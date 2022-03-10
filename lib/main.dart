@@ -3,10 +3,16 @@ import 'package:flutter/services.dart';
 
 import 'package:flame/src/device.dart';
 
-import 'pages/home.dart';
-import 'pages/achievements.dart';
-import 'pages/secrets.dart';
-import 'pages/settings.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:ordinary_idle/model/PlayerV1.dart';
+
+import 'package:ordinary_idle/pages/Home.dart';
+import 'package:ordinary_idle/pages/Achievements.dart';
+import 'package:ordinary_idle/pages/Secrets.dart';
+import 'package:ordinary_idle/pages/Settings.dart';
+
+import 'package:ordinary_idle/partials/HomeHeader.dart';
 
 // import 'package:flame/src/game/game_widget/game_widget.dart';
 // import 'partials/1cookie.dart';
@@ -14,24 +20,24 @@ import 'pages/settings.dart';
 void main() async {
   WidgetsFlutterBinding
       .ensureInitialized(); //It will usually be bugged if you are awaiting on main() method without this line of code.
+
+  //Initialize Flame
   var flameDevice = Device();
   await flameDevice.fullScreen();
   await flameDevice.setOrientation(DeviceOrientation.portraitUp);
 
-  // Cookie game = Cookie();
+  //Initialize Hive
+  await Hive.initFlutter();
+  Hive.registerAdapter(PlayerV1Adapter());
+  await Hive.openBox<PlayerV1>('player');
 
-  // runApp(
-  //   GameWidget(
-  //     game: game,
-  //   ),
-  // );
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  static const String _title = 'Flutter Code Sample';
+  static const String _title = 'OrdinaryIdle';
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +57,11 @@ class MyStatefulWidget extends StatefulWidget {
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     Home(),
-    Achievements(),
-    Secrets(),
-    Settings(),
+    const Achievements(),
+    const Secrets(),
+    const Settings(),
   ];
 
   void _onItemTapped(int index) {
@@ -67,9 +73,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BottomNavigationBar Sample'),
-      ),
+      appBar: _selectedIndex == 0
+          ? AppBar(
+              title: HomeHeader(pCoins: 4096),
+            )
+          : null,
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

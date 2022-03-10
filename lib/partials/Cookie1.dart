@@ -12,7 +12,7 @@ class Cookie extends FlameGame with TapDetector {
 
   @override
   Future<void>? onLoad() async {
-    var cookieImage = await Flame.images.load("cookie.png");
+    final cookieImage = await Flame.images.load("cookie.png");
     cookie = Sprite(cookieImage);
     return super.onLoad();
   }
