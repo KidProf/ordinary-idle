@@ -9,14 +9,14 @@ class Cookie extends FlameGame with TapDetector {
   late Vector2 screenSize;
   late Sprite cookie;
   bool hasWon = false;
-  
+
   @override
   Future<void>? onLoad() async {
     var cookieImage = await Flame.images.load("cookie.png");
     cookie = Sprite(cookieImage);
     return super.onLoad();
   }
-  
+
   @override
   bool onTapDown(TapDownInfo e) {
     double screenCenterX = screenSize.x / 2;

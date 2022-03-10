@@ -10,20 +10,17 @@ class Home extends StatefulWidget {
   State<StatefulWidget> createState() {
     return HomeState();
   }
-
 }
 
 class HomeState extends State<Home> {
-  
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  
+  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
   final Cookie game = Cookie();
 
   @override
   Widget build(BuildContext context) {
     return GameWidget(
-        game: game,
+      game: game,
     );
   }
 }
