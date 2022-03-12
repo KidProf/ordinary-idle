@@ -8,7 +8,9 @@ import 'package:flame/sprite.dart';
 class Cookie extends FlameGame with TapDetector {
   late Vector2 screenSize;
   late Sprite cookie;
-  bool hasWon = false;
+  final Function addCoins;
+
+  Cookie(this.addCoins);
 
   @override
   Future<void>? onLoad() async {
@@ -19,15 +21,14 @@ class Cookie extends FlameGame with TapDetector {
 
   @override
   bool onTapDown(TapDownInfo e) {
-    double screenCenterX = screenSize.x / 2;
-    double screenCenterY = screenSize.y / 2;
+    // print(addCoins(1.0));
 
-    if (e.raw.localPosition.dx >= screenCenterX - 75 &&
-        e.raw.localPosition.dx <= screenCenterX + 75 &&
-        e.raw.localPosition.dy >= screenCenterY - 75 &&
-        e.raw.localPosition.dy <= screenCenterY + 75) {
-      hasWon = true;
-    }
+    // if (e.raw.localPosition.dx >= screenCenterX - 75 &&
+    //     e.raw.localPosition.dx <= screenCenterX + 75 &&
+    //     e.raw.localPosition.dy >= screenCenterY - 75 &&
+    //     e.raw.localPosition.dy <= screenCenterY + 75) {
+    //   hasWon = true;
+    // }
     return true;
   }
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class HomeHeader extends StatelessWidget {
+class ValueHeader extends StatelessWidget {
   final double pCoins;
 
-  const HomeHeader({required this.pCoins, Key? key}) : super(key: key);
+  const ValueHeader({required this.pCoins, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

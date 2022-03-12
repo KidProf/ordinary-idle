@@ -12,7 +12,8 @@ import 'package:ordinary_idle/pages/Achievements.dart';
 import 'package:ordinary_idle/pages/Secrets.dart';
 import 'package:ordinary_idle/pages/Settings.dart';
 
-import 'package:ordinary_idle/partials/HomeHeader.dart';
+import 'package:ordinary_idle/partials/ValueHeader.dart';
+import 'package:ordinary_idle/util/Money.dart';
 
 // import 'package:flame/src/game/game_widget/game_widget.dart';
 // import 'partials/1cookie.dart';
@@ -29,7 +30,7 @@ void main() async {
   //Initialize Hive
   await Hive.initFlutter();
   Hive.registerAdapter(PlayerV1Adapter());
-  await Hive.openBox<PlayerV1>('player');
+  await Hive.openBox('player');
 
   runApp(const MyApp());
 }
@@ -56,27 +57,47 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  late Box box;
+  late Money pMoney;
+  late List<Widget> _widgetOptions;
   int _selectedIndex = 0;
-  static final List<Widget> _widgetOptions = <Widget>[
-    Home(),
-    const Achievements(),
-    const Secrets(),
-    const Settings(),
-  ];
 
+  _MyStatefulWidgetState(){
+    box = Hive.box("player");
+    pMoney = Money(box.get("pCoins"),box.get("pExpCoins"),box.get("useExp"));
+    _widgetOptions = <Widget>[
+      Home(pMoney.addCoins),
+      const Achievements(),
+      const Secrets(),
+      const Settings(),
+    ];
+  }
+  
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  // child: ValueListenableBuilder<Box>(
+  //               valueListenable: Hive.box('player').listenable(),
+  //               builder: (ctx, box, _) {
+  //                 return AppBar(
+  //                   title: ValueHeader(pCoins: box.get("pCoins")),
+  //                 );
+  //               },
+  //             )
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _selectedIndex == 0
-          ? AppBar(
-              title: HomeHeader(pCoins: 4096),
-            )
+      appBar: _selectedIndex != 3
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(50),
+              child: ValueListenableBuilder<double>(valueListenable: pMoney.getCoins, builder: (ctx,coins, _) {
+                // print("update");
+                return AppBar(title:ValueHeader(pCoins: coins,));
+              })
+              )
           : null,
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
