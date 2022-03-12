@@ -21,7 +21,7 @@ class Cookie extends FlameGame with TapDetector {
 
   @override
   bool onTapDown(TapDownInfo e) {
-    // print(addCoins(1.0));
+    addCoins(1.0);
 
     // if (e.raw.localPosition.dx >= screenCenterX - 75 &&
     //     e.raw.localPosition.dx <= screenCenterX + 75 &&

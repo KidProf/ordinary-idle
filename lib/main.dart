@@ -5,15 +5,16 @@ import 'package:flame/src/device.dart';
 
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:ordinary_idle/model/PlayerV1.dart';
+import 'package:ordinary_idle/model/CurrentSecretV1.dart';
 
 import 'package:ordinary_idle/pages/Home.dart';
 import 'package:ordinary_idle/pages/Achievements.dart';
-import 'package:ordinary_idle/pages/Secrets.dart';
+import 'package:ordinary_idle/pages/SecretsPage.dart';
 import 'package:ordinary_idle/pages/Settings.dart';
 
 import 'package:ordinary_idle/partials/ValueHeader.dart';
 import 'package:ordinary_idle/util/Money.dart';
+import 'package:ordinary_idle/util/Secrets.dart';
 
 // import 'package:flame/src/game/game_widget/game_widget.dart';
 // import 'partials/1cookie.dart';
@@ -29,8 +30,9 @@ void main() async {
 
   //Initialize Hive
   await Hive.initFlutter();
-  Hive.registerAdapter(PlayerV1Adapter());
+  Hive.registerAdapter(CurrentSecretV1Adapter());
   await Hive.openBox('player');
+  await Hive.openBox('currentSecrets');
 
   runApp(const MyApp());
 }
@@ -57,22 +59,16 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  late Box box;
-  late Money pMoney;
-  late List<Widget> _widgetOptions;
+  final Money pMoney = Money();
+  final Secrets pSecrets = Secrets();
+  late final List<Widget> _widgetOptions = <Widget>[
+    Home(pMoney.addCoins),
+    const Achievements(),
+    const SecretsPage(),
+    const Settings(),
+  ];
   int _selectedIndex = 0;
 
-  _MyStatefulWidgetState(){
-    box = Hive.box("player");
-    pMoney = Money(box.get("pCoins"),box.get("pExpCoins"),box.get("useExp"));
-    _widgetOptions = <Widget>[
-      Home(pMoney.addCoins),
-      const Achievements(),
-      const Secrets(),
-      const Settings(),
-    ];
-  }
-  
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -93,11 +89,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       appBar: _selectedIndex != 3
           ? PreferredSize(
               preferredSize: const Size.fromHeight(50),
-              child: ValueListenableBuilder<double>(valueListenable: pMoney.getCoins, builder: (ctx,coins, _) {
-                // print("update");
-                return AppBar(title:ValueHeader(pCoins: coins,));
-              })
-              )
+              child: ValueListenableBuilder<double>(
+                  valueListenable: pMoney.getCoinsListener,
+                  builder: (ctx, coins, _) {
+                    // print("update");
+                    return AppBar(
+                        title: ValueHeader(
+                      pCoins: coins,
+                    ));
+                  }))
           : null,
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -129,5 +129,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         onTap: _onItemTapped,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    Hive.close();
+    super.dispose();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Secrets extends StatelessWidget {
-  const Secrets({Key? key}) : super(key: key);
+class SecretsPage extends StatelessWidget {
+  const SecretsPage({Key? key}) : super(key: key);
 
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 

@@ -36,8 +36,5 @@ class PlayerV1Adapter extends TypeAdapter<PlayerV1> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PlayerV1Adapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is PlayerV1Adapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
