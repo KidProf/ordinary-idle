@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:flame/src/device.dart';
 
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:ordinary_idle/model/CurrentSecretV1.dart';
 
 import 'package:ordinary_idle/pages/Home.dart';
@@ -13,6 +15,7 @@ import 'package:ordinary_idle/pages/SecretsPage.dart';
 import 'package:ordinary_idle/pages/Settings.dart';
 
 import 'package:ordinary_idle/partials/ValueHeader.dart';
+
 import 'package:ordinary_idle/util/Money.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
 
@@ -62,17 +65,39 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   final Money pMoney = Money();
   final Secrets pSecrets = Secrets();
   late final List<Widget> _widgetOptions = <Widget>[
-    Home(pMoney.addCoins),
-    const Achievements(),
-    const SecretsPage(),
-    const Settings(),
+    Home(pSecrets, pMoney.addCoins),
+    Achievements(pSecrets),
+    SecretsPage(pSecrets),
+    Settings(pSecrets),
   ];
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 2 && !pSecrets.secretCompleted(1)) {
+      pSecrets.progressSecret(1, 0);
+      final tuple = pSecrets.secretProgress(1);
+      final isFinished = tuple.item1;
+      final progress = tuple.item2;
+      if (isFinished) {
+        setState(() {
+          _selectedIndex = index;
+        });
+      } else {
+        Fluttertoast.showToast(
+          msg: progress < 10 ? "It is a secret" : "${20 - progress} steps to fun",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black87,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   // child: ValueListenableBuilder<Box>(

@@ -4,10 +4,13 @@ import 'package:flame/flame.dart';
 import 'package:flame/input.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame/widgets.dart';
+import 'package:flutter/material.dart';
 
 class Cookie extends FlameGame with TapDetector {
   late Vector2 screenSize;
   late Sprite cookie;
+  late SpriteButton cookieButton;
   final Function addCoins;
 
   Cookie(this.addCoins);
@@ -16,6 +19,16 @@ class Cookie extends FlameGame with TapDetector {
   Future<void>? onLoad() async {
     final cookieImage = await Flame.images.load("cookie.png");
     cookie = Sprite(cookieImage);
+    cookieButton = SpriteButton(
+      sprite: cookie,
+      pressedSprite: cookie,
+      height: 300,
+      width: 300,
+      label: const Text("Cookie"),
+      onPressed: () {
+        print("pressed cookie"); //TODO: get it working
+      },
+    );
     return super.onLoad();
   }
 
