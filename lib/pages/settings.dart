@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:ordinary_idle/main.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
 import 'package:restart_app/restart_app.dart';
 
@@ -21,8 +23,14 @@ class Settings extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () async {
-              Hive.deleteFromDisk();
-              await Restart.restartApp(); //TODO: not working on ios device, should use state instead
+              //Delete Hive
+              // Hive.deleteFromDisk();
+              await Hive.box('player').clear();
+              await Hive.box('currentSecrets').clear();
+              //Initialize Hive
+              await Hive.openBox('player');
+              await Hive.openBox('currentSecrets');
+              RestartWidget.restartApp(context);
             },
             child: Text("Reset All"),
           )
