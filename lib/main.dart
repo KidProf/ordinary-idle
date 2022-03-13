@@ -18,6 +18,7 @@ import 'package:ordinary_idle/partials/ValueHeader.dart';
 
 import 'package:ordinary_idle/util/Money.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
+import 'package:ordinary_idle/util/toast.dart';
 
 // import 'package:flame/src/game/game_widget/game_widget.dart';
 // import 'partials/1cookie.dart';
@@ -71,8 +72,16 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     Settings(pSecrets),
   ];
   int _selectedIndex = 0;
+  late FToast fToast;
 
-  void _onItemTapped(int index) {
+  @override
+  void initState() {
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
+
+  void _onItemTapped(int index, BuildContext context) {
     if (index == 2 && !pSecrets.secretCompleted(1)) {
       pSecrets.progressSecret(1, 0);
       final tuple = pSecrets.secretProgress(1);
@@ -83,15 +92,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           _selectedIndex = index;
         });
       } else {
-        Fluttertoast.showToast(
-          msg: progress < 10 ? "It is a secret" : "${20 - progress} steps to fun",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black87,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        fToast.removeCustomToast();
+        MyToast.showBottomToast(fToast, progress < 10 ? "It is a secret" : "${20 - progress} steps to fun");
+        // Fluttertoast.showToast(
+        //   msg: progress < 10 ? "It is a secret" : "${20 - progress} steps to fun",
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.BOTTOM,
+        //   timeInSecForIosWeb: 1,
+        //   backgroundColor: Colors.black87,
+        //   textColor: Colors.white,
+        //   fontSize: 16.0,
+        // );
       }
     } else {
       setState(() {
@@ -151,7 +162,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
-        onTap: _onItemTapped,
+        onTap: (int x) => _onItemTapped(x, context),
       ),
     );
   }

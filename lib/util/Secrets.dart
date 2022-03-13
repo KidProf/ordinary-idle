@@ -165,7 +165,7 @@ class Secrets {
     player.put("completedSecrets", completedSecrets);
     Fluttertoast.showToast(
       msg: "Secret Unlocked! ${s.title}",
-      toastLength: Toast.LENGTH_SHORT,
+      toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.TOP,
       timeInSecForIosWeb: 1,
       backgroundColor: Colors.black87,

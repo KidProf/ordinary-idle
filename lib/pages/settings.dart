@@ -20,7 +20,7 @@ class Settings extends StatelessWidget {
             style: optionStyle,
           ),
           ElevatedButton(
-            onPressed:  () async {
+            onPressed: () async {
               Hive.deleteFromDisk();
               await Restart.restartApp(); //TODO: not working on ios device, should use state instead
             },
