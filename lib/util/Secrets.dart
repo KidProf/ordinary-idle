@@ -31,9 +31,9 @@ class Secrets {
         reward: 1,
         progressComponent: [
           {
-            "total": 20,
+            "total": 15,
             "volatile": true,
-          }
+          },
         ]),
     Secret(
       id: 2,
@@ -41,9 +41,13 @@ class Secrets {
       prerequisites: [1],
       title: "Tap outeide the cookie",
       description:
-          "As the cookie will move around and even change in size, I think taking taps outside the cookie into account is a good idea.",
+          "As the cookie will move around and even change in size, I think making taps outside the cookie count is a good idea.",
       reward: 1,
-      progressComponent: [],
+      progressComponent: [
+        {
+          "total": 10,
+        },
+      ],
     ),
     Secret(
       id: 3,
@@ -89,43 +93,46 @@ class Secrets {
     //return 0 if not in current list
   }
 
-  void progressSecret(int id, int stage) {
+  void progressSecret(int id, int stage,{int amount=1}) {
+    print("progressSecret");
     if (secretCompleted(id) || !prerequisiteMet(id)) {
       return; //completed already, so no need tracking OR prerequisite not met, cannot start
     } else if (currentSecrets.containsKey(id)) {
       final CurrentSecretV1 c = currentSecrets.get(id);
       if (c.stage == stage) {
         //no progression if wrong stage, the ! is for null checking, which I think doesnt needed because we are sure it contains the key
-        c.progress += 1;
+        c.progress += amount;
+        print(c.progress);
         currentSecrets.put(id, c);
-      }
-      if (c.progress == c.total) {
-        currentSecrets.delete(id);
-        if (c.stage + 1 == c.totalStages) {
-          _completeSecret(id);
-        } else {
-          _initNewSecret(id, c.stage + 1);
+        if (c.progress >= c.total) {
+          currentSecrets.delete(id);
+          if (c.stage + 1 == c.totalStages) {
+            _completeSecret(id);
+          } else {
+            _initNewSecret(id, c.stage + 1);
+          }
         }
       }
+      
     } else if (currentVolatileSecrets.containsKey(id)) {
       final CurrentVolatileSecret cv = currentVolatileSecrets[id]!;
       if (cv.stage == stage) {
         //no progression if wrong stage, the ! is for null checking, which I think doesnt needed because we are sure it contains the key
-        cv.progress += 1;
+        cv.progress += amount;
         print(cv.progress);
-      }
-      if (cv.progress == cv.total) {
-        currentVolatileSecrets.remove(id);
-        if (cv.stage + 1 == cv.totalStages) {
-          _completeSecret(id);
-        } else {
-          _initNewSecret(id, cv.stage + 1);
+        if (cv.progress >= cv.total) {
+          currentVolatileSecrets.remove(id);
+          if (cv.stage + 1 == cv.totalStages) {
+            _completeSecret(id);
+          } else {
+            _initNewSecret(id, cv.stage + 1);
+          }
         }
       }
     } else {
       final s = getSecretById(id);
-      if (s.progressComponent[0]["total"] > 1) {
-        _initNewSecret(id, 0, progress: 1);
+      if (s.progressComponent[0]["total"] > amount) {
+        _initNewSecret(id, 0, amount: amount);
       } else if (s.progressComponent.length <= 1) {
         _completeSecret(id);
       } else {
@@ -134,24 +141,26 @@ class Secrets {
     }
   }
 
-  void _initNewSecret(int id, int stage, {int progress = 0}) {
+  void _initNewSecret(int id, int stage, {int amount = 0}) {
     final s = getSecretById(id);
     final sp = s.progressComponent[stage];
+    print(s);
     if (sp["volatile"]) {
       currentVolatileSecrets[id] = CurrentVolatileSecret(
         sid: id,
         stage: stage,
-        progress: progress,
+        progress: amount,
         total: sp["total"],
         totalStages: s.progressComponent.length,
       );
     } else {
+      print("currentSecretPut");
       currentSecrets.put(
           id,
           CurrentSecretV1(
             sid: id,
             stage: stage,
-            progress: progress,
+            progress: amount,
             total: sp["total"],
             totalStages: s.progressComponent.length,
           ));

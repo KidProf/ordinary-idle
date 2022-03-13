@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:ordinary_idle/partials/Cookie1.dart';
+import 'package:ordinary_idle/partials/1cookie/CookieBackground.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
 
 class Home extends StatelessWidget {
@@ -15,6 +15,6 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("Home");
+    return CookieBackground(pSecrets, addCoins);
   }
 }

@@ -65,23 +65,23 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       final tuple = pSecrets.secretProgress(1);
       final isFinished = tuple.item1;
       final progress = tuple.item2;
+
+      fToast.removeCustomToast();
+      if(progress <= 3){
+        MyToast.showBottomToast(fToast,"This is a secret");
+      }else if(progress<=6){
+        MyToast.showBottomToast(fToast,"I said, THIS IS A SECRET!");
+      }else if(progress<=9){
+        MyToast.showBottomToast(fToast,"You will NEVER be able to get in");
+      }else{
+        MyToast.showBottomToast(fToast, "You are now ${15-progress} steps away from revealing the secret");
+      }
+
       if (isFinished) {
         setState(() {
           _selectedIndex = index;
         });
-      } else {
-        fToast.removeCustomToast();
-        MyToast.showBottomToast(fToast, progress < 10 ? "It is a secret" : "${20 - progress} steps to fun");
-        // Fluttertoast.showToast(
-        //   msg: progress < 10 ? "It is a secret" : "${20 - progress} steps to fun",
-        //   toastLength: Toast.LENGTH_SHORT,
-        //   gravity: ToastGravity.BOTTOM,
-        //   timeInSecForIosWeb: 1,
-        //   backgroundColor: Colors.black87,
-        //   textColor: Colors.white,
-        //   fontSize: 16.0,
-        // );
-      }
+      } 
     } else {
       setState(() {
         _selectedIndex = index;
