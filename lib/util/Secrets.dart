@@ -39,7 +39,7 @@ class Secrets {
       id: 2,
       exid: "1.1",
       prerequisites: [1],
-      title: "Tap outeide the cookie",
+      title: "Tap outside the cookie",
       description:
           "As the cookie will move around and even change in size, I think taking taps outside the cookie into account is a good idea.",
       reward: 1,
