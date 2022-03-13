@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flame/src/device.dart';
-
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/MyApp.dart';
@@ -12,11 +10,6 @@ import 'package:ordinary_idle/model/CurrentSecretV1.dart';
 void main() async {
   WidgetsFlutterBinding
       .ensureInitialized(); //It will usually be bugged if you are awaiting on main() method without this line of code.
-
-  //Initialize Flame
-  var flameDevice = Device();
-  await flameDevice.fullScreen();
-  await flameDevice.setOrientation(DeviceOrientation.portraitUp);
   
   //Initialize Hive
   await Hive.initFlutter();

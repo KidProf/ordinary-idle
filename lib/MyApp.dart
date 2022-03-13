@@ -17,7 +17,6 @@ import 'package:ordinary_idle/util/Money.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
 import 'package:ordinary_idle/util/toast.dart';
 
-// import 'package:flame/src/game/game_widget/game_widget.dart';
 // import 'partials/1cookie.dart';
 
 class MyApp extends StatelessWidget {
