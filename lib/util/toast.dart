@@ -19,7 +19,10 @@ class MyToast {
           // SizedBox(
           //   width: 12.0,
           // ),
-          Text(msg,style: const TextStyle(color: Colors.white),),
+          Text(
+            msg,
+            style: const TextStyle(color: Colors.white),
+          ),
         ],
       ),
     );

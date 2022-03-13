@@ -10,7 +10,7 @@ import 'package:ordinary_idle/model/CurrentSecretV1.dart';
 void main() async {
   WidgetsFlutterBinding
       .ensureInitialized(); //It will usually be bugged if you are awaiting on main() method without this line of code.
-  
+
   //Initialize Hive
   await Hive.initFlutter();
   Hive.registerAdapter(CurrentSecretV1Adapter());
@@ -54,4 +54,3 @@ class _RestartWidgetState extends State<RestartWidget> {
     );
   }
 }
-

@@ -28,7 +28,7 @@ class Secrets {
         title: "Welcome",
         description:
             "Congratulations on discovering your first secret. I would say this is the most important secret, as it unlocks the secrets page and your ability to find other secrets.",
-        reward: 1,
+        reward: 1.0,
         progressComponent: [
           {
             "total": 15,
@@ -39,10 +39,10 @@ class Secrets {
       id: 2,
       exid: "1.1",
       prerequisites: [1],
-      title: "Tap outeide the cookie",
+      title: "More space to tap",
       description:
           "As the cookie will move around and even change in size, I think making taps outside the cookie count is a good idea.",
-      reward: 1,
+      reward: 0.5,
       progressComponent: [
         {
           "total": 10,
@@ -55,7 +55,7 @@ class Secrets {
       prerequisites: [1],
       title: "Where did the cookie go?",
       description: "Swipe the cookie up until it disappears from the screen.",
-      reward: 1,
+      reward: 1.0,
       progressComponent: [],
     )
   ];
@@ -93,7 +93,7 @@ class Secrets {
     //return 0 if not in current list
   }
 
-  void progressSecret(int id, int stage,{int amount=1}) {
+  void progressSecret(int id, int stage, {int amount = 1}) {
     print("progressSecret");
     if (secretCompleted(id) || !prerequisiteMet(id)) {
       return; //completed already, so no need tracking OR prerequisite not met, cannot start
@@ -113,7 +113,6 @@ class Secrets {
           }
         }
       }
-      
     } else if (currentVolatileSecrets.containsKey(id)) {
       final CurrentVolatileSecret cv = currentVolatileSecrets[id]!;
       if (cv.stage == stage) {
@@ -190,7 +189,7 @@ class Secret {
   final List<int> prerequisites;
   final String title;
   final String description;
-  final int reward;
+  final double reward;
   final List<Map> progressComponent;
 
   Secret({
