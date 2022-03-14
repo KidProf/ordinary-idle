@@ -34,7 +34,8 @@ class _CookieBackgroundState extends State<CookieBackground> {
         cookieOffset;
     return SwipeDetector(
         onSwipeUp: () {
-          if(cookieOffset.y<-canvasSize.y*0.42){
+          if(widget.pSecrets.prerequisiteMet(3)&&!widget.pSecrets.secretCompleted(3)){
+            if(cookieOffset.y<-canvasSize.y*0.42){
             setState(() {
               cookieShow = false;
             });
@@ -45,7 +46,7 @@ class _CookieBackgroundState extends State<CookieBackground> {
               cookieOffset += Vector2(0, -canvasSize.y*0.06);
             });
           }
-          
+          }        
           print("swipe up" + cookieOffset.toString());
         },
         filterOnStart: (DragStartDetails dragDetails) {
@@ -62,7 +63,7 @@ class _CookieBackgroundState extends State<CookieBackground> {
             child: Container(
               width: double.infinity,
               height: double.infinity,
-              color: Colors.Colors.green[50],
+              color: const Color(0xFFFAFAFA),
               child: Stack(
                 children: [
                   Positioned(
