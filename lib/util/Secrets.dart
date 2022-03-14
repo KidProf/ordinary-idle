@@ -27,7 +27,7 @@ class Secrets {
         prerequisites: [],
         title: "Welcome",
         description:
-            "Congratulations on discovering your first secret. I would say this is the most important secret, as it unlocks the secrets page and your ability to find other secrets.",
+            "Tapping the secret button 15 times.\n\nCongratulations on discovering your first secret. I would say this is the most important secret, as it unlocks the secrets page and your ability to find other secrets.",
         reward: 1.0,
         progressComponent: [
           {
@@ -35,13 +35,16 @@ class Secrets {
             "volatile": true,
           },
         ]),
+
+    //referenced in:
+    // CookieBackground.dart, check if it taps outside the cookie
     Secret(
       id: 2,
       exid: "1.1",
       prerequisites: [1],
       title: "More space to tap",
       description:
-          "As the cookie will move around and even change in size, I think making taps outside the cookie count is a good idea.",
+          "Tapping outside the cookie but inside the canvas 10 times.\n\nAs the cookie will move around and even change in size, I think making taps outside the cookie count is a good idea.",
       reward: 0.5,
       progressComponent: [
         {
@@ -50,6 +53,7 @@ class Secrets {
         },
       ],
     ),
+
     Secret(
       id: 3,
       exid: "1.2",
@@ -95,7 +99,7 @@ class Secrets {
   }
 
   void progressSecret(int id, int stage, {int amount = 1}) {
-    print("entered progressSecret function with id: "+id.toString()+", stage: "+stage.toString());
+    print("entered progressSecret function with id: " + id.toString() + ", stage: " + stage.toString());
     if (secretCompleted(id) || !prerequisiteMet(id)) {
       return; //completed already, so no need tracking OR prerequisite not met, cannot start
     } else if (currentSecrets.containsKey(id)) {
@@ -103,7 +107,7 @@ class Secrets {
       if (c.stage == stage) {
         //no progression if wrong stage, the ! is for null checking, which I think doesnt needed because we are sure it contains the key
         c.progress += amount;
-        print("current progress: "+c.progress.toString());
+        print("current progress: " + c.progress.toString());
         currentSecrets.put(id, c);
         if (c.progress >= c.total) {
           currentSecrets.delete(id);
@@ -119,7 +123,7 @@ class Secrets {
       if (cv.stage == stage) {
         //no progression if wrong stage, the ! is for null checking, which I think doesnt needed because we are sure it contains the key
         cv.progress += amount;
-        print("current progress (volatile): "+cv.progress.toString());
+        print("current progress (volatile): " + cv.progress.toString());
         if (cv.progress >= cv.total) {
           currentVolatileSecrets.remove(id);
           if (cv.stage + 1 == cv.totalStages) {

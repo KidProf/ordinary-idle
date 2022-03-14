@@ -71,7 +71,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         setState(() {
           _selectedIndex = index;
         });
-      }else{
+      } else {
         if (progress <= 3) {
           MyToast.showBottomToast(fToast, "This is a secret");
         } else if (progress <= 6) {
