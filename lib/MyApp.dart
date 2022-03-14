@@ -44,8 +44,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   final Secrets pSecrets = Secrets();
   late final List<Widget> _widgetOptions = <Widget>[
     Home(pSecrets, pMoney.addCoins),
-    Achievements(pSecrets),
     SecretsPage(pSecrets),
+    // Achievements(pSecrets),
     Settings(pSecrets),
   ];
   int _selectedIndex = 0;
@@ -59,27 +59,28 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 
   void _onItemTapped(int index, BuildContext context) {
-    if (index == 2 && !pSecrets.secretCompleted(1)) {
+    if (index == 1 && !pSecrets.secretCompleted(1)) {
       pSecrets.progressSecret(1, 0);
       final tuple = pSecrets.secretProgress(1);
       final isFinished = tuple.item1;
       final progress = tuple.item2;
 
       fToast.removeCustomToast();
-      if (progress <= 3) {
-        MyToast.showBottomToast(fToast, "This is a secret");
-      } else if (progress <= 6) {
-        MyToast.showBottomToast(fToast, "I said, THIS IS A SECRET!");
-      } else if (progress <= 9) {
-        MyToast.showBottomToast(fToast, "You will NEVER be able to get in");
-      } else {
-        MyToast.showBottomToast(fToast, "You are now ${15 - progress} steps away from revealing the secret");
-      }
-
       if (isFinished) {
+        MyToast.showBottomToast(fToast, "Secret revealed");
         setState(() {
           _selectedIndex = index;
         });
+      }else{
+        if (progress <= 3) {
+          MyToast.showBottomToast(fToast, "This is a secret");
+        } else if (progress <= 6) {
+          MyToast.showBottomToast(fToast, "I said, THIS IS A SECRET!");
+        } else if (progress <= 9) {
+          MyToast.showBottomToast(fToast, "You will NEVER be able to get in");
+        } else {
+          MyToast.showBottomToast(fToast, "You are now ${15 - progress} steps away from revealing the secret");
+        }
       }
     } else {
       setState(() {
@@ -99,7 +100,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _selectedIndex != 3
+      appBar: _selectedIndex != 2 //TODO: Change back to 3 later
           ? PreferredSize(
               preferredSize: const Size.fromHeight(50),
               child: ValueListenableBuilder<double>(
@@ -122,13 +123,13 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             label: "",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.assignment_turned_in),
-            label: "",
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.lock),
             label: "",
           ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.assignment_turned_in),
+          //   label: "",
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: "",

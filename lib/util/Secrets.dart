@@ -46,6 +46,7 @@ class Secrets {
       progressComponent: [
         {
           "total": 10,
+          "volatile": false,
         },
       ],
     ),
@@ -94,7 +95,7 @@ class Secrets {
   }
 
   void progressSecret(int id, int stage, {int amount = 1}) {
-    print("progressSecret");
+    print("entered progressSecret function with id: "+id.toString()+", stage: "+stage.toString());
     if (secretCompleted(id) || !prerequisiteMet(id)) {
       return; //completed already, so no need tracking OR prerequisite not met, cannot start
     } else if (currentSecrets.containsKey(id)) {
@@ -102,7 +103,7 @@ class Secrets {
       if (c.stage == stage) {
         //no progression if wrong stage, the ! is for null checking, which I think doesnt needed because we are sure it contains the key
         c.progress += amount;
-        print(c.progress);
+        print("current progress: "+c.progress.toString());
         currentSecrets.put(id, c);
         if (c.progress >= c.total) {
           currentSecrets.delete(id);
@@ -118,7 +119,7 @@ class Secrets {
       if (cv.stage == stage) {
         //no progression if wrong stage, the ! is for null checking, which I think doesnt needed because we are sure it contains the key
         cv.progress += amount;
-        print(cv.progress);
+        print("current progress (volatile): "+cv.progress.toString());
         if (cv.progress >= cv.total) {
           currentVolatileSecrets.remove(id);
           if (cv.stage + 1 == cv.totalStages) {
@@ -143,7 +144,6 @@ class Secrets {
   void _initNewSecret(int id, int stage, {int amount = 0}) {
     final s = getSecretById(id);
     final sp = s.progressComponent[stage];
-    print(s);
     if (sp["volatile"]) {
       currentVolatileSecrets[id] = CurrentVolatileSecret(
         sid: id,
