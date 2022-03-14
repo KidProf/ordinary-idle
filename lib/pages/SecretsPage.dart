@@ -45,43 +45,52 @@ class SecretsPage extends StatelessWidget {
                 children: [
                   const SizedBox(width: 10),
                   Text(s.exid, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color)),
-                  const Spacer(),
-                  Text(s.title, style: TextStyle(fontSize: 20, color: color)),
-                  const Spacer(),
+                  const SizedBox(width: 10),
+                  Expanded(child: Text(s.title, style: TextStyle(fontSize: 20, color: color,), overflow: TextOverflow.ellipsis,)),
+                  const SizedBox(width: 10),
                   Text("+"+s.reward.toString() + "x", style: TextStyle(fontSize: 20, color: color)),
                   const SizedBox(width: 10),
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
               )),
           onTap: () {
-            if (completed) {
-              showModalBottomSheet<void>(
-                context: context,
-                builder: (BuildContext context) {
-                  return Container(
-                    height: 250,
-                    color: const Color(0xFFFAFAFA),
-                    margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(s.title, style: TextStyle(fontSize: 20)),
-                          SizedBox(height: 20),
-                          Text(s.description),
-                          SizedBox(height: 20),
-                          ElevatedButton(
-                            child: const Text('Close'),
-                            onPressed: () => Navigator.pop(context),
-                          )
-                        ],
+            showModalBottomSheet<void>(
+              isScrollControlled: true,
+              context: context,
+              builder: (BuildContext context) {
+                List<Widget> children;
+                if (completed) {
+                  children = [
+                      SizedBox(width: MediaQuery.of(context).size.width - 20, height: 0), //maintain width
+                      Text(s.title, style: TextStyle(fontSize: 20)),
+                      SizedBox(width: MediaQuery.of(context).size.width - 20, child: Text(s.description)),
+                      ElevatedButton(
+                        child: const Text('Close'),
+                        onPressed: () => Navigator.pop(context),
                       ),
-                    ),
-                  );
-                },
-              );
-            }
+                  ];
+                }else{
+                  children = [
+                    SizedBox(width: MediaQuery.of(context).size.width - 20, height: 0), //maintain width
+                    Text(s.title, style: TextStyle(fontSize: 20)),
+                    const Text("LOCKED"),
+                    ElevatedButton(
+                        child: const Text('Close'),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                  ];
+                }
+                return Container(
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  child: Wrap(
+                  direction: Axis.vertical,
+                  alignment: WrapAlignment.start,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 20,
+                  children: children,
+                ),);
+              },
+            );
           });
     }).toList();
   }

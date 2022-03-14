@@ -40,7 +40,6 @@ class _CookieBackgroundState extends State<CookieBackground> {
               cookieShow = false;
             });
             widget.pSecrets.progressSecret(3,0);
-            print("completed");
           }else{
             setState(() {
               cookieOffset += Vector2(0, -canvasSize.y*0.06);
@@ -49,6 +48,9 @@ class _CookieBackgroundState extends State<CookieBackground> {
           }        
           print("swipe up" + cookieOffset.toString());
         },
+        swipeConfiguration: SwipeConfiguration(
+          verticalSwipeMaxWidthThreshold: 100,
+        ),
         filterOnStart: (DragStartDetails dragDetails) {
           print(_isInCookie(
               dragDetails.globalPosition.dx, dragDetails.globalPosition.dy));
@@ -85,7 +87,7 @@ class _CookieBackgroundState extends State<CookieBackground> {
     var y = details.globalPosition.dy;
     // or user the local position method to get the offset
     // print(details.localPosition);
-    print("tap down " + x.toString() + ", " + y.toString());
+    // print("tap down " + x.toString() + ", " + y.toString());
     widget.addCoins(1.0);
     if (_isInCookie(x, y)) {
       //TODO: animations of some sort

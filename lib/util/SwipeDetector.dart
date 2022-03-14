@@ -105,11 +105,10 @@ class SwipeDetector extends StatelessWidget {
         if (dy < 0) dy = -dy;
         double positiveVelocity = velocity < 0 ? -velocity : velocity;
 
-        if(filterOnStart!=null&&!filterStartSatisfied) return;
-        if (dx > swipeConfiguration.verticalSwipeMaxWidthThreshold) return;
-        if (dy < swipeConfiguration.verticalSwipeMinDisplacement) return;
-        if (positiveVelocity < swipeConfiguration.verticalSwipeMinVelocity)
-          return;
+        if(filterOnStart!=null&&!filterStartSatisfied){print("filter not satified"); return;}
+        if (dx > swipeConfiguration.verticalSwipeMaxWidthThreshold){print("verticalSwipeMaxWidthThreshold not satified"); return;}
+        if (dy < swipeConfiguration.verticalSwipeMinDisplacement){print("verticalSwipeMinDisplacement not satified"); return;}
+        if (positiveVelocity < swipeConfiguration.verticalSwipeMinVelocity){print("verticalSwipeMinVelocity not satified"); return;}
 
         if (velocity < 0) {
           //Swipe Up

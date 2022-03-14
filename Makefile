@@ -19,7 +19,13 @@ icon:
 rename:
 	pub global run rename --bundleId com.kidprof.ordinaryidle && pub global run rename --appname "OrdinaryIdle"
 
-build-android:
+build-bundle:
 	flutter build appbundle
+
+build-apk:
+	flutter build apk
+
+build-apk-split:
+	flutter build apk --split-per-abi
 clean:
 	flutter clean
