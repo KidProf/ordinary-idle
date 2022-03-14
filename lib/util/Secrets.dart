@@ -61,7 +61,12 @@ class Secrets {
       title: "Where did the cookie go?",
       description: "Swipe the cookie up until it disappears from the screen.",
       reward: 1.0,
-      progressComponent: [],
+      progressComponent: [
+        {
+          "total": 1,
+          "volatile": true,
+        },
+      ],
     )
   ];
 

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/material/colors.dart' as Colors;
 import 'package:ordinary_idle/util/Secrets.dart';
+import 'package:ordinary_idle/util/SwipeDetector.dart';
 import 'package:vector_math/vector_math.dart';
+
 
 class CookieBackground extends StatefulWidget {
   final Function addCoins;
   final Secrets pSecrets;
 
-  const CookieBackground(this.pSecrets, this.addCoins, {Key? key}) : super(key: key);
+  const CookieBackground(this.pSecrets, this.addCoins, {Key? key})
+      : super(key: key);
 
   @override
   State<CookieBackground> createState() => _CookieBackgroundState();
@@ -18,24 +22,61 @@ class _CookieBackgroundState extends State<CookieBackground> {
   late Vector2 cookieCenter;
   Vector2 cookieOffset = Vector2.zero();
   double cookieSize = 300;
+  double sensitivity = 50;
+  bool cookieShow = true;
 
   @override
   Widget build(BuildContext context) {
-    canvasSize = Vector2(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height);
+    canvasSize = Vector2(
+        MediaQuery.of(context).size.width, MediaQuery.of(context).size.height,);
     canvasCenter = Vector2(canvasSize.x / 2, canvasSize.y / 2);
-    cookieCenter = canvasCenter + cookieOffset; //Vector2(canvasCenter.x+cookieOffset.x,canvasCenter.y+cookieOffset.y);
-
-    return GestureDetector(
-      // When the child is tapped, show a snackbar.
-      onTapDown: _onBackgroundTapDown,
-      // onTapUp: _onTapUp,
-      // The custom button
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: Image(image: AssetImage('assets/images/cookie.png'), height: 300, width: 300),
-      ),
-    );
+    cookieCenter = canvasCenter +
+        cookieOffset;
+    return SwipeDetector(
+        onSwipeUp: () {
+          if(cookieOffset.y<-canvasSize.y*0.42){
+            setState(() {
+              cookieShow = false;
+            });
+            widget.pSecrets.progressSecret(3,0);
+            print("completed");
+          }else{
+            setState(() {
+              cookieOffset += Vector2(0, -canvasSize.y*0.06);
+            });
+          }
+          
+          print("swipe up" + cookieOffset.toString());
+        },
+        filterOnStart: (DragStartDetails dragDetails) {
+          print(_isInCookie(
+              dragDetails.globalPosition.dx, dragDetails.globalPosition.dy));
+          return _isInCookie(
+              dragDetails.globalPosition.dx, dragDetails.globalPosition.dy);
+        },
+        child: GestureDetector(
+            // When the child is tapped, show a snackbar.
+            onTapDown: _onBackgroundTapDown,
+            // onTapUp: _onTapUp,
+            // The custom button
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.Colors.green[50],
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: cookieCenter.x - cookieSize / 2,
+                    top: cookieCenter.y - cookieSize / 2,
+                    height: cookieSize,
+                    width: cookieSize,
+                    child: cookieShow ? const Image(
+                      image: AssetImage('assets/images/cookie.png'),
+                    ) : Container(),
+                  ),
+                ],
+              ),
+            )));
   }
 
   _onBackgroundTapDown(TapDownDetails details) {
@@ -43,7 +84,7 @@ class _CookieBackgroundState extends State<CookieBackground> {
     var y = details.globalPosition.dy;
     // or user the local position method to get the offset
     // print(details.localPosition);
-    // print("tap down " + x.toString() + ", " + y.toString());
+    print("tap down " + x.toString() + ", " + y.toString());
     widget.addCoins(1.0);
     if (_isInCookie(x, y)) {
       //TODO: animations of some sort
@@ -56,6 +97,7 @@ class _CookieBackgroundState extends State<CookieBackground> {
   // }
 
   bool _isInCookie(double x, double y) {
+    if(!cookieShow) return false; 
     double result = (x - cookieCenter.x) * (x - cookieCenter.x) +
         (y - cookieCenter.y) * (y - cookieCenter.y) -
         (cookieSize / 2) * (cookieSize / 2);
