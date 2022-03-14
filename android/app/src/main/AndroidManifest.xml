@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ordinary_idle">
    <application
-        android:label="ordinary_idle"
+        android:label="OrdinaryIdle"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
