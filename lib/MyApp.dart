@@ -14,7 +14,7 @@ import 'package:ordinary_idle/partials/ValueHeader.dart';
 
 import 'package:ordinary_idle/util/Money.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
-import 'package:ordinary_idle/util/toast.dart';
+import 'package:ordinary_idle/util/MyToast.dart';
 
 // import 'partials/1cookie.dart';
 
@@ -41,7 +41,7 @@ class MyStatefulWidget extends StatefulWidget {
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   final Money pMoney = Money();
-  final Secrets pSecrets = Secrets();
+  late Secrets pSecrets;
   late final List<Widget> _widgetOptions = <Widget>[
     Home(pSecrets, pMoney.addCoins),
     SecretsPage(pSecrets),
@@ -56,6 +56,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     super.initState();
     fToast = FToast();
     fToast.init(context);
+    pSecrets = Secrets(pMoney.updateSecretsMultiplier,fToast);
   }
 
   void _onItemTapped(int index, BuildContext context) {
@@ -103,14 +104,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       appBar: _selectedIndex != 2 //TODO: Change back to 3 later
           ? PreferredSize(
               preferredSize: const Size.fromHeight(50),
-              child: ValueListenableBuilder<double>(
-                  valueListenable: pMoney.getCoinsListener,
-                  builder: (ctx, coins, _) {
+              child: ValueListenableBuilder<Map<String,dynamic>>(
+                  valueListenable: pMoney.getMoneyListener,
+                  builder: (ctx, money, _) {
                     // print("update");
                     return AppBar(
                         title: ValueHeader(
-                      pCoins: coins,
-                    ));
+                      pCoins: money["coins"],
+                      pMultiplier: money["multiplier"],
+                    ),);
                   }))
           : null,
       body: Center(

@@ -3,15 +3,19 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:ordinary_idle/model/CurrentSecretV1.dart';
 import 'package:ordinary_idle/util/CurrentVolatileSecret.dart';
+import 'package:ordinary_idle/util/Money.dart';
+import 'package:ordinary_idle/util/MyToast.dart';
 import 'package:tuple/tuple.dart';
 
 class Secrets {
   late Box player;
   late Box currentSecrets;
   late List<int> completedSecrets;
+  late Function updateSecretsMultiplier;
+  late FToast fToast;
   Map<int, CurrentVolatileSecret> currentVolatileSecrets = {};
 
-  Secrets() {
+  Secrets(this.updateSecretsMultiplier, this.fToast) {
     player = Hive.box("player");
     currentSecrets = Hive.box("currentSecrets");
     completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);
@@ -70,7 +74,7 @@ class Secrets {
     )
   ];
 
-  Secret getSecretById(int id) {
+  static Secret getSecretById(int id) {
     return secrets.where((s) => s.id == id).first;
   }
 
@@ -180,15 +184,8 @@ class Secrets {
     final s = getSecretById(id);
     completedSecrets.add(id);
     player.put("completedSecrets", completedSecrets);
-    Fluttertoast.showToast(
-      msg: "Secret Unlocked! ${s.title}",
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.TOP,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.black87,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
+    MyToast.showSecretToast(fToast, "Secret Unlocked! ${s.title}");
+    updateSecretsMultiplier();
   }
 }
 

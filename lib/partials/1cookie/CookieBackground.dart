@@ -52,8 +52,6 @@ class _CookieBackgroundState extends State<CookieBackground> {
           verticalSwipeMaxWidthThreshold: 100,
         ),
         filterOnStart: (DragStartDetails dragDetails) {
-          print(_isInCookie(
-              dragDetails.globalPosition.dx, dragDetails.globalPosition.dy));
           return _isInCookie(
               dragDetails.globalPosition.dx, dragDetails.globalPosition.dy);
         },
