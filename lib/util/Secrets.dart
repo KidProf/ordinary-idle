@@ -62,7 +62,7 @@ class Secrets {
       id: 3,
       exid: "1.2",
       prerequisites: [1],
-      title: "Where did the cookie go?",
+      title: "Where did it go?",
       description: "Swipe the cookie up until it disappears from the screen.",
       reward: 1.0,
       progressComponent: [
@@ -71,11 +71,29 @@ class Secrets {
           "volatile": true,
         },
       ],
-    )
+    ),
+    Secret(
+      id: 4,
+      exid: "1.3",
+      prerequisites: [1, 3],
+      title: "Diode",
+      description: "Rotate the cookie anticlockwise for 4 cycles.",
+      reward: 1.0,
+      progressComponent: [
+        {
+          "total": 1,
+          "volatile": true,
+        },
+      ],
+    ),
   ];
 
   static Secret getSecretById(int id) {
     return secrets.where((s) => s.id == id).first;
+  }
+
+  bool secretDoable(int id) {
+    return prerequisiteMet(id) && !secretCompleted(id);
   }
 
   bool secretCompleted(int id) {

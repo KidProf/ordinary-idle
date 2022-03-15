@@ -1,16 +1,19 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/colors.dart' as Colors;
 import 'package:ordinary_idle/util/Secrets.dart';
 import 'package:ordinary_idle/util/SwipeDetector.dart';
 import 'package:vector_math/vector_math.dart';
 
+import 'package:ordinary_idle/util/RotateDetector.dart';
 
 class CookieBackground extends StatefulWidget {
   final Function addCoins;
   final Secrets pSecrets;
 
-  const CookieBackground(this.pSecrets, this.addCoins, {Key? key})
-      : super(key: key);
+  const CookieBackground(this.pSecrets, this.addCoins, {Key? key}) : super(key: key);
 
   @override
   State<CookieBackground> createState() => _CookieBackgroundState();
@@ -22,62 +25,61 @@ class _CookieBackgroundState extends State<CookieBackground> {
   late Vector2 cookieCenter;
   Vector2 cookieOffset = Vector2.zero();
   double cookieSize = 300;
-  double sensitivity = 50;
   bool cookieShow = true;
+
+  //for secret 4
+  double cookieAngle = 0; //rotation of cookie displayed
+  double internalAngle = 0; //actual rotation of cookie (including anticlockwise)
+  double fingerCookieOffset = 0; //cookieAngle = fingerAngle - fingerCookieOffset
+  double secret4Progression = 0;
+  bool secret4Completed = false; //so that the animation could play
 
   @override
   Widget build(BuildContext context) {
     canvasSize = Vector2(
-        MediaQuery.of(context).size.width, MediaQuery.of(context).size.height,);
+      MediaQuery.of(context).size.width,
+      MediaQuery.of(context).size.height,
+    );
     canvasCenter = Vector2(canvasSize.x / 2, canvasSize.y / 2);
-    cookieCenter = canvasCenter +
-        cookieOffset;
-    return SwipeDetector(
-        onSwipeUp: () {
-          if(widget.pSecrets.prerequisiteMet(3)&&!widget.pSecrets.secretCompleted(3)){
-            if(cookieOffset.y<-canvasSize.y*0.42){
-            setState(() {
-              cookieShow = false;
-            });
-            widget.pSecrets.progressSecret(3,0);
-          }else{
-            setState(() {
-              cookieOffset += Vector2(0, -canvasSize.y*0.06);
-            });
-          }
-          }        
-          print("swipe up" + cookieOffset.toString());
-        },
-        swipeConfiguration: SwipeConfiguration(
-          verticalSwipeMaxWidthThreshold: 100,
-        ),
-        filterOnStart: (DragStartDetails dragDetails) {
-          return _isInCookie(
-              dragDetails.globalPosition.dx, dragDetails.globalPosition.dy);
-        },
-        child: GestureDetector(
-            // When the child is tapped, show a snackbar.
-            onTapDown: _onBackgroundTapDown,
-            // onTapUp: _onTapUp,
-            // The custom button
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: const Color(0xFFFAFAFA), //the color is necessary or else taps outside the cookie cannot be registered
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: cookieCenter.x - cookieSize / 2,
-                    top: cookieCenter.y - cookieSize / 2,
-                    height: cookieSize,
-                    width: cookieSize,
-                    child: cookieShow ? const Image(
-                      image: AssetImage('assets/images/cookie.png'),
-                    ) : Container(),
-                  ),
-                ],
+    cookieCenter = canvasCenter + cookieOffset;
+
+    //FIXME: temporary: secret4Completed = set to whether secret has unlocked before, so that rotation animation would persist, but have to switch to secret 5 later
+    secret4Completed = widget.pSecrets.secretCompleted(4);
+
+    var gestureChild = GestureDetector(
+        onTapDown: _onBackgroundTapDown,
+        // onTapUp: _onTapUp,
+        // The custom button
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: const Color(0xFFFAFAFA), //the color is necessary or else taps outside the cookie cannot be registered
+          child: Stack(
+            children: [
+              Positioned(
+                left: cookieCenter.x - cookieSize / 2,
+                top: cookieCenter.y - cookieSize / 2 - 75, //TODO: this is the approximate height of the header
+                height: cookieSize,
+                width: cookieSize,
+                child: cookieShow
+                    ? Transform.rotate(
+                        angle: -cookieAngle,
+                        child: const Image(
+                          image: AssetImage('assets/images/cookie.png'),
+                        ),
+                      )
+                    : Container(),
               ),
-            )));
+            ],
+          ),
+        ));
+    if (widget.pSecrets.secretDoable(3)) {
+      return _swipeDetectorSecret3(gestureChild);
+    } else if (widget.pSecrets.secretDoable(4) || secret4Completed) {
+      return _panDetectorSecret4(gestureChild);
+    } else {
+      return gestureChild;
+    }
   }
 
   _onBackgroundTapDown(TapDownDetails details) {
@@ -87,8 +89,12 @@ class _CookieBackgroundState extends State<CookieBackground> {
     // print(details.localPosition);
     // print("tap down " + x.toString() + ", " + y.toString());
     widget.addCoins(1.0);
+    // print(Vector2(x - cookieCenter.x,y-cookieCenter.y));
     if (_isInCookie(x, y)) {
       //TODO: animations of some sort
+      // setState(() {
+      //   cookieAngle += 0.1;
+      // });
     } else {
       widget.pSecrets.progressSecret(2, 0);
     }
@@ -98,10 +104,80 @@ class _CookieBackgroundState extends State<CookieBackground> {
   // }
 
   bool _isInCookie(double x, double y) {
-    if(!cookieShow) return false; 
+    if (!cookieShow) return false;
     double result = (x - cookieCenter.x) * (x - cookieCenter.x) +
         (y - cookieCenter.y) * (y - cookieCenter.y) -
         (cookieSize / 2) * (cookieSize / 2);
     return result <= 0;
+  }
+
+  Widget _swipeDetectorSecret3(Widget child) {
+    return SwipeDetector(
+      onSwipeUp: widget.pSecrets.secretDoable(3)
+          ? () {
+              if (cookieOffset.y < -canvasSize.y * 0.35) {
+                setState(() {
+                  cookieShow = false;
+                });
+                widget.pSecrets.progressSecret(3, 0);
+              } else {
+                setState(() {
+                  cookieOffset += Vector2(0, -canvasSize.y * 0.05);
+                });
+              }
+              print("swipe up" + cookieOffset.toString());
+            }
+          : null,
+      swipeConfiguration: SwipeConfiguration(
+        verticalSwipeMaxWidthThreshold: 100,
+      ),
+      filterOnStart: (DragStartDetails dragDetails) {
+        return _isInCookie(dragDetails.globalPosition.dx, dragDetails.globalPosition.dy);
+      },
+      child: child,
+    );
+  }
+
+  Widget _panDetectorSecret4(Widget child) {
+    return RotateDetector(
+      getAngleOffset: _getAngleOffset,
+      onAngleChange: _onAngleChange,
+      center: cookieCenter,
+      child: child,
+    );
+  }
+
+  _getAngleOffset(double offset) {
+    fingerCookieOffset = offset - cookieAngle;
+    print(fingerCookieOffset);
+  }
+
+  _onAngleChange(double fingerAngle) {
+    var newInternalAngle = fingerAngle - fingerCookieOffset % (2 * pi);
+    if ((newInternalAngle - internalAngle) % (2 * pi) > pi || secret4Completed) {
+      //clockwise, OK
+      secret4Progression = 0;
+      print("clockwise");
+      internalAngle = newInternalAngle;
+      setState(() {
+        cookieAngle = internalAngle;
+      });
+    } else {
+      print("anticlockwise");
+      print(secret4Progression);
+      internalAngle = newInternalAngle;
+      while (newInternalAngle < secret4Progression) {
+        newInternalAngle += 2 * pi;
+      }
+      secret4Progression = newInternalAngle;
+      if (secret4Progression > 8 * pi) {
+        //4 cycles
+        widget.pSecrets.progressSecret(4, 0);
+        secret4Completed = true;
+        setState(() {
+          cookieAngle = internalAngle;
+        });
+      }
+    }
   }
 }

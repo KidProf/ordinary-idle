@@ -19,10 +19,12 @@ class MyToast {
           // SizedBox(
           //   width: 12.0,
           // ),
-          Flexible(child: Text(
-            msg,
-            style: const TextStyle(color: Colors.white),
-          ),),
+          Flexible(
+            child: Text(
+              msg,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
         ],
       ),
     );
@@ -42,14 +44,17 @@ class MyToast {
           SizedBox(
             width: 12.0,
           ),
-          Flexible(child: Text(
-            msg,
-            style: const TextStyle(color: Colors.black),
-          ),),
+          Flexible(
+            child: Text(
+              msg,
+              style: const TextStyle(color: Colors.black),
+            ),
+          ),
         ],
       ),
     );
   }
+
   // Custom Toast Position
   static void showBottomToast(FToast fToast, String msg) {
     fToast.showToast(

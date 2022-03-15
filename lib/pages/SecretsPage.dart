@@ -46,9 +46,17 @@ class SecretsPage extends StatelessWidget {
                   const SizedBox(width: 10),
                   Text(s.exid, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color)),
                   const SizedBox(width: 10),
-                  Expanded(child: Text(s.title, style: TextStyle(fontSize: 20, color: color,), overflow: TextOverflow.ellipsis,)),
+                  Expanded(
+                      child: Text(
+                    s.title,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: color,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  )),
                   const SizedBox(width: 10),
-                  Text("+"+s.reward.toString() + "x", style: TextStyle(fontSize: 20, color: color)),
+                  Text("+" + s.reward.toString() + "x", style: TextStyle(fontSize: 20, color: color)),
                   const SizedBox(width: 10),
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -61,34 +69,35 @@ class SecretsPage extends StatelessWidget {
                 List<Widget> children;
                 if (completed) {
                   children = [
-                      SizedBox(width: MediaQuery.of(context).size.width - 20, height: 0), //maintain width
-                      Text(s.title, style: TextStyle(fontSize: 20)),
-                      SizedBox(width: MediaQuery.of(context).size.width - 20, child: Text(s.description)),
-                      ElevatedButton(
-                        child: const Text('Close'),
-                        onPressed: () => Navigator.pop(context),
-                      ),
+                    SizedBox(width: MediaQuery.of(context).size.width - 20, height: 0), //maintain width
+                    Text(s.title, style: TextStyle(fontSize: 20)),
+                    SizedBox(width: MediaQuery.of(context).size.width - 20, child: Text(s.description)),
+                    ElevatedButton(
+                      child: const Text('Close'),
+                      onPressed: () => Navigator.pop(context),
+                    ),
                   ];
-                }else{
+                } else {
                   children = [
                     SizedBox(width: MediaQuery.of(context).size.width - 20, height: 0), //maintain width
                     Text(s.title, style: TextStyle(fontSize: 20)),
                     const Text("LOCKED"),
                     ElevatedButton(
-                        child: const Text('Close'),
-                        onPressed: () => Navigator.pop(context),
-                      ),
+                      child: const Text('Close'),
+                      onPressed: () => Navigator.pop(context),
+                    ),
                   ];
                 }
                 return Container(
                   margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
                   child: Wrap(
-                  direction: Axis.vertical,
-                  alignment: WrapAlignment.start,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: 20,
-                  children: children,
-                ),);
+                    direction: Axis.vertical,
+                    alignment: WrapAlignment.start,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 20,
+                    children: children,
+                  ),
+                );
               },
             );
           });

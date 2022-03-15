@@ -61,7 +61,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     super.initState();
     fToast = FToast();
     fToast.init(context);
-    pSecrets = Secrets(pMoney.updateSecretsMultiplier,fToast);
+    pSecrets = Secrets(pMoney.updateSecretsMultiplier, fToast);
   }
 
   void _onItemTapped(int index, BuildContext context) {
@@ -109,15 +109,16 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       appBar: _selectedIndex != 2 //TODO: Change back to 3 later
           ? PreferredSize(
               preferredSize: const Size.fromHeight(50),
-              child: ValueListenableBuilder<Map<String,dynamic>>(
+              child: ValueListenableBuilder<Map<String, dynamic>>(
                   valueListenable: pMoney.getMoneyListener,
                   builder: (ctx, money, _) {
                     // print("update");
                     return AppBar(
-                        title: ValueHeader(
-                      pCoins: money["coins"],
-                      pMultiplier: money["multiplier"],
-                    ),);
+                      title: ValueHeader(
+                        pCoins: money["coins"],
+                        pMultiplier: money["multiplier"],
+                      ),
+                    );
                   }))
           : null,
       body: Center(

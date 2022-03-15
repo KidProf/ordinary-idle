@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 //Source: https://flutteragency.com/how-to-detect-swipes-in-flutter/#:~:text=How%20to%20Detect%20Swipe%20In%20Flutter%3F,-Firstly%2C%20Wrap%20your&text=Using%20SwipeDetector%20is%20straightforward.,and%20paste%20the%20file%20code.
 
 class SwipeConfiguration {
@@ -65,9 +64,7 @@ class SwipeDetector extends StatelessWidget {
       this.onSwipeRight,
       this.filterOnStart,
       SwipeConfiguration? swipeConfiguration})
-      : this.swipeConfiguration = swipeConfiguration == null
-            ? SwipeConfiguration()
-            : swipeConfiguration;
+      : this.swipeConfiguration = swipeConfiguration == null ? SwipeConfiguration() : swipeConfiguration;
 
   @override
   Widget build(BuildContext context) {
@@ -83,10 +80,10 @@ class SwipeDetector extends StatelessWidget {
     return GestureDetector(
       child: child,
       onVerticalDragStart: (dragDetails) {
-        if(filterOnStart!=null){
+        if (filterOnStart != null) {
           filterStartSatisfied = filterOnStart!(dragDetails);
         }
-        
+
         //filter drag function
         startVerticalDragDetails = dragDetails;
       },
@@ -94,10 +91,8 @@ class SwipeDetector extends StatelessWidget {
         updateVerticalDragDetails = dragDetails;
       },
       onVerticalDragEnd: (endDetails) {
-        double dx = updateVerticalDragDetails.globalPosition.dx -
-            startVerticalDragDetails.globalPosition.dx;
-        double dy = updateVerticalDragDetails.globalPosition.dy -
-            startVerticalDragDetails.globalPosition.dy;
+        double dx = updateVerticalDragDetails.globalPosition.dx - startVerticalDragDetails.globalPosition.dx;
+        double dy = updateVerticalDragDetails.globalPosition.dy - startVerticalDragDetails.globalPosition.dy;
         double velocity = endDetails.primaryVelocity!;
 
         //Convert values to be positive
@@ -105,10 +100,22 @@ class SwipeDetector extends StatelessWidget {
         if (dy < 0) dy = -dy;
         double positiveVelocity = velocity < 0 ? -velocity : velocity;
 
-        if(filterOnStart!=null&&!filterStartSatisfied){print("filter not satified"); return;}
-        if (dx > swipeConfiguration.verticalSwipeMaxWidthThreshold){print("verticalSwipeMaxWidthThreshold not satified"); return;}
-        if (dy < swipeConfiguration.verticalSwipeMinDisplacement){print("verticalSwipeMinDisplacement not satified"); return;}
-        if (positiveVelocity < swipeConfiguration.verticalSwipeMinVelocity){print("verticalSwipeMinVelocity not satified"); return;}
+        if (filterOnStart != null && !filterStartSatisfied) {
+          print("filter not satified");
+          return;
+        }
+        if (dx > swipeConfiguration.verticalSwipeMaxWidthThreshold) {
+          print("verticalSwipeMaxWidthThreshold not satified");
+          return;
+        }
+        if (dy < swipeConfiguration.verticalSwipeMinDisplacement) {
+          print("verticalSwipeMinDisplacement not satified");
+          return;
+        }
+        if (positiveVelocity < swipeConfiguration.verticalSwipeMinVelocity) {
+          print("verticalSwipeMinVelocity not satified");
+          return;
+        }
 
         if (velocity < 0) {
           //Swipe Up
@@ -129,10 +136,8 @@ class SwipeDetector extends StatelessWidget {
         updateHorizontalDragDetails = dragDetails;
       },
       onHorizontalDragEnd: (endDetails) {
-        double dx = updateHorizontalDragDetails.globalPosition.dx -
-            startHorizontalDragDetails.globalPosition.dx;
-        double dy = updateHorizontalDragDetails.globalPosition.dy -
-            startHorizontalDragDetails.globalPosition.dy;
+        double dx = updateHorizontalDragDetails.globalPosition.dx - startHorizontalDragDetails.globalPosition.dx;
+        double dy = updateHorizontalDragDetails.globalPosition.dy - startHorizontalDragDetails.globalPosition.dy;
         double velocity = endDetails.primaryVelocity!;
 
         if (dx < 0) dx = -dx;
@@ -141,8 +146,7 @@ class SwipeDetector extends StatelessWidget {
 
         if (dx < swipeConfiguration.horizontalSwipeMinDisplacement) return;
         if (dy > swipeConfiguration.horizontalSwipeMaxHeightThreshold) return;
-        if (positiveVelocity < swipeConfiguration.horizontalSwipeMinVelocity)
-          return;
+        if (positiveVelocity < swipeConfiguration.horizontalSwipeMinVelocity) return;
 
         if (velocity < 0) {
           //Swipe Up

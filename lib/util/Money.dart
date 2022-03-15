@@ -17,7 +17,7 @@ class Money {
     secretsMultiplier = _computeSecretsMultiplier();
 
     money = ValueNotifier<Map<String, dynamic>>({
-      "coins" : player.get("coins",defaultValue: 1.0),
+      "coins": player.get("coins", defaultValue: 1.0),
       "multiplier": _computeMultiplier(),
     });
     // _expCoins = player.get("expCoins", defaultValue: 0.0);
@@ -41,7 +41,7 @@ class Money {
   }
 
   double addCoins(double coins) {
-    money.value = {...money.value, "coins" : money.value["coins"]+coins*money.value["multiplier"]};
+    money.value = {...money.value, "coins": money.value["coins"] + coins * money.value["multiplier"]};
     player.put("coins", money.value["coins"]);
     return money.value["coins"];
   }
@@ -53,13 +53,13 @@ class Money {
   // }
 
   double addCoinsWithoutMultiplier(double coins) {
-    money.value = {...money.value, "coins" : money.value["coins"]+coins};
+    money.value = {...money.value, "coins": money.value["coins"] + coins};
     player.put("coins", money.value["coins"]);
     return money.value["coins"];
   }
 
   void setCoins(double coins) {
-    money.value = {...money.value, "coins" : coins};
+    money.value = {...money.value, "coins": coins};
     player.put("coins", money.value["coins"]);
     return;
   }
@@ -70,22 +70,22 @@ class Money {
   //   return;
   // }
 
-
   //recompute and update secretsMultiplier and hence multiplier, return new secretsMultiplier
-  double updateSecretsMultiplier(){
+  double updateSecretsMultiplier() {
     print("updateSecretsMultiplier");
     secretsMultiplier = _computeSecretsMultiplier();
     updateMultiplier();
     return secretsMultiplier;
   }
 
-  double updateMultiplier(){
+  double updateMultiplier() {
     var x = _computeMultiplier();
-    money.value = {...money.value, "multiplier" : x};
+    money.value = {...money.value, "multiplier": x};
     print(x);
     return x;
   }
-  double _computeSecretsMultiplier(){
+
+  double _computeSecretsMultiplier() {
     double sum = 0;
     final completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);
     completedSecrets.forEach((id) {
@@ -94,7 +94,8 @@ class Money {
     });
     return sum;
   }
-  double _computeMultiplier(){
+
+  double _computeMultiplier() {
     return secretsMultiplier + otherMultiplier + 1;
   }
 }
