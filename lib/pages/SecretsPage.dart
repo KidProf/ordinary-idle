@@ -5,7 +5,8 @@ class SecretsPage extends StatelessWidget {
   final Secrets pSecrets;
   const SecretsPage(this.pSecrets, {Key? key}) : super(key: key);
 
-  static const TextStyle titleStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle titleStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
@@ -45,19 +46,28 @@ class SecretsPage extends StatelessWidget {
               child: Row(
                 children: [
                   const SizedBox(width: 10),
-                  Text(s.exid, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color)),
-                  const SizedBox(width: 10),
-                  Expanded(
-                      child: Text(
-                    s.title,
+                  Text(
+                    s.exid,
                     style: TextStyle(
                       fontSize: 20,
+                      fontWeight: FontWeight.bold,
                       color: color,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                  )),
+                  ),
                   const SizedBox(width: 10),
-                  Text("+" + s.reward.toString() + "x", style: TextStyle(fontSize: 20, color: color)),
+                  Expanded(child: pSecrets.prerequisiteMet(s.id) ? 
+                    Text(
+                      s.title,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: color,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                  ) : Wrap(alignment: WrapAlignment.start, children: [Icon(Icons.lock, color: Colors.black38,),]),),
+                  
+                  const SizedBox(width: 10),
+                  Text("+" + s.reward.toString() + "x",
+                      style: TextStyle(fontSize: 20, color: color)),
                   const SizedBox(width: 10),
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -70,9 +80,13 @@ class SecretsPage extends StatelessWidget {
                 List<Widget> children;
                 if (completed) {
                   children = [
-                    SizedBox(width: MediaQuery.of(context).size.width - 20, height: 0), //maintain width
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width - 20,
+                        height: 0), //maintain width
                     Text(s.title, style: TextStyle(fontSize: 20)),
-                    SizedBox(width: MediaQuery.of(context).size.width - 20, child: Text(s.description)),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width - 20,
+                        child: Text(s.description)),
                     ElevatedButton(
                       child: const Text('Close'),
                       onPressed: () => Navigator.pop(context),
@@ -80,9 +94,11 @@ class SecretsPage extends StatelessWidget {
                   ];
                 } else {
                   children = [
-                    SizedBox(width: MediaQuery.of(context).size.width - 20, height: 0), //maintain width
-                    Text(s.title, style: TextStyle(fontSize: 20)),
-                    const Text("LOCKED"),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width - 20,
+                        height: 0,), //maintain width 
+                    pSecrets.prerequisiteMet(s.id) ? Text(s.title, style: TextStyle(fontSize: 20)) : const Icon(Icons.lock),
+                    Text(pSecrets.prerequisiteMet(s.id) ? "LOCKED! Have fun finding it." : "You have not met the requirements to find this secret yet."),
                     ElevatedButton(
                       child: const Text('Close'),
                       onPressed: () => Navigator.pop(context),
