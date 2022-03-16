@@ -111,6 +111,15 @@ class _CookieBackgroundState extends State<CookieBackground> {
     return result <= 0;
   }
 
+  bool _isInCookieTolerance(double x, double y) {
+    if (!cookieShow) return false;
+    double result = (x - cookieCenter.x) * (x - cookieCenter.x) +
+        (y - cookieCenter.y) * (y - cookieCenter.y) -
+        (cookieSize * 3 / 4) * (cookieSize * 3 / 4); //1.5*radius
+    return result <= 0;
+  }
+
+
   Widget _swipeDetectorSecret3(Widget child) {
     return SwipeDetector(
       onSwipeUp: widget.pSecrets.secretDoable(3)
@@ -130,9 +139,11 @@ class _CookieBackgroundState extends State<CookieBackground> {
           : null,
       swipeConfiguration: SwipeConfiguration(
         verticalSwipeMaxWidthThreshold: 100,
+        verticalSwipeMinVelocity: 150,
+        verticalSwipeMinDisplacement: 50,
       ),
       filterOnStart: (DragStartDetails dragDetails) {
-        return _isInCookie(dragDetails.globalPosition.dx, dragDetails.globalPosition.dy);
+        return _isInCookieTolerance(dragDetails.globalPosition.dx, dragDetails.globalPosition.dy);
       },
       child: child,
     );
@@ -142,6 +153,9 @@ class _CookieBackgroundState extends State<CookieBackground> {
     return RotateDetector(
       getAngleOffset: _getAngleOffset,
       onAngleChange: _onAngleChange,
+      filterOnStart: (DragStartDetails dragDetails) {
+        return _isInCookieTolerance(dragDetails.globalPosition.dx, dragDetails.globalPosition.dy);
+      },
       center: cookieCenter,
       child: child,
     );

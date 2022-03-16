@@ -73,7 +73,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
       fToast.removeCustomToast();
       if (isFinished) {
-        MyToast.showBottomToast(fToast, "Secret revealed");
         setState(() {
           _selectedIndex = index;
         });

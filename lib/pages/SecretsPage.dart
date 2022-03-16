@@ -10,21 +10,22 @@ class SecretsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        alignment: Alignment.topCenter,
-        margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-        child: Wrap(
-          children: [
-            Text("Secrets", style: titleStyle),
-            SizedBox(height: 10),
-            ..._printSecrets(pSecrets, context),
-          ],
-          // spacing: 30,
-          runAlignment: WrapAlignment.start,
-          crossAxisAlignment: WrapCrossAlignment.start,
-          direction: Axis.vertical,
-          // mainAxisAlignment: MainAxisAlignment.start,
-          // crossAxisAlignment: CrossAxisAlignment.center,
-        ));
+      alignment: Alignment.topCenter,
+      margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+      child: Wrap(
+        children: [
+          Text("Secrets", style: titleStyle),
+          SizedBox(height: 10),
+          ..._printSecrets(pSecrets, context),
+        ],
+        // spacing: 30,
+        runAlignment: WrapAlignment.start,
+        crossAxisAlignment: WrapCrossAlignment.start,
+        direction: Axis.vertical,
+        // mainAxisAlignment: MainAxisAlignment.start,
+        // crossAxisAlignment: CrossAxisAlignment.center,
+      ),
+    );
   }
 
   List<Widget> _printSecrets(Secrets pSecrets, BuildContext context) {

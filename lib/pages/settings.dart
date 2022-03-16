@@ -9,19 +9,22 @@ class Settings extends StatelessWidget {
   final Secrets pSecrets;
   const Settings(this.pSecrets, {Key? key}) : super(key: key);
 
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle titleStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+    return Container(
+      alignment: Alignment.center,
+      margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+      child: Wrap(
         children: [
+          // const SizedBox(height: 70),
           const Text(
             'Settings',
-            style: optionStyle,
+            style: titleStyle,
           ),
           ElevatedButton(
+            style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.red),),
             onPressed: () async {
               //Delete Hive
               // Hive.deleteFromDisk();
@@ -33,7 +36,26 @@ class Settings extends StatelessWidget {
               RestartWidget.restartApp(context);
             },
             child: Text("Reset All"),
-          )
-        ]);
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              //Delete Hive storage related to secrets
+              await Hive.box('player').put("completedSecrets",<int>[]);
+              await Hive.box('currentSecrets').clear();
+              //Initialize deleted boxes
+              await Hive.openBox('currentSecrets');
+              RestartWidget.restartApp(context);
+            },
+            child: Text("Reset Secerets Only"),
+          ),
+        ],
+        spacing: 30,
+        runAlignment: WrapAlignment.start,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        direction: Axis.vertical,
+        // mainAxisAlignment: MainAxisAlignment.start,
+        // crossAxisAlignment: CrossAxisAlignment.center,
+      ),
+    );
   }
 }

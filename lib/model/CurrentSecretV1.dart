@@ -1,3 +1,6 @@
+//CurrentSecretsV1 model:
+// List<CurrentSecretV1>
+
 import 'package:hive/hive.dart';
 
 part 'CurrentSecretV1.g.dart';
