@@ -81,8 +81,8 @@ class SecretsPage extends StatelessWidget {
                 if (completed) {
                   children = [
                     SizedBox(
-                        width: MediaQuery.of(context).size.width - 20,
-                        height: 0), //maintain width
+                      width: MediaQuery.of(context).size.width - 20,
+                      height: 0), //maintain width and top padding
                     Text(s.title, style: TextStyle(fontSize: 20)),
                     SizedBox(
                         width: MediaQuery.of(context).size.width - 20,
@@ -95,10 +95,12 @@ class SecretsPage extends StatelessWidget {
                 } else {
                   children = [
                     SizedBox(
+                      width: MediaQuery.of(context).size.width - 20,
+                      height: 0), //maintain width and top padding
+                    pSecrets.prerequisiteMet(s.id) ? Text(s.title, style: TextStyle(fontSize: 20)) : const Icon(Icons.lock), 
+                    SizedBox(
                         width: MediaQuery.of(context).size.width - 20,
-                        height: 0,), //maintain width 
-                    pSecrets.prerequisiteMet(s.id) ? Text(s.title, style: TextStyle(fontSize: 20)) : const Icon(Icons.lock),
-                    Text(pSecrets.prerequisiteMet(s.id) ? "LOCKED! Have fun finding it." : "You have not met the requirements to find this secret yet."),
+                        child: Text(pSecrets.prerequisiteMet(s.id) ? "LOCKED! Have fun finding it." : "You have not met the requirements to find this secret yet. Find other secrets to unlock it.")),
                     ElevatedButton(
                       child: const Text('Close'),
                       onPressed: () => Navigator.pop(context),
