@@ -5,8 +5,7 @@ class SecretsPage extends StatelessWidget {
   final Secrets pSecrets;
   const SecretsPage(this.pSecrets, {Key? key}) : super(key: key);
 
-  static const TextStyle titleStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle titleStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
@@ -55,19 +54,28 @@ class SecretsPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Expanded(child: pSecrets.prerequisiteMet(s.id) ? 
-                    Text(
-                      s.title,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: color,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                  ) : Wrap(alignment: WrapAlignment.start, children: [Icon(Icons.lock, color: Colors.black38,),]),),
-                  
+                  Expanded(
+                    child: pSecrets.prerequisiteMet(s.id)
+                        ? Text(
+                            s.title,
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: color,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          )
+                        : Wrap(
+                            alignment: WrapAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.lock,
+                                color: Colors.black38,
+                              ),
+                            ],
+                          ),
+                  ),
                   const SizedBox(width: 10),
-                  Text("+" + s.reward.toString() + "x",
-                      style: TextStyle(fontSize: 20, color: color)),
+                  Text("+" + s.reward.toString() + "x", style: TextStyle(fontSize: 20, color: color)),
                   const SizedBox(width: 10),
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -80,13 +88,9 @@ class SecretsPage extends StatelessWidget {
                 List<Widget> children;
                 if (completed) {
                   children = [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width - 20,
-                      height: 0), //maintain width and top padding
+                    SizedBox(width: MediaQuery.of(context).size.width - 20, height: 0), //maintain width and top padding
                     Text(s.title, style: TextStyle(fontSize: 20)),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width - 20,
-                        child: Text(s.description)),
+                    SizedBox(width: MediaQuery.of(context).size.width - 20, child: Text(s.description)),
                     ElevatedButton(
                       child: const Text('Close'),
                       onPressed: () => Navigator.pop(context),
@@ -94,13 +98,15 @@ class SecretsPage extends StatelessWidget {
                   ];
                 } else {
                   children = [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width - 20,
-                      height: 0), //maintain width and top padding
-                    pSecrets.prerequisiteMet(s.id) ? Text(s.title, style: TextStyle(fontSize: 20)) : const Icon(Icons.lock), 
+                    SizedBox(width: MediaQuery.of(context).size.width - 20, height: 0), //maintain width and top padding
+                    pSecrets.prerequisiteMet(s.id)
+                        ? Text(s.title, style: TextStyle(fontSize: 20))
+                        : const Icon(Icons.lock),
                     SizedBox(
                         width: MediaQuery.of(context).size.width - 20,
-                        child: Text(pSecrets.prerequisiteMet(s.id) ? "LOCKED! Have fun finding it." : "You have not met the requirements to find this secret yet. Find other secrets to unlock it.")),
+                        child: Text(pSecrets.prerequisiteMet(s.id)
+                            ? "LOCKED! Have fun finding it."
+                            : "You have not met the requirements to find this secret yet. Find other secrets to unlock it.")),
                     ElevatedButton(
                       child: const Text('Close'),
                       onPressed: () => Navigator.pop(context),

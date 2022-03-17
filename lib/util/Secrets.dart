@@ -208,8 +208,8 @@ class Secrets {
 }
 
 class Secret {
-  final int id;
-  final String exid;
+  final int id; //cannot be changed once initialized, or else will have problems during updates
+  final String exid; //can be changed to suit context later
   final List<int> prerequisites;
   final String title;
   final String description;

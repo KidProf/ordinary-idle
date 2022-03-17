@@ -12,16 +12,20 @@ class ValueHeader extends StatelessWidget {
       children: [
         const Image(image: AssetImage('assets/images/coin.png'), width: 30, height: 30),
         const SizedBox(width: 10),
-        Text(pCoins.toString(),
-            style: TextStyle(
-              fontSize: 25,
-            )),
+        Text(
+          pCoins.toString(),
+          style: TextStyle(
+            fontSize: 25,
+          ),
+        ),
         const SizedBox(width: 50),
-        Text(pMultiplier.toString() + "x",
-            style: TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-            )),
+        Text(
+          pMultiplier.toString() + "x",
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ],
       mainAxisAlignment: MainAxisAlignment.center,
     );

@@ -7,14 +7,16 @@ class Money {
 
   late ValueNotifier<Map<String, dynamic>> money;
   late Box player;
+  late Box purchases;
   late double secretsMultiplier;
   late double otherMultiplier;
 
   Money() {
     player = Hive.box("player");
-
+    purchases = Hive.box("purchases");
     otherMultiplier = player.get("otherMultiplier", defaultValue: 0.0);
     secretsMultiplier = _computeSecretsMultiplier();
+    //TODO: updateCoinsPerTap
 
     money = ValueNotifier<Map<String, dynamic>>({
       "coins": player.get("coins", defaultValue: 1.0),
@@ -58,6 +60,13 @@ class Money {
     return money.value["coins"];
   }
 
+  bool subtractCoins(double coins) {
+    if (money.value["coins"] - coins < 0) return false;
+    money.value = {...money.value, "coins": money.value["coins"] - coins};
+    player.put("coins", money.value["coins"]);
+    return true;
+  }
+
   void setCoins(double coins) {
     money.value = {...money.value, "coins": coins};
     player.put("coins", money.value["coins"]);
@@ -97,5 +106,11 @@ class Money {
 
   double _computeMultiplier() {
     return secretsMultiplier + otherMultiplier + 1;
+  }
+
+  double updateCoinsPerTap() {
+    print("updateCoinsPerTap");
+    //the purchase with id 0 should be the only one related to tapping
+    return 0;
   }
 }

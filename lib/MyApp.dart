@@ -16,6 +16,7 @@ import 'package:ordinary_idle/partials/ValueHeader.dart';
 import 'package:ordinary_idle/util/Money.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
+import 'package:ordinary_idle/util/Shops.dart';
 
 // import 'partials/1cookie.dart';
 
@@ -47,8 +48,9 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   final Money pMoney = Money();
   late Secrets pSecrets;
+  late Shops pShops = Shops(pMoney);
   late final List<Widget> _widgetOptions = <Widget>[
-    Home(pSecrets, pMoney.addCoins),
+    Home(pSecrets, pMoney),
     SecretsPage(pSecrets),
     // Achievements(pSecrets),
     Settings(pSecrets),

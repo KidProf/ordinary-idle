@@ -1,6 +1,3 @@
-//CurrentSecretsV1 model:
-// List<CurrentSecretV1>
-
 import 'package:hive/hive.dart';
 
 part 'CurrentSecretV1.g.dart';
@@ -30,3 +27,6 @@ class CurrentSecretV1 {
     required this.totalStages,
   });
 }
+
+//CurrentSecretsV1 model:
+// Map<int,CurrentSecretV1>

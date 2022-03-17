@@ -119,7 +119,6 @@ class _CookieBackgroundState extends State<CookieBackground> {
     return result <= 0;
   }
 
-
   Widget _swipeDetectorSecret3(Widget child) {
     return SwipeDetector(
       onSwipeUp: widget.pSecrets.secretDoable(3)

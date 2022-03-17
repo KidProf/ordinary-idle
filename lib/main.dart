@@ -17,6 +17,7 @@ void main() async {
 
   await Hive.openBox('player');
   await Hive.openBox('currentSecrets');
+  await Hive.openBox('purchases');
   runApp(
     RestartWidget(
       child: MyApp(),

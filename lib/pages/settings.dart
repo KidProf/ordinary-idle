@@ -24,7 +24,9 @@ class Settings extends StatelessWidget {
             style: titleStyle,
           ),
           ElevatedButton(
-            style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.red),),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+            ),
             onPressed: () async {
               //Delete Hive
               // Hive.deleteFromDisk();
@@ -40,7 +42,7 @@ class Settings extends StatelessWidget {
           ElevatedButton(
             onPressed: () async {
               //Delete Hive storage related to secrets
-              await Hive.box('player').put("completedSecrets",<int>[]);
+              await Hive.box('player').put("completedSecrets", <int>[]);
               await Hive.box('currentSecrets').clear();
               //Initialize deleted boxes
               await Hive.openBox('currentSecrets');
