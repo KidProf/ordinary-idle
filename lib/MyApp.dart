@@ -108,15 +108,16 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     return Scaffold(
       appBar: _selectedIndex != 2 //TODO: Change back to 3 later
           ? PreferredSize(
-              preferredSize: const Size.fromHeight(50),
+              preferredSize: const Size.fromHeight(80), //FIXME: Please change CookieBackground to match the height of the header (specified in MyApp.dart)
               child: ValueListenableBuilder<Map<String, dynamic>>(
-                  valueListenable: pMoney.getMoneyListener,
+                  valueListenable: pMoney.getVitalsListener,
                   builder: (ctx, money, _) {
                     // print("update");
                     return AppBar(
                       title: ValueHeader(
                         money,
                       ),
+                      toolbarHeight: 80, //FIXME: Please change CookieBackground to match the height of the header (specified in MyApp.dart)
                     );
                   }))
           : null,

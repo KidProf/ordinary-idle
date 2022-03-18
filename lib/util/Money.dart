@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
@@ -7,32 +8,35 @@ import 'package:ordinary_idle/util/Util.dart';
 class Money extends Shops {
   //TODO: add functionality to store the log of the value
 
-  late ValueNotifier<Map<String, dynamic>> money;
+  late ValueNotifier<Map<String, dynamic>> vitals;
   late Box player;
   late double secretsMultiplier;
   late double otherMultiplier;
-  late double coinsPerTap;
+  late Timer idleTimer;
 
   Money() : super() {
     player = Hive.box("player");
     otherMultiplier = player.get("otherMultiplier", defaultValue: 0.0);
     secretsMultiplier = _computeSecretsMultiplier();
-    coinsPerTap = computeCoinsPerTap();
-    money = ValueNotifier<Map<String, dynamic>>({
+    vitals = ValueNotifier<Map<String, dynamic>>({
       "coins": player.get("coins", defaultValue: 1.0),
       "multiplier": _computeMultiplier(),
+      "coinsPerSecond": computeCoinsPerSecond(),
+      "coinsPerTap": computeCoinsPerTap(),
     });
 
-    // _expCoins = player.get("expCoins", defaultValue: 0.0);
-    // _useExp = player.get("useExp", defaultValue: false);
+    //initialize idle timer
+    idleTimer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      addCoins(vitals.value["coinsPerSecond"]);
+    });
   }
 
-  static String moneyRepresentation(Map<String, dynamic> money) {
-    return Util.doubleRepresentation(money["coins"], 2);
+  static String vitalsRepresentation(Map<String, dynamic> vitals) {
+    return Util.doubleRepresentation(vitals["coins"]);
   }
 
-  ValueNotifier<Map<String, dynamic>> get getMoneyListener {
-    return money;
+  ValueNotifier<Map<String, dynamic>> get getVitalsListener {
+    return vitals;
   }
 
   // ValueNotifier<double> get getCoinsListener {
@@ -40,54 +44,52 @@ class Money extends Shops {
   // }
 
   double get getCoins {
-    return money.value["coins"];
+    return vitals.value["coins"];
   }
 
   double get getMultiplier {
-    return money.value["multiplier"];
+    return vitals.value["multiplier"];
   }
 
   double tap(double coins) {
-    money.value = {...money.value, "coins": money.value["coins"] + coins * money.value["multiplier"] * coinsPerTap};
-    player.put("coins", money.value["coins"]);
-    return money.value["coins"];
+    addCoins(vitals.value["coinsPerTap"]*coins);
+    return vitals.value["coins"];
   }
 
   double addCoins(double coins) {
-    money.value = {...money.value, "coins": money.value["coins"] + coins * money.value["multiplier"]};
-    player.put("coins", money.value["coins"]);
-    return money.value["coins"];
+    addCoinsWithoutMultiplier(coins * vitals.value["multiplier"]);
+    return vitals.value["coins"];
   }
 
   // double addMultiplier(double multiplier) {
-  //   money.value = {...money.value, "multiplier" : money.value["multiplier"]+multiplier};
-  //   player.put("multiplier", money.value["multiplier"]);
-  //   return money.value["multiplier"];
+  //   vitals.value = {...vitals.value, "multiplier" : vitals.value["multiplier"]+multiplier};
+  //   player.put("multiplier", vitals.value["multiplier"]);
+  //   return vitals.value["multiplier"];
   // }
 
   double addCoinsWithoutMultiplier(double coins) {
-    money.value = {...money.value, "coins": money.value["coins"] + coins};
-    player.put("coins", money.value["coins"]);
-    return money.value["coins"];
+    vitals.value = {...vitals.value, "coins": vitals.value["coins"] + coins};
+    player.put("coins", vitals.value["coins"]);
+    return vitals.value["coins"];
   }
 
   @override //Shops.dart interface
   bool subtractCoins(double coins) {
-    if (money.value["coins"] - coins < 0) return false;
-    money.value = {...money.value, "coins": money.value["coins"] - coins};
-    player.put("coins", money.value["coins"]);
+    if (vitals.value["coins"] - coins < 0) return false;
+    vitals.value = {...vitals.value, "coins": vitals.value["coins"] - coins};
+    player.put("coins", vitals.value["coins"]);
     return true;
   }
 
   void setCoins(double coins) {
-    money.value = {...money.value, "coins": coins};
-    player.put("coins", money.value["coins"]);
+    vitals.value = {...vitals.value, "coins": coins};
+    player.put("coins", vitals.value["coins"]);
     return;
   }
 
   // void setMultiplier(double multiplier) {
-  //   money.value = {...money.value, "multiplier" : multiplier};
-  //   player.put("multiplier", money.value["multiplier"]);
+  //   vitals.value = {...vitals.value, "multiplier" : multiplier};
+  //   player.put("multiplier", vitals.value["multiplier"]);
   //   return;
   // }
 
@@ -101,7 +103,7 @@ class Money extends Shops {
 
   double updateMultiplier() {
     var x = _computeMultiplier();
-    money.value = {...money.value, "multiplier": x};
+    vitals.value = {...vitals.value, "multiplier": x};
     print("updateMultiplier " + x.toString());
     return x;
   }
@@ -122,8 +124,17 @@ class Money extends Shops {
 
   @override //Shops.dart interface
   double updateCoinsPerTap() {
-    coinsPerTap = computeCoinsPerTap();
-    print("updateCoinsPerTap " + coinsPerTap.toString());
+    var coinsPerTap = computeCoinsPerTap();
+    print("coins per tap is: " + coinsPerTap.toString());
+    vitals.value = {...vitals.value, "coinsPerTap": coinsPerTap};
     return coinsPerTap;
+  }
+
+  @override
+  double updateCoinsPerSecond() {
+    var coinsPerSecond = computeCoinsPerSecond();
+    print("coins per second is: " + coinsPerSecond.toString());
+    vitals.value = {...vitals.value, "coinsPerSecond": coinsPerSecond};
+    return coinsPerSecond;
   }
 }

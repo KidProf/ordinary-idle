@@ -58,7 +58,7 @@ class _CookieBackgroundState extends State<CookieBackground> {
             children: [
               Positioned(
                 left: cookieCenter.x - cookieSize / 2,
-                top: cookieCenter.y - cookieSize / 2 - 75, //TODO: this is the approximate height of the header
+                top: cookieCenter.y - cookieSize / 2 - 75, //FIXME: this is the approximate height of the header
                 height: cookieSize,
                 width: cookieSize,
                 child: cookieShow
@@ -89,6 +89,8 @@ class _CookieBackgroundState extends State<CookieBackground> {
     // print(details.localPosition);
     // print("tap down " + x.toString() + ", " + y.toString());
     widget.tap(1.0);
+    // print((x - cookieCenter.x) * (x - cookieCenter.x) +
+    //     (y - cookieCenter.y) * (y - cookieCenter.y));
     // print(Vector2(x - cookieCenter.x,y-cookieCenter.y));
     if (_isInCookie(x, y)) {
       //TODO: animations of some sort
@@ -103,18 +105,20 @@ class _CookieBackgroundState extends State<CookieBackground> {
   // _onTapUp(TapUpDetails details) {
   // }
 
+  double _squaredDistanceFromCenter(double x, double y){
+    return (x - cookieCenter.x) * (x - cookieCenter.x) +
+        (y - cookieCenter.y) * (y - cookieCenter.y);
+  }
   bool _isInCookie(double x, double y) {
     if (!cookieShow) return false;
-    double result = (x - cookieCenter.x) * (x - cookieCenter.x) +
-        (y - cookieCenter.y) * (y - cookieCenter.y) -
+    double result = _squaredDistanceFromCenter(x,y) -
         (cookieSize / 2) * (cookieSize / 2);
     return result <= 0;
   }
 
   bool _isInCookieTolerance(double x, double y) {
     if (!cookieShow) return false;
-    double result = (x - cookieCenter.x) * (x - cookieCenter.x) +
-        (y - cookieCenter.y) * (y - cookieCenter.y) -
+    double result = _squaredDistanceFromCenter(x,y) -
         (cookieSize * 3 / 4) * (cookieSize * 3 / 4); //1.5*radius
     return result <= 0;
   }

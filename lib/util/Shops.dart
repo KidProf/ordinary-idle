@@ -13,6 +13,7 @@ import 'package:tuple/tuple.dart';
 abstract class Shops {
   //INTERFACE
   void updateCoinsPerTap();
+  void updateCoinsPerSecond();
   bool subtractCoins(double x);
 
   late Box purchases;
@@ -20,7 +21,9 @@ abstract class Shops {
   Map<int, CurrentVolatileSecret> currentVolatileSecrets = {};
 
   static double _gain0(int i) => pow(1.2, i).toDouble();
-  static double _cost0(int i) => (20 * pow(1.3, i)).toDouble();
+  static double _cost0(int i) => (50 * pow(1.3, i)).toDouble();
+  static double _gain1(int i) => (i * 0.1).toDouble();
+  static double _cost1(int i) => (10 * pow(1.2, i)).toDouble();
 
   @mustCallSuper
   Shops() {
@@ -51,6 +54,31 @@ abstract class Shops {
           },
         ),
       ),
+      Shop(
+        id: 1,
+        exid: "1",
+        prerequisites: <Map<String, dynamic>>[],
+        title: "Auto Clicker",
+        description: "Increase coins per second",
+        descriptionI: (int i) => "Increase coins per tap to ${_gain1(i)}",
+        type: "idle",
+        gain: Resource(
+          type: "idle",
+          value: _gain1,
+          callback: (int i) {
+            updateCoinsPerSecond();
+
+            return true;
+          },
+        ),
+        cost: Resource(
+          type: "money",
+          value: _cost1,
+          callback: (int i) {
+            return subtractCoins(_cost1(i));
+          },
+        ),
+      ),
     ];
   }
 
@@ -65,19 +93,30 @@ abstract class Shops {
   bool purchaseItem(int id) {
     var s = getShopById(id);
     var level = getLevelById(id);
-    print("cost of purchase: " + s.cost.value!(level).toString());
-    var possible = s.cost.callback(level);
 
+    var possible = s.cost.callback(level);
+    print("Purchasing item with id: " +
+        id.toString() +
+        " and level: " +
+        level.toString() +
+        ". It costs " +
+        s.cost.value!(level).toString() +
+        (possible ? " (SUCEESS)" : " (ABORTED) not enough money"));
     if (!possible) return false;
     level += 1;
-    s.gain.callback(level);
     purchases.put(id, level);
+    s.gain.callback(level);
     return true;
   }
 
   @protected
   double computeCoinsPerTap() {
     return shops.where((s) => s.type == "tap").fold(0, (xs, x) => xs + x.gain.value!(getLevelById(x.id)));
+  }
+
+  @protected
+  double computeCoinsPerSecond() {
+    return shops.where((s) => s.type == "idle").fold(0, (xs, x) => xs + x.gain.value!(getLevelById(x.id)));
   }
 
   double getCostById(int id, {int? level}) {
