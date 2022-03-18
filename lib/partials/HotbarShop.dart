@@ -10,10 +10,10 @@ class HotbarShop extends StatelessWidget {
   final int id;
   late Shop shop;
 
-  HotbarShop(this.pMoney, this.id, {Key? key}) : super(key: key){
+  HotbarShop(this.pMoney, this.id, {Key? key}) : super(key: key) {
     shop = pMoney.getShopById(id);
   }
-  
+
   static final ButtonStyle greenRounded = ButtonStyle(
     backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -53,11 +53,11 @@ class HotbarShop extends StatelessWidget {
                 child: Row(
                   children: [
                     ValueListenableBuilder<Box>(
-                      valueListenable: Hive.box('purchases').listenable(keys: [id]),
-                      builder: (context, box, _) {
-                        return Text(Util.doubleRepresentation(pMoney.getCostById(id,level: box.get(id)),2), style: TextStyle(fontSize: 10));
-                      }
-                    ),
+                        valueListenable: Hive.box('purchases').listenable(keys: [id]),
+                        builder: (context, box, _) {
+                          return Text(Util.doubleRepresentation(pMoney.getCostById(id, level: box.get(id)), 2),
+                              style: TextStyle(fontSize: 10));
+                        }),
                     const Image(
                       image: AssetImage('assets/images/coin.png'),
                       width: 20,
@@ -71,7 +71,7 @@ class HotbarShop extends StatelessWidget {
           ),
           onPressed: () {
             pMoney.purchaseItem(id);
-            print("Purchased"+id.toString());
+            print("Purchased" + id.toString());
           },
         ),
       ),
@@ -79,11 +79,11 @@ class HotbarShop extends StatelessWidget {
   }
 }
 
-  // child: ValueListenableBuilder<Box>(
-  //               valueListenable: Hive.box('player').listenable(),
-  //               builder: (ctx, box, _) {
-  //                 return AppBar(
-  //                   title: ValueHeader(pCoins: box.get("pCoins")),
-  //                 );
-  //               },
-  //             )
+// child: ValueListenableBuilder<Box>(
+//               valueListenable: Hive.box('player').listenable(),
+//               builder: (ctx, box, _) {
+//                 return AppBar(
+//                   title: ValueHeader(pCoins: box.get("pCoins")),
+//                 );
+//               },
+//             )

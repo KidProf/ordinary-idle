@@ -4,7 +4,7 @@ import 'package:ordinary_idle/util/Secrets.dart';
 import 'package:ordinary_idle/util/Shops.dart';
 import 'package:ordinary_idle/util/Util.dart';
 
-class Money extends Shops { 
+class Money extends Shops {
   //TODO: add functionality to store the log of the value
 
   late ValueNotifier<Map<String, dynamic>> money;
@@ -22,13 +22,13 @@ class Money extends Shops {
       "coins": player.get("coins", defaultValue: 1.0),
       "multiplier": _computeMultiplier(),
     });
-    
+
     // _expCoins = player.get("expCoins", defaultValue: 0.0);
     // _useExp = player.get("useExp", defaultValue: false);
   }
 
-  static String moneyRepresentation(Map<String, dynamic> money){
-    return Util.doubleRepresentation(money["coins"],2);
+  static String moneyRepresentation(Map<String, dynamic> money) {
+    return Util.doubleRepresentation(money["coins"], 2);
   }
 
   ValueNotifier<Map<String, dynamic>> get getMoneyListener {
@@ -102,7 +102,7 @@ class Money extends Shops {
   double updateMultiplier() {
     var x = _computeMultiplier();
     money.value = {...money.value, "multiplier": x};
-    print("updateMultiplier "+x.toString());
+    print("updateMultiplier " + x.toString());
     return x;
   }
 
@@ -123,8 +123,7 @@ class Money extends Shops {
   @override //Shops.dart interface
   double updateCoinsPerTap() {
     coinsPerTap = computeCoinsPerTap();
-    print("updateCoinsPerTap "+coinsPerTap.toString());
+    print("updateCoinsPerTap " + coinsPerTap.toString());
     return coinsPerTap;
   }
-
 }

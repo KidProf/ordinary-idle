@@ -12,9 +12,9 @@ class ShopComponent extends StatelessWidget {
     return Row(
       children: [
         const SizedBox(width: 10),
-        HotbarShop(pMoney,0),
+        HotbarShop(pMoney, 0),
         const SizedBox(width: 10),
-        HotbarShop(pMoney,0),
+        HotbarShop(pMoney, 0),
         const SizedBox(width: 10),
         CircleAvatar(
           backgroundColor: Colors.amber[800],

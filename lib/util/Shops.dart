@@ -15,14 +15,12 @@ abstract class Shops {
   void updateCoinsPerTap();
   bool subtractCoins(double x);
 
-
-
   late Box purchases;
   late List<Shop> shops;
   Map<int, CurrentVolatileSecret> currentVolatileSecrets = {};
 
   static double _gain0(int i) => pow(1.2, i).toDouble();
-  static double _cost0(int i) => (20*pow(1.3, i)).toDouble();
+  static double _cost0(int i) => (20 * pow(1.3, i)).toDouble();
 
   @mustCallSuper
   Shops() {
@@ -67,7 +65,7 @@ abstract class Shops {
   bool purchaseItem(int id) {
     var s = getShopById(id);
     var level = getLevelById(id);
-    print("cost of purchase: "+s.cost.value!(level).toString());
+    print("cost of purchase: " + s.cost.value!(level).toString());
     var possible = s.cost.callback(level);
 
     if (!possible) return false;
@@ -78,8 +76,8 @@ abstract class Shops {
   }
 
   @protected
-  double computeCoinsPerTap(){
-    return shops.where((s)=>s.type=="tap").fold(0,(xs,x) => xs+x.gain.value!(getLevelById(x.id)));
+  double computeCoinsPerTap() {
+    return shops.where((s) => s.type == "tap").fold(0, (xs, x) => xs + x.gain.value!(getLevelById(x.id)));
   }
 
   double getCostById(int id, {int? level}) {
