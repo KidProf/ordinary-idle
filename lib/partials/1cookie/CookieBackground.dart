@@ -10,10 +10,10 @@ import 'package:vector_math/vector_math.dart';
 import 'package:ordinary_idle/util/RotateDetector.dart';
 
 class CookieBackground extends StatefulWidget {
-  final Function addCoins;
+  final Function tap;
   final Secrets pSecrets;
 
-  const CookieBackground(this.pSecrets, this.addCoins, {Key? key}) : super(key: key);
+  const CookieBackground(this.pSecrets, this.tap, {Key? key}) : super(key: key);
 
   @override
   State<CookieBackground> createState() => _CookieBackgroundState();
@@ -88,7 +88,7 @@ class _CookieBackgroundState extends State<CookieBackground> {
     // or user the local position method to get the offset
     // print(details.localPosition);
     // print("tap down " + x.toString() + ", " + y.toString());
-    widget.addCoins(1.0);
+    widget.tap(1.0);
     // print(Vector2(x - cookieCenter.x,y-cookieCenter.y));
     if (_isInCookie(x, y)) {
       //TODO: animations of some sort

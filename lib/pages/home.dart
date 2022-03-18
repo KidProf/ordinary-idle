@@ -18,7 +18,7 @@ class Home extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: Column(
         children: [
-          Expanded(child: CookieBackground(pSecrets, pMoney.addCoins)),
+          Expanded(child: CookieBackground(pSecrets, pMoney.tap)),
           Container(height: 70, child: ShopComponent(pMoney)),
         ],
       ),

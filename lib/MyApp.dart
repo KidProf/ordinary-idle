@@ -48,7 +48,6 @@ class MyStatefulWidget extends StatefulWidget {
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   final Money pMoney = Money();
   late Secrets pSecrets;
-  late Shops pShops = Shops(pMoney);
   late final List<Widget> _widgetOptions = <Widget>[
     Home(pSecrets, pMoney),
     SecretsPage(pSecrets),
@@ -116,8 +115,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                     // print("update");
                     return AppBar(
                       title: ValueHeader(
-                        pCoins: money["coins"],
-                        pMultiplier: money["multiplier"],
+                        money,
                       ),
                     );
                   }))

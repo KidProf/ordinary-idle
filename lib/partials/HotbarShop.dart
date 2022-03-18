@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ordinary_idle/util/Money.dart';
 
 class HotbarShop extends StatelessWidget {
+  final Money pMoney;
   final int id;
-  const HotbarShop(this.id, {Key? key}) : super(key: key);
+  const HotbarShop(this.pMoney, this.id, {Key? key}) : super(key: key);
 
   static final ButtonStyle greenRounded = ButtonStyle(
     backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
@@ -55,7 +57,8 @@ class HotbarShop extends StatelessWidget {
             ],
           ),
           onPressed: () {
-            print("Hello world");
+            pMoney.purchaseItem(id);
+            print("Purchased"+id.toString());
           },
         ),
       ),

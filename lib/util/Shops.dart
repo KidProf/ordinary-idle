@@ -10,16 +10,22 @@ import 'package:ordinary_idle/util/Money.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
 import 'package:tuple/tuple.dart';
 
-class Shops {
+abstract class Shops {
+  //INTERFACE
+  void updateCoinsPerTap();
+  bool subtractCoins(double x);
+
+
+
   late Box purchases;
   late List<Shop> shops;
-  final Money pMoney;
   Map<int, CurrentVolatileSecret> currentVolatileSecrets = {};
 
   static double _gain0(int i) => pow(1.2, i).toDouble();
   static double _cost0(int i) => pow(1.3, i).toDouble();
 
-  Shops(this.pMoney) {
+  @mustCallSuper
+  Shops() {
     purchases = Hive.box("purchases");
     shops = [
       Shop(
@@ -34,7 +40,7 @@ class Shops {
           type: "tap",
           value: _gain0,
           callback: (int i) {
-            pMoney.updateCoinsPerTap();
+            updateCoinsPerTap();
 
             return true;
           },
@@ -43,7 +49,7 @@ class Shops {
           type: "money",
           value: _cost0,
           callback: (int i) {
-            return pMoney.subtractCoins(_cost0(i));
+            return subtractCoins(_cost0(i));
           },
         ),
       ),
@@ -61,11 +67,18 @@ class Shops {
   bool purchaseItem(int id) {
     var s = getShopById(id);
     var level = getLevelById(id);
+    print(s.cost.value!(level).toString());
     var possible = s.cost.callback(level);
+
     if (!possible) return false;
     s.gain.callback(level);
     purchases.put(id, level + 1);
     return true;
+  }
+
+  @protected
+  double computeCoinsPerTap(){
+    return shops.where((s)=>s.type=="tap").fold(0,(xs,x) => xs+x.gain.value!(getLevelById(x.id)));
   }
 }
 

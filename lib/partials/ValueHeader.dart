@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ordinary_idle/util/Money.dart';
+import 'package:ordinary_idle/util/Util.dart';
 
 class ValueHeader extends StatelessWidget {
-  final double pCoins;
-  final double pMultiplier;
+  final Map<String, dynamic> money;
 
-  const ValueHeader({required this.pCoins, required this.pMultiplier, Key? key}) : super(key: key);
+  const ValueHeader(this.money, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,14 +14,14 @@ class ValueHeader extends StatelessWidget {
         const Image(image: AssetImage('assets/images/coin.png'), width: 30, height: 30),
         const SizedBox(width: 10),
         Text(
-          pCoins.toString(),
+          Money.moneyRepresentation(money),
           style: TextStyle(
             fontSize: 25,
           ),
         ),
         const SizedBox(width: 50),
         Text(
-          pMultiplier.toString() + "x",
+          money["multiplier"].toString() + "x",
           style: TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.bold,

@@ -32,9 +32,11 @@ class Settings extends StatelessWidget {
               // Hive.deleteFromDisk();
               await Hive.box('player').clear();
               await Hive.box('currentSecrets').clear();
+              await Hive.box('purchases').clear();
               //Initialize Hive
               await Hive.openBox('player');
               await Hive.openBox('currentSecrets');
+              await Hive.openBox('purchases');
               RestartWidget.restartApp(context);
             },
             child: Text("Reset All"),

@@ -1,29 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
+import 'package:ordinary_idle/util/Shops.dart';
+import 'package:ordinary_idle/util/Util.dart';
 
-class Money {
+class Money extends Shops { 
   //TODO: add functionality to store the log of the value
 
   late ValueNotifier<Map<String, dynamic>> money;
   late Box player;
-  late Box purchases;
   late double secretsMultiplier;
   late double otherMultiplier;
+  late double coinsPerTap;
 
-  Money() {
+  Money() : super() {
     player = Hive.box("player");
-    purchases = Hive.box("purchases");
     otherMultiplier = player.get("otherMultiplier", defaultValue: 0.0);
     secretsMultiplier = _computeSecretsMultiplier();
-    //TODO: updateCoinsPerTap
-
+    coinsPerTap = computeCoinsPerTap();
     money = ValueNotifier<Map<String, dynamic>>({
       "coins": player.get("coins", defaultValue: 1.0),
       "multiplier": _computeMultiplier(),
     });
+    
     // _expCoins = player.get("expCoins", defaultValue: 0.0);
     // _useExp = player.get("useExp", defaultValue: false);
+  }
+
+  static String moneyRepresentation(Map<String, dynamic> money){
+    return Util.doubleRepresentation(money["coins"],2);
   }
 
   ValueNotifier<Map<String, dynamic>> get getMoneyListener {
@@ -40,6 +45,12 @@ class Money {
 
   double get getMultiplier {
     return money.value["multiplier"];
+  }
+
+  double tap(double coins) {
+    money.value = {...money.value, "coins": money.value["coins"] + coins * money.value["multiplier"] * coinsPerTap};
+    player.put("coins", money.value["coins"]);
+    return money.value["coins"];
   }
 
   double addCoins(double coins) {
@@ -60,6 +71,7 @@ class Money {
     return money.value["coins"];
   }
 
+  @override //Shops.dart interface
   bool subtractCoins(double coins) {
     if (money.value["coins"] - coins < 0) return false;
     money.value = {...money.value, "coins": money.value["coins"] - coins};
@@ -90,7 +102,7 @@ class Money {
   double updateMultiplier() {
     var x = _computeMultiplier();
     money.value = {...money.value, "multiplier": x};
-    print(x);
+    print("updateMultiplier "+x.toString());
     return x;
   }
 
@@ -108,9 +120,11 @@ class Money {
     return secretsMultiplier + otherMultiplier + 1;
   }
 
+  @override //Shops.dart interface
   double updateCoinsPerTap() {
-    print("updateCoinsPerTap");
-    //the purchase with id 0 should be the only one related to tapping
-    return 0;
+    coinsPerTap = computeCoinsPerTap();
+    print("updateCoinsPerTap "+coinsPerTap.toString());
+    return coinsPerTap;
   }
+
 }

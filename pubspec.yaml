@@ -40,6 +40,7 @@ dependencies:
   tuple: ^2.0.0
   restart_app: ^1.1.0
   vector_math: ^2.1.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
