@@ -22,7 +22,7 @@ abstract class Shops {
   Map<int, CurrentVolatileSecret> currentVolatileSecrets = {};
 
   static double _gain0(int i) => pow(1.2, i).toDouble();
-  static double _cost0(int i) => pow(1.3, i).toDouble();
+  static double _cost0(int i) => (20*pow(1.3, i)).toDouble();
 
   @mustCallSuper
   Shops() {
@@ -67,18 +67,37 @@ abstract class Shops {
   bool purchaseItem(int id) {
     var s = getShopById(id);
     var level = getLevelById(id);
-    print(s.cost.value!(level).toString());
+    print("cost of purchase: "+s.cost.value!(level).toString());
     var possible = s.cost.callback(level);
 
     if (!possible) return false;
+    level += 1;
     s.gain.callback(level);
-    purchases.put(id, level + 1);
+    purchases.put(id, level);
     return true;
   }
 
   @protected
   double computeCoinsPerTap(){
     return shops.where((s)=>s.type=="tap").fold(0,(xs,x) => xs+x.gain.value!(getLevelById(x.id)));
+  }
+
+  double getCostById(int id, {int? level}) {
+    var s = getShopById(id);
+    var level1 = level ?? getLevelById(id);
+    return s.cost.value!(level1);
+  }
+
+  double getGainById(int id, {int? level}) {
+    var s = getShopById(id);
+    var level1 = level ?? getLevelById(id);
+    return s.gain.value!(level1);
+  }
+
+  String getDescriptionById(int id, {int? level}) {
+    var s = getShopById(id);
+    var level1 = level ?? getLevelById(id);
+    return s.descriptionI(level1);
   }
 }
 

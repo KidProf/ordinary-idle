@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/util/Money.dart';
+import 'package:ordinary_idle/util/Shops.dart';
+import 'package:ordinary_idle/util/Util.dart';
 
 class HotbarShop extends StatelessWidget {
   final Money pMoney;
   final int id;
-  const HotbarShop(this.pMoney, this.id, {Key? key}) : super(key: key);
+  late Shop shop;
 
+  HotbarShop(this.pMoney, this.id, {Key? key}) : super(key: key){
+    shop = pMoney.getShopById(id);
+  }
+  
   static final ButtonStyle greenRounded = ButtonStyle(
     backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -32,7 +40,7 @@ class HotbarShop extends StatelessWidget {
                   children: [
                     const Icon(Icons.arrow_upward, size: 20),
                     Text(
-                      "Tap",
+                      shop.title,
                       style: TextStyle(fontSize: 20),
                     ),
                   ],
@@ -44,7 +52,12 @@ class HotbarShop extends StatelessWidget {
                 bottom: 0,
                 child: Row(
                   children: [
-                    Text("12", style: TextStyle(fontSize: 10)),
+                    ValueListenableBuilder<Box>(
+                      valueListenable: Hive.box('purchases').listenable(keys: [id]),
+                      builder: (context, box, _) {
+                        return Text(Util.doubleRepresentation(pMoney.getCostById(id,level: box.get(id)),2), style: TextStyle(fontSize: 10));
+                      }
+                    ),
                     const Image(
                       image: AssetImage('assets/images/coin.png'),
                       width: 20,
@@ -65,3 +78,12 @@ class HotbarShop extends StatelessWidget {
     );
   }
 }
+
+  // child: ValueListenableBuilder<Box>(
+  //               valueListenable: Hive.box('player').listenable(),
+  //               builder: (ctx, box, _) {
+  //                 return AppBar(
+  //                   title: ValueHeader(pCoins: box.get("pCoins")),
+  //                 );
+  //               },
+  //             )
