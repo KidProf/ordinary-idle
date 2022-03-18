@@ -58,7 +58,9 @@ class _CookieBackgroundState extends State<CookieBackground> {
             children: [
               Positioned(
                 left: cookieCenter.x - cookieSize / 2,
-                top: cookieCenter.y - cookieSize / 2 - 80, //FIXME: this is the approximate height of the header (specified in MyApp.dart)
+                top: cookieCenter.y -
+                    cookieSize / 2 -
+                    80, //FIXME: this is the approximate height of the header (specified in MyApp.dart)
                 height: cookieSize,
                 width: cookieSize,
                 child: cookieShow
