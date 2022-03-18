@@ -35,7 +35,8 @@ class HotbarShop extends StatelessWidget {
             children: [
               Positioned(
                 left: 0,
-                top: 12,
+                top: 0,
+                bottom: 0,
                 child: Row(
                   children: [
                     const Icon(Icons.arrow_upward, size: 20),

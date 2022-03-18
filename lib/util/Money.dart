@@ -52,7 +52,7 @@ class Money extends Shops {
   }
 
   double tap(double coins) {
-    addCoins(vitals.value["coinsPerTap"]*coins);
+    addCoins(vitals.value["coinsPerTap"] * coins);
     return vitals.value["coins"];
   }
 

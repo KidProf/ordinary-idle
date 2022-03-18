@@ -63,7 +63,7 @@ class MyToast {
         positionedToastBuilder: (context, child) {
           return Positioned(
             child: Align(alignment: Alignment.center, child: child),
-            bottom: 100.0,
+            bottom: 150.0,
             left: 0.0,
             right: 0.0,
           );

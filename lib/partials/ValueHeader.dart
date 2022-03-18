@@ -15,10 +15,7 @@ class ValueHeader extends StatelessWidget {
         const SizedBox(width: 10),
         Row(
           children: [
-            const Image(
-                image: AssetImage('assets/images/coin.png'),
-                width: 30,
-                height: 30),
+            const Image(image: AssetImage('assets/images/coin.png'), width: 30, height: 30),
             const SizedBox(width: 10),
             Text(
               Money.vitalsRepresentation(vitals),
@@ -42,9 +39,8 @@ class ValueHeader extends StatelessWidget {
           width: double.infinity,
           child: Wrap(
             children: [
-              Text(
-                  "CPS:" + Util.doubleRepresentation(vitals["coinsPerSecond"])),
-              Text("CPT:" + Util.doubleRepresentation(vitals["coinsPerTap"])),
+              Text("CPS:" + Util.doubleRepresentation(vitals["coinsPerSecond"] * vitals["multiplier"])),
+              Text("CPT:" + Util.doubleRepresentation(vitals["coinsPerTap"] * vitals["multiplier"])),
             ],
             alignment: WrapAlignment.spaceBetween,
           ),

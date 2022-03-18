@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ordinary_idle/partials/HotbarShop.dart';
 import 'package:ordinary_idle/util/Money.dart';
 
@@ -25,7 +26,14 @@ class ShopComponent extends StatelessWidget {
               color: Colors.white,
             ),
             onPressed: () {
-              print("goodbye world");
+              Fluttertoast.showToast(
+                  msg: "I haven't done this page",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.black87,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
             },
           ),
         ),
