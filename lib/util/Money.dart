@@ -137,4 +137,10 @@ class Money extends Shops {
     vitals.value = {...vitals.value, "coinsPerSecond": coinsPerSecond};
     return coinsPerSecond;
   }
+
+  @override
+  bool possibleById(int id, {int? level}) {
+    var cost = getCostById(id,level: level);
+    return cost <= vitals.value["coins"];
+  }
 }

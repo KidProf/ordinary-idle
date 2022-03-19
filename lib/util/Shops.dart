@@ -8,6 +8,7 @@ import 'package:ordinary_idle/model/PurchaseV1.dart';
 import 'package:ordinary_idle/util/CurrentVolatileSecret.dart';
 import 'package:ordinary_idle/util/Money.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
+import 'package:ordinary_idle/util/Util.dart';
 import 'package:tuple/tuple.dart';
 
 abstract class Shops {
@@ -15,6 +16,7 @@ abstract class Shops {
   void updateCoinsPerTap();
   void updateCoinsPerSecond();
   bool subtractCoins(double x);
+  bool possibleById(int id, {int? level});
 
   late Box purchases;
   late List<Shop> shops;
@@ -35,7 +37,7 @@ abstract class Shops {
         prerequisites: <Map<String, dynamic>>[],
         title: "Tap",
         description: "Increase coins per tap",
-        descriptionI: (int i) => "Increase coins per tap to ${_gain0(i)}",
+        descriptionI: (int i) => "Increase coins per tap to ${Util.doubleRepresentation(_gain0(i))}",
         type: "tap",
         gain: Resource(
           type: "tap",
@@ -60,7 +62,7 @@ abstract class Shops {
         prerequisites: <Map<String, dynamic>>[],
         title: "Auto Clicker",
         description: "Increase coins per second",
-        descriptionI: (int i) => "Increase coins per tap to ${_gain1(i)}",
+        descriptionI: (int i) => "Increase coins per tap to ${Util.doubleRepresentation(_gain1(i))}",
         type: "idle",
         gain: Resource(
           type: "idle",
@@ -135,6 +137,10 @@ abstract class Shops {
     var s = getShopById(id);
     var level1 = level ?? getLevelById(id);
     return s.descriptionI(level1);
+  }
+
+  bool prerequisiteMet(int id) {
+    return true; //TODO:
   }
 }
 

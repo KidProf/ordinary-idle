@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ordinary_idle/partials/DetailShop.dart';
 import 'package:ordinary_idle/partials/HotbarShop.dart';
 import 'package:ordinary_idle/util/Money.dart';
+import 'package:ordinary_idle/util/Shops.dart';
 
 class ShopComponent extends StatelessWidget {
   final Money pMoney;
@@ -26,16 +28,22 @@ class ShopComponent extends StatelessWidget {
               color: Colors.white,
             ),
             onPressed: () {
-              Fluttertoast.showToast(
-                  msg: "I haven't done this page",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.black87,
-                  textColor: Colors.white,
-                  fontSize: 16.0);
-            },
-          ),
+              showModalBottomSheet<void>(
+              isScrollControlled: true,
+              context: context,
+              builder: (BuildContext context) {
+                return Container(
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  height: 500,
+                  child: Column(
+                    children: pMoney.shops.map((Shop shop) {
+                      return DetailShop(pMoney,shop);
+                    }).toList(),
+                  ),
+                );
+              },
+            );
+          }),
         ),
         const SizedBox(width: 10),
       ],

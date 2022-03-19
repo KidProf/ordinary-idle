@@ -112,11 +112,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   80), //FIXME: Please change CookieBackground to match the height of the header (specified in MyApp.dart)
               child: ValueListenableBuilder<Map<String, dynamic>>(
                   valueListenable: pMoney.getVitalsListener,
-                  builder: (ctx, money, _) {
+                  builder: (ctx, vitals, _) {
                     // print("update");
                     return AppBar(
                       title: ValueHeader(
-                        money,
+                        vitals,
                       ),
                       toolbarHeight:
                           80, //FIXME: Please change CookieBackground to match the height of the header (specified in MyApp.dart)
