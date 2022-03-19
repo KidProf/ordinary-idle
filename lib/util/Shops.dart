@@ -26,6 +26,10 @@ abstract class Shops {
   static double _cost0(int i) => (50 * pow(1.3, i)).toDouble();
   static double _gain1(int i) => (i * 0.1).toDouble();
   static double _cost1(int i) => (10 * pow(1.2, i)).toDouble();
+  static double _gain2(int i) => (i * 16).toDouble();
+  static double _cost2(int i) => (2000 * pow(1.2, i)).toDouble();
+  static double _gain3(int i) => (i * 1800).toDouble();
+  static double _cost3(int i) => (300000 * pow(1.2, i)).toDouble();
 
   @mustCallSuper
   Shops() {
@@ -37,7 +41,7 @@ abstract class Shops {
         prerequisites: <Map<String, dynamic>>[],
         title: "Tap",
         description: "Increase coins per tap",
-        descriptionI: (int i) => "Increase coins per tap to ${Util.doubleRepresentation(_gain0(i))}",
+        descriptionI: (int i) => "Increase coins per tap from ${Util.doubleRepresentation(_gain0(i))} to ${Util.doubleRepresentation(_gain0(i+1))}",
         type: "tap",
         gain: Resource(
           type: "tap",
@@ -62,7 +66,7 @@ abstract class Shops {
         prerequisites: <Map<String, dynamic>>[],
         title: "Auto Clicker",
         description: "Increase coins per second",
-        descriptionI: (int i) => "Increase coins per tap to ${Util.doubleRepresentation(_gain1(i))}",
+        descriptionI: (int i) => "Increase coins per second by ${Util.doubleRepresentation(_gain1(i))} -> ${Util.doubleRepresentation(_gain1(i+1))}",
         type: "idle",
         gain: Resource(
           type: "idle",
@@ -78,6 +82,56 @@ abstract class Shops {
           value: _cost1,
           callback: (int i) {
             return subtractCoins(_cost1(i));
+          },
+        ),
+      ),
+      Shop(
+        id: 2,
+        exid: "2",
+        prerequisites: <Map<String, dynamic>>[],
+        title: "Family Business",
+        description: "Increase coins per second",
+        descriptionI: (int i) => "Increase coins per second by ${Util.doubleRepresentation(_gain2(i))} -> ${Util.doubleRepresentation(_gain2(i+1))}",
+        type: "idle",
+        gain: Resource(
+          type: "idle",
+          value: _gain2,
+          callback: (int i) {
+            updateCoinsPerSecond();
+
+            return true;
+          },
+        ),
+        cost: Resource(
+          type: "money",
+          value: _cost2,
+          callback: (int i) {
+            return subtractCoins(_cost2(i));
+          },
+        ),
+      ),
+      Shop(
+        id: 3,
+        exid: "3",
+        prerequisites: <Map<String, dynamic>>[],
+        title: "Village Help",
+        description: "Increase coins per second",
+        descriptionI: (int i) => "Increase coins per second by ${Util.doubleRepresentation(_gain3(i))} -> ${Util.doubleRepresentation(_gain3(i+1))}",
+        type: "idle",
+        gain: Resource(
+          type: "idle",
+          value: _gain3,
+          callback: (int i) {
+            updateCoinsPerSecond();
+
+            return true;
+          },
+        ),
+        cost: Resource(
+          type: "money",
+          value: _cost3,
+          callback: (int i) {
+            return subtractCoins(_cost3(i));
           },
         ),
       ),
@@ -154,8 +208,8 @@ class Shop {
   final String Function(int) descriptionI;
   final String
       type; //"tap","idle","achievements",..., this may not be necessary because class Resource already has a type
-  final Resource gain;
-  final Resource cost;
+  final Resource gain; //gain when upgrading from level to level + 1
+  final Resource cost; //cost when upgrading from level - 1 to level 
 
   Shop({
     required this.id,

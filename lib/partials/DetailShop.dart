@@ -5,22 +5,17 @@ import 'package:ordinary_idle/util/Money.dart';
 import 'package:ordinary_idle/util/Shops.dart';
 import 'package:ordinary_idle/util/Util.dart';
 
-class DetailShop extends StatefulWidget {
+class DetailShop extends StatelessWidget {
   final Money pMoney;
-  final Shop s;
-  late int sid;
+  final Map<String, dynamic> vitals;
+  final int sid;
+  late Shop s;
   late int level;
-  DetailShop(this.pMoney, this.s, {Key? key}) : super(key: key) {
-    sid = s.id;
+
+  DetailShop(this.pMoney, this.sid, this.vitals, {Key? key}) : super(key: key) {
+    s = pMoney.getShopById(sid);
     level = pMoney.getLevelById(sid);
   }
-
-  @override
-  State<DetailShop> createState() => _DetailShopState();
-}
-
-class _DetailShopState extends State<DetailShop> {
-  bool isChecked = false;
 
   Color getColor(Set<MaterialState> states) {
     const Set<MaterialState> interactiveStates = <MaterialState>{
@@ -37,52 +32,76 @@ class _DetailShopState extends State<DetailShop> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Box>(
-        valueListenable: Hive.box('purchases').listenable(keys: [widget.sid]),
+        valueListenable: Hive.box('purchases').listenable(keys: [sid]),
         builder: (context, box, _) {
-          return Card(
-            child: ListTile(
-              title: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  widget.s.title,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              subtitle: Text(
-                widget.s.descriptionI(widget.level),
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
+          return ValueListenableBuilder<Map<String, dynamic>>(
+              valueListenable: pMoney.getVitalsListener,
+              builder: (context, vitals, _) {
+                return Card(
+                  child: ListTile(
+                    title: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        s.title,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
-              ),
-              leading: Checkbox(
-                checkColor: Colors.white,
-                fillColor: MaterialStateProperty.resolveWith(getColor),
-                value: isChecked,
-                onChanged: (bool? value) {
-                  setState(() {
-                    isChecked = value!;
-                  });
-                },
-              ),
-              trailing: Column(children: [
-                  ValueListenableBuilder<Map<String, dynamic>>(
-                      valueListenable: widget.pMoney.getVitalsListener,
-                      builder: (context, vitals, _) {
-                        return ElevatedButton(
-                          style: Util.greenRounded,
+                    subtitle: Container(
+                      constraints: BoxConstraints(
+                        minHeight: 60,
+                      ),
+                      child: Text(
+                        s.descriptionI(level),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    leading: Checkbox(
+                      checkColor: Colors.white,
+                      fillColor: MaterialStateProperty.resolveWith(getColor),
+                      value: vitals["hotbarShop"].contains(sid),
+                      onChanged: (bool? value) {
+                        pMoney.setHotbarShop(sid, value!);
+                      },
+                    ),
+                    trailing: Container(
+                      width: 80,
+                      child: Column(children: [
+                        ElevatedButton(
+                          style: pMoney.possibleById(sid)
+                              ? Util.greenRounded
+                              : Util.disabledRounded,
                           child: Text("BUY"),
                           onPressed: () {
-                            print("pressed");
+                            pMoney.purchaseItem(sid);
                           },
-                        );
-                      }),
-                ]),
-            ),
-          );
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              Util.doubleRepresentation(
+                                  pMoney.getCostById(sid, level: box.get(sid))),
+                              style: TextStyle(fontSize: 10),
+                            ),
+                            const SizedBox(width: 5),
+                            const Image(
+                              image: AssetImage('assets/images/coin.png'),
+                              width: 20,
+                              height: 20,
+                            ),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+                      ]),
+                    ),
+                  ),
+                );
+              });
         });
   }
 }

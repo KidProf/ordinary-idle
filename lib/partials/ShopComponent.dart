@@ -12,42 +12,46 @@ class ShopComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const SizedBox(width: 10),
-        HotbarShop(pMoney, 0),
-        const SizedBox(width: 10),
-        HotbarShop(pMoney, 1),
-        const SizedBox(width: 10),
-        CircleAvatar(
-          backgroundColor: Colors.amber[800],
-          radius: 25,
-          child: IconButton(
-            icon: Icon(
-              Icons.more_vert,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              showModalBottomSheet<void>(
-              isScrollControlled: true,
-              context: context,
-              builder: (BuildContext context) {
-                return Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  height: 500,
-                  child: Column(
-                    children: pMoney.shops.map((Shop shop) {
-                      return DetailShop(pMoney,shop);
-                    }).toList(),
-                  ),
-                );
-              },
-            );
-          }),
-        ),
-        const SizedBox(width: 10),
-      ],
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-    );
+    return ValueListenableBuilder<Map<String, dynamic>>(
+        valueListenable: pMoney.getVitalsListener,
+        builder: (context, vitals, _) {
+          return Row(
+            children: [
+              ...vitals["hotbarShop"].map((int x)=> HotbarShop(pMoney, x)),
+              const SizedBox(width: 10),
+              CircleAvatar(
+                backgroundColor: Colors.amber[800],
+                radius: 25,
+                child: IconButton(
+                    icon: Icon(
+                      Icons.more_vert,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      showModalBottomSheet<void>(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                            height: 500,
+                            child: ListView.builder(
+                              // itemExtent: 100,
+                              scrollDirection: Axis.vertical,
+                              itemCount: pMoney.shops.length,
+                              itemBuilder: (BuildContext context, int i) { 
+                                return DetailShop(pMoney, i, vitals);
+                               },
+                            ),
+                          );
+                        },
+                      );
+                    }),
+              ),
+              const SizedBox(width: 10),
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          );
+        });
   }
 }

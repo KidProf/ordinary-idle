@@ -17,63 +17,61 @@ class HotbarShop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: SizedBox(
+      child: Container(
         height: 50,
+        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
         child: ValueListenableBuilder<Box>(
             valueListenable: Hive.box('purchases').listenable(keys: [id]),
             builder: (context, box, _) {
-              return ValueListenableBuilder<Map<String, dynamic>>(
-                valueListenable: pMoney.getVitalsListener,
-                builder: (context, vitals, _) {
-                  return ElevatedButton(
-                    style: pMoney.possibleById(id) ? Util.greenRounded : Util.disabledRounded,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          left: 0,
-                          top: 0,
-                          bottom: 0,
-                          child: Row(
-                            children: [
-                              const Icon(Icons.arrow_upward, size: 20),
-                              Container(
-                                child: Text(
-                                  shop.title,
-                                  style: TextStyle(fontSize: 20),
-                                  overflow: TextOverflow
-                                      .ellipsis, //wont work, it would just flow out of the screen
-                                ),
-                              ),
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.start,
+              return ElevatedButton(
+                style: pMoney.possibleById(id)
+                    ? Util.greenRounded
+                    : Util.disabledRounded,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.arrow_upward, size: 20),
+                          Container(
+                            child: Text(
+                              shop.title,
+                              style: TextStyle(fontSize: 20),
+                              overflow: TextOverflow
+                                  .ellipsis, //wont work, it would just flow out of the screen
+                            ),
                           ),
-                        ),
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: Row(
-                            children: [
-                              Text(
-                                Util.doubleRepresentation(
-                                    pMoney.getCostById(id, level: box.get(id))),
-                                style: TextStyle(fontSize: 10),
-                              ),
-                              const Image(
-                                image: AssetImage('assets/images/coin.png'),
-                                width: 20,
-                                height: 20,
-                              ),
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.end,
-                          ),
-                        ),
-                      ],
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.start,
+                      ),
                     ),
-                    onPressed: () {
-                      pMoney.purchaseItem(id);
-                    },
-                  );
-                }
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Row(
+                        children: [
+                          Text(
+                            Util.doubleRepresentation(
+                                pMoney.getCostById(id, level: box.get(id))),
+                            style: TextStyle(fontSize: 10),
+                          ),
+                          const Image(
+                            image: AssetImage('assets/images/coin.png'),
+                            width: 20,
+                            height: 20,
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.end,
+                      ),
+                    ),
+                  ],
+                ),
+                onPressed: () {
+                  pMoney.purchaseItem(id);
+                },
               );
             }),
       ),

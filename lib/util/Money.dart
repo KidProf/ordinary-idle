@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
 import 'package:ordinary_idle/util/Shops.dart';
@@ -13,6 +14,7 @@ class Money extends Shops {
   late double secretsMultiplier;
   late double otherMultiplier;
   late Timer idleTimer;
+  final hotbarShopLimit = 3;
 
   Money() : super() {
     player = Hive.box("player");
@@ -23,6 +25,7 @@ class Money extends Shops {
       "multiplier": _computeMultiplier(),
       "coinsPerSecond": computeCoinsPerSecond(),
       "coinsPerTap": computeCoinsPerTap(),
+      "hotbarShop": player.get("hotbarShop",defaultValue: <int>[0,1]),
     });
 
     //initialize idle timer
@@ -142,5 +145,27 @@ class Money extends Shops {
   bool possibleById(int id, {int? level}) {
     var cost = getCostById(id,level: level);
     return cost <= vitals.value["coins"];
+  }
+
+  void setHotbarShop(int id, bool value){
+    if(value==true&&!vitals.value["hotbarShop"].contains(id)){ //add
+      if(vitals.value["hotbarShop"].length<hotbarShopLimit){
+        var newHotbar = <int>[...vitals.value["hotbarShop"],id];
+        newHotbar.sort();
+        vitals.value = {...vitals.value,"hotbarShop":newHotbar};
+        player.put("hotbarShop", newHotbar);
+      }else{
+        Fluttertoast.showToast(msg: "You can have at most "+ hotbarShopLimit.toString() + " items in the hotbar");
+      }
+    }else if(value==false&&vitals.value["hotbarShop"].contains(id)){ //remove
+      print(vitals.value["hotbarShop"]);
+      if(vitals.value["hotbarShop"].length>1){
+        var newHotbar = vitals.value["hotbarShop"].where((int x)=>x!=id).toList();
+        vitals.value = {...vitals.value,"hotbarShop":newHotbar};
+        player.put("hotbarShop", newHotbar);
+      }else{
+        Fluttertoast.showToast(msg: "You need at least 1 item in the hotbar");
+      }
+    }
   }
 }
