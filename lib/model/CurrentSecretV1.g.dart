@@ -20,7 +20,7 @@ class CurrentSecretV1Adapter extends TypeAdapter<CurrentSecretV1> {
       sid: fields[100] as int,
       stage: fields[101] as int,
       progress: fields[102] as int,
-      total: fields[103] as int,
+      total: fields[203] as num,
       totalStages: fields[104] as int,
     );
   }
@@ -35,7 +35,7 @@ class CurrentSecretV1Adapter extends TypeAdapter<CurrentSecretV1> {
       ..write(obj.stage)
       ..writeByte(102)
       ..write(obj.progress)
-      ..writeByte(103)
+      ..writeByte(203)
       ..write(obj.total)
       ..writeByte(104)
       ..write(obj.totalStages);
@@ -47,5 +47,7 @@ class CurrentSecretV1Adapter extends TypeAdapter<CurrentSecretV1> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CurrentSecretV1Adapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      other is CurrentSecretV1Adapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

@@ -11,6 +11,7 @@ class Secrets {
   late Box player;
   late Box currentSecrets;
   late List<int> completedSecrets;
+  late List<int> unlockedThemes;
   late Function updateSecretsMultiplier;
   late FToast fToast;
   Map<int, CurrentVolatileSecret> currentVolatileSecrets = {};
@@ -19,6 +20,7 @@ class Secrets {
     player = Hive.box("player");
     currentSecrets = Hive.box("currentSecrets");
     completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);
+    unlockedThemes = player.get("unlockedThemes", defaultValue: <int>[1]);
   }
 
   //TODO: Gen from CSV
@@ -32,6 +34,7 @@ class Secrets {
         title: "Welcome",
         description:
             "Tapping the secret button 15 times.\n\nCongratulations on discovering your first secret. I would say this is the most important secret, as it unlocks the secrets page and your ability to find other secrets.",
+        theme: 0,
         reward: 1.0,
         progressComponent: [
           {
@@ -49,6 +52,7 @@ class Secrets {
       title: "More space to tap",
       description:
           "Tapping outside the cookie but inside the canvas 10 times.\n\nAs the cookie will move around and even change in size, I think making taps outside the cookie count is a good idea.",
+      theme: 1,
       reward: 0.5,
       progressComponent: [
         {
@@ -64,6 +68,7 @@ class Secrets {
       prerequisites: [1],
       title: "Where did it go?",
       description: "Swipe the cookie up until it disappears from the screen.",
+      theme: 1,
       reward: 1.0,
       progressComponent: [
         {
@@ -78,6 +83,38 @@ class Secrets {
       prerequisites: [1, 3],
       title: "Diode",
       description: "Rotate the cookie anticlockwise for 4 cycles.",
+      theme: 1,
+      reward: 1.0,
+      progressComponent: [
+        {
+          "total": 1,
+          "volatile": true,
+        },
+      ],
+    ),
+    Secret(
+      id: 9999,
+      exid: "2.0",
+      prerequisites: [],
+      title: "Number of taps",
+      description: "",
+      theme: 2,
+      reward: 0.0,
+      type: "hidden",
+      progressComponent: [
+        {
+          "total": double.infinity, //never completed
+          "volatile": false,
+        },
+      ],
+    ),
+    Secret(
+      id: 5,
+      exid: "2.1",
+      prerequisites: [1],
+      title: "96966696966969699999666",
+      description: "Invert the phone when the tap count only contains 6s and 9s.",
+      theme: 2,
       reward: 1.0,
       progressComponent: [
         {
@@ -102,6 +139,11 @@ class Secrets {
 
   bool prerequisiteMet(int id) {
     final s = getSecretById(id);
+    
+    // print(unlockedThemes);
+    //if theme is 0, can be accessed anywhere
+    if(s.theme!=0 && !unlockedThemes.contains(s.theme)) return false; 
+
     for (var prerequisite in s.prerequisites) {
       if (!secretCompleted(prerequisite)) return false;
     }
@@ -211,18 +253,22 @@ class Secret {
   final int id; //cannot be changed once initialized, or else will have problems during updates
   final String exid; //can be changed to suit context later
   final List<int> prerequisites;
+  final int theme;
   final String title;
   final String description;
   final double reward;
   final List<Map> progressComponent;
+  final String type;
 
   Secret({
     required this.id,
     required this.exid,
     required this.title,
     required this.prerequisites,
+    required this.theme,
     required this.description,
     required this.reward,
     required this.progressComponent,
+    this.type = "normal",
   });
 }

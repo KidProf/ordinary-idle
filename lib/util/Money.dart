@@ -168,4 +168,8 @@ class Money extends Shops {
       }
     }
   }
+
+  int getCurrentTheme(){
+    return player.get("currentTheme",defaultValue: 1);
+  }
 }

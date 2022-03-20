@@ -3,14 +3,15 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/colors.dart' as Colors;
+import 'package:ordinary_idle/util/Background.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
 import 'package:ordinary_idle/util/SwipeDetector.dart';
 import 'package:vector_math/vector_math.dart';
 
 import 'package:ordinary_idle/util/RotateDetector.dart';
 
-class CookieBackground extends StatefulWidget {
-  final Function tap;
+class CookieBackground extends StatefulWidget{
+  final Function(double) tap;
   final Secrets pSecrets;
 
   const CookieBackground(this.pSecrets, this.tap, {Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class CookieBackground extends StatefulWidget {
   State<CookieBackground> createState() => _CookieBackgroundState();
 }
 
-class _CookieBackgroundState extends State<CookieBackground> {
+class _CookieBackgroundState extends State<CookieBackground>  implements Background{
   late Vector2 canvasSize;
   late Vector2 canvasCenter;
   late Vector2 cookieCenter;
@@ -47,7 +48,7 @@ class _CookieBackgroundState extends State<CookieBackground> {
     secret4Completed = widget.pSecrets.secretCompleted(4);
 
     var gestureChild = GestureDetector(
-        onTapDown: _onBackgroundTapDown,
+        onTapDown: onBackgroundTapDown,
         // onTapUp: _onTapUp,
         // The custom button
         child: Container(
@@ -84,7 +85,8 @@ class _CookieBackgroundState extends State<CookieBackground> {
     }
   }
 
-  _onBackgroundTapDown(TapDownDetails details) {
+  @override
+  onBackgroundTapDown(TapDownDetails details) {
     var x = details.globalPosition.dx;
     var y = details.globalPosition.dy;
     // or user the local position method to get the offset

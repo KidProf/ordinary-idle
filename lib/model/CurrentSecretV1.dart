@@ -13,8 +13,8 @@ class CurrentSecretV1 {
   @HiveField(102)
   int progress;
 
-  @HiveField(103)
-  final int total;
+  @HiveField(203)
+  final num total;
 
   @HiveField(104)
   final int totalStages;
