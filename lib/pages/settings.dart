@@ -1,60 +1,112 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/main.dart';
+import 'package:ordinary_idle/util/Money.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
+import 'package:ordinary_idle/util/Util.dart';
 import 'package:restart_app/restart_app.dart';
 
 class Settings extends StatelessWidget {
   final Secrets pSecrets;
+  final Money pMoney;
   final Function(int, BuildContext) onItemTapped;
-  const Settings(this.pSecrets, this.onItemTapped, {Key? key}) : super(key: key);
+  const Settings(this.pSecrets, this.pMoney, this.onItemTapped, {Key? key}) : super(key: key);
 
   static const TextStyle titleStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-      child: Wrap(
-        children: [
-          // const SizedBox(height: 70),
-          const Text(
-            'Settings',
-            style: titleStyle,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: SizedBox(
+          child: Wrap(
+            children: [
+              const Text(
+                'Settings',
+                style: titleStyle,
+              ),
+              const Text(
+                'Danger Zone',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.red),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width - 20,
+                child: Text(
+                    "Note that these actions cannot be undone. The reset secrets only button is only temporary available during beta stage."),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width - 20,
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                      ),
+                      onPressed: () async {
+                        await _resetAll(context);
+                      },
+                      child: Text("Reset All"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await _resetSecretsOnly(context);
+                      },
+                      child: Text("Reset Secrets Only"),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width - 20,
+                child: Expanded(child: Divider(color: Colors.black45)),
+              ),
+              const Text(
+                'Change Theme',
+                style: titleStyle,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width - 20,
+                child: Text(
+                    "Changing themes unlock the possibility of finding different secrets. Reach 1e6 coins net worth to unlock the option of changing themes. Although there will only be a few during beta stage, expect to see more as we are approaching release."),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width - 20,
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            pMoney.getNetWorth() >= 1000000 ? Colors.green : Util.disabled),
+                      ),
+                      onPressed: () async {
+                        if (pMoney.getNetWorth() >= 1000000) {
+                          //1e6
+                          await _changeTheme(context);
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "Reach 1e6 coins net worth to unlock the option of changing themes. ");
+                        }
+                      },
+                      child: Text("Change Theme"),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ),
+              ),
+              SizedBox(width: MediaQuery.of(context).size.width - 20, height: 0), //maintain width and top padding
+            ],
+            spacing: 20,
+            runAlignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.start,
+            direction: Axis.vertical,
           ),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-            ),
-            onPressed: () async {
-              await _resetAll(context);
-            },
-            child: Text("Reset All"),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              await _resetSecretsOnly(context);
-            },
-            child: Text("Reset Secrets Only"),
-          ),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-            ),
-            onPressed: () async {
-              await _changeTheme(context);
-            },
-            child: Text("Change Theme"),
-          ),
-        ],
-        spacing: 30,
-        runAlignment: WrapAlignment.start,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        direction: Axis.vertical,
-        // mainAxisAlignment: MainAxisAlignment.start,
-        // crossAxisAlignment: CrossAxisAlignment.center,
+        ),
       ),
     );
   }

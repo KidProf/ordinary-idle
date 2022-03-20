@@ -43,32 +43,36 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
 
           return GestureDetector(
             onTapDown: onBackgroundTapDown,
-            child: Column(
-              children: [
-                SizedBox(height: 0),
-                Container(
-                  alignment: Alignment.center,
-                  child: isOverflow
-                      ? const Icon(CupertinoIcons.infinite, size: 130)
-                      : Text(
-                          taps != 303 ? taps.toString() : "LOL",
-                          style: tapStyle,
-                        ),
-                ),
-                ElevatedButton(
-                  child: Text("Reset Count"),
-                  onPressed: () {
-                    widget.pSecrets.resetSecretProgression(9999);
-                  },
-                ),
-                ElevatedButton(
-                  child: Text("+300"), //FIXME: do not put this to release!!!
-                  onPressed: () {
-                    widget.pSecrets.progressSecret(9999, 0, amount: 300);
-                  },
-                ),
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Container(
+              color: Colors
+                  .Colors.green[100], //the color is necessary or else taps outside the cookie cannot be registered
+              child: Column(
+                children: [
+                  SizedBox(height: 0),
+                  Container(
+                    alignment: Alignment.center,
+                    child: isOverflow
+                        ? const Icon(CupertinoIcons.infinite, size: 130)
+                        : Text(
+                            taps != 303 ? taps.toString() : "LOL",
+                            style: tapStyle,
+                          ),
+                  ),
+                  ElevatedButton(
+                    child: Text("Reset Count"),
+                    onPressed: () {
+                      widget.pSecrets.resetSecretProgression(9999);
+                    },
+                  ),
+                  ElevatedButton(
+                    child: Text("+300"), //FIXME: do not put this to release!!!
+                    onPressed: () {
+                      widget.pSecrets.progressSecret(9999, 0, amount: 300);
+                    },
+                  ),
+                ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ),
             ),
           );
         });

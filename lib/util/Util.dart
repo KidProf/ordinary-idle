@@ -36,12 +36,14 @@ mixin Util {
   );
 
   static final ButtonStyle disabledRounded = ButtonStyle(
-    backgroundColor: MaterialStateProperty.all<Color>(Colors.black54),
+    backgroundColor: MaterialStateProperty.all<Color>(disabled),
     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50.0),
-        side: BorderSide(color: Colors.black54),
+        side: BorderSide(color: disabled),
       ),
     ),
   );
+
+  static const Color disabled = Colors.black54;
 }

@@ -72,7 +72,10 @@ class Money extends Shops {
 
   double addCoinsWithoutMultiplier(double coins) {
     vitals.value = {...vitals.value, "coins": vitals.value["coins"] + coins};
+    double netWorth = player.get("netWorth", defaultValue: 1.0);
+    netWorth += coins;
     player.put("coins", vitals.value["coins"]);
+    player.put("netWorth", netWorth);
     return vitals.value["coins"];
   }
 
@@ -172,5 +175,9 @@ class Money extends Shops {
 
   int getCurrentTheme() {
     return player.get("currentTheme", defaultValue: 1);
+  }
+
+  double getNetWorth() {
+    return player.get("netWorth", defaultValue: 1.0);
   }
 }
