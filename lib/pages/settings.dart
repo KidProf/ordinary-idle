@@ -64,7 +64,7 @@ class Settings extends StatelessWidget {
               ),
               Container(
                 width: MediaQuery.of(context).size.width - 20,
-                child: Expanded(child: Divider(color: Colors.black45)),
+                child: Divider(color: Colors.black45),
               ),
               const Text(
                 'Change Theme',
@@ -145,7 +145,9 @@ class Settings extends StatelessWidget {
     var newTheme =
         unlockedThemes[(unlockedThemes.indexOf(currentTheme) + 1) % unlockedThemes.length]; //cycle to the next theme
     player.put('currentTheme', newTheme);
+    print("PLAYER GET"+player.get("coins").toString());
     RestartWidget.restartApp(context);
+    print("PLAYER GET"+player.get("coins").toString());
     onItemTapped(0, context); //switch to home page
   }
 }

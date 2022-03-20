@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -56,6 +58,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   ];
   int _selectedIndex = 0;
   late FToast fToast;
+  late Timer? idleTimer;
 
   @override
   void initState() {
@@ -63,6 +66,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     fToast = FToast();
     fToast.init(context);
     pSecrets = Secrets(pMoney.updateSecretsMultiplier, fToast);
+    //initialize idle timer
+    idleTimer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      pMoney.addIdleCoins();
+    });
   }
 
   void _onItemTapped(int index, BuildContext context) {
@@ -155,9 +162,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     );
   }
 
-  // @override
-  // void dispose() {
-  //   Hive.close();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    idleTimer?.cancel();
+    super.dispose();
+  }
 }

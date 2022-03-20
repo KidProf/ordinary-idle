@@ -13,7 +13,6 @@ class Money extends Shops {
   late Box player;
   late double secretsMultiplier;
   late double otherMultiplier;
-  late Timer idleTimer;
   final hotbarShopLimit = 3;
 
   Money() : super() {
@@ -27,11 +26,10 @@ class Money extends Shops {
       "coinsPerTap": computeCoinsPerTap(),
       "hotbarShop": player.get("hotbarShop", defaultValue: <int>[0, 1]),
     });
+  }
 
-    //initialize idle timer
-    idleTimer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
-      addCoins(vitals.value["coinsPerSecond"]);
-    });
+  void addIdleCoins(){
+    addCoins(vitals.value["coinsPerSecond"]);
   }
 
   static String vitalsRepresentation(Map<String, dynamic> vitals) {
@@ -76,6 +74,7 @@ class Money extends Shops {
     netWorth += coins;
     player.put("coins", vitals.value["coins"]);
     player.put("netWorth", netWorth);
+    // print("VITALS COINS: "+vitals.value["coins"].toString()+" HIVE COINS: " + player.get("coins").toString());
     return vitals.value["coins"];
   }
 
