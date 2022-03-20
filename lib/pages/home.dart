@@ -16,20 +16,31 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var currentBackground;
+    var backgroundColor;
     switch (pMoney.getCurrentTheme()) {
       case 1:
         currentBackground = CookieBackground(pSecrets, pMoney.tap);
+        backgroundColor = Colors.amber[100];
         break;
       case 2:
         currentBackground = TapCountBackground(pSecrets, pMoney.tap);
+        backgroundColor = Colors.green[100];
+        break;
+      default:
+        currentBackground = CookieBackground(pSecrets, pMoney.tap);
+        backgroundColor = Colors.amber[100];
+        break;
     }
     return Container(
       alignment: Alignment.topCenter,
-      child: Column(
-        children: [
-          Expanded(child: currentBackground),
-          Container(height: 70, child: ShopComponent(pMoney)),
-        ],
+      child: Container(
+        color: backgroundColor,
+        child: Column(
+          children: [
+            Expanded(child: currentBackground),
+            Container(height: 70, child: ShopComponent(pMoney)),
+          ],
+        ),
       ),
     );
   }

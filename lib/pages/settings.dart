@@ -37,7 +37,7 @@ class Settings extends StatelessWidget {
             onPressed: () async {
               await _resetSecretsOnly(context);
             },
-            child: Text("Reset Secerets Only"),
+            child: Text("Reset Secrets Only"),
           ),
           ElevatedButton(
             style: ButtonStyle(
@@ -62,11 +62,11 @@ class Settings extends StatelessWidget {
   Future<void> _resetAll(BuildContext context) async {
     //Delete Hive
     await Hive.box('player').clear();
-    await Hive.box('currentSecrets').clear();
+    await Hive.box('currentSecretsV2').clear();
     await Hive.box('purchases').clear();
     //Initialize Hive
     await Hive.openBox('player');
-    await Hive.openBox('currentSecrets');
+    await Hive.openBox('currentSecretsV2');
     await Hive.openBox('purchases');
     RestartWidget.restartApp(context);
   }
@@ -76,9 +76,11 @@ class Settings extends StatelessWidget {
     await Hive.box('player').put("completedSecrets", <int>[]);
     await Hive.box('player').put("currentTheme", 1);
     await Hive.box('player').put("unlockedThemes", <int>[1]);
-    await Hive.box('currentSecrets').clear();
+    await Hive.box('currentSecretsV2').clear();
+
     //Initialize deleted boxes
-    await Hive.openBox('currentSecrets');
+    await Hive.openBox('currentSecretsV2');
+    RestartWidget.restartApp(context);
   }
 
   Future<void> _changeTheme(BuildContext context) async {

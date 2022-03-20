@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
-import 'package:ordinary_idle/model/CurrentSecretV1.dart';
+import 'package:ordinary_idle/model/CurrentSecretV2.dart';
 import 'package:ordinary_idle/util/CurrentVolatileSecret.dart';
 import 'package:ordinary_idle/util/Money.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
@@ -18,7 +18,7 @@ class Secrets {
 
   Secrets(this.updateSecretsMultiplier, this.fToast) {
     player = Hive.box("player");
-    currentSecrets = Hive.box("currentSecrets");
+    currentSecrets = Hive.box("currentSecretsV2");
     completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);
     unlockedThemes = player.get("unlockedThemes", defaultValue: <int>[1]);
   }
@@ -123,6 +123,51 @@ class Secrets {
         },
       ],
     ),
+    Secret(
+      id: 6,
+      exid: "2.2",
+      prerequisites: [1],
+      title: "Disguise",
+      description: "Invert the phone so that the number appears to be at least 700 larger than the actual number.",
+      theme: 2,
+      reward: 1.0,
+      progressComponent: [
+        {
+          "total": 1,
+          "volatile": true,
+        },
+      ],
+    ),
+    Secret(
+      id: 7,
+      exid: "2.3",
+      prerequisites: [1],
+      title: "Text Overflow",
+      description: "Make the tap count overflowing the screen.",
+      theme: 2,
+      reward: 2.0,
+      progressComponent: [
+        {
+          "total": 1,
+          "volatile": true,
+        },
+      ],
+    ),
+    Secret(
+      id: 8,
+      exid: "2.4",
+      prerequisites: [1],
+      title: "Remain LOL",
+      description: "Stop at 303 for 5 seconds, which is replaced by LOL.",
+      theme: 2,
+      reward: 1.0,
+      progressComponent: [
+        {
+          "total": 1,
+          "volatile": true,
+        },
+      ],
+    ),
   ];
 
   static Secret getSecretById(int id) {
@@ -152,7 +197,7 @@ class Secrets {
 
   Tuple2<bool, int> secretProgress(int id) {
     if (currentSecrets.containsKey(id)) {
-      final CurrentSecretV1 c = currentSecrets.get(id);
+      final CurrentSecretV2 c = currentSecrets.get(id);
       return Tuple2(false, c.progress);
     }
     if (currentVolatileSecrets.containsKey(id)) {
@@ -172,7 +217,7 @@ class Secrets {
     if (secretCompleted(id) || !prerequisiteMet(id)) {
       return; //completed already, so no need tracking OR prerequisite not met, cannot start
     } else if (currentSecrets.containsKey(id)) {
-      final CurrentSecretV1 c = currentSecrets.get(id);
+      final CurrentSecretV2 c = currentSecrets.get(id);
       if (c.stage == stage) {
         //no progression if wrong stage, the ! is for null checking, which I think doesnt needed because we are sure it contains the key
         c.progress += amount;
@@ -229,7 +274,7 @@ class Secrets {
       print("currentSecretPut");
       currentSecrets.put(
           id,
-          CurrentSecretV1(
+          CurrentSecretV2(
             sid: id,
             stage: stage,
             progress: amount,
@@ -246,6 +291,10 @@ class Secrets {
     player.put("completedSecrets", completedSecrets);
     MyToast.showSecretToast(fToast, "Secret Unlocked! ${s.title}");
     updateSecretsMultiplier();
+  }
+
+  void resetSecretProgression(int id) {
+    currentSecrets.delete(id);
   }
 }
 

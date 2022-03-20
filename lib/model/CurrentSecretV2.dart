@@ -1,9 +1,9 @@
 import 'package:hive/hive.dart';
 
-part 'CurrentSecretV1.g.dart';
+part 'CurrentSecretV2.g.dart';
 
-@HiveType(typeId: 101)
-class CurrentSecretV1 {
+@HiveType(typeId: 202)
+class CurrentSecretV2 {
   @HiveField(100)
   final int sid;
 
@@ -19,7 +19,7 @@ class CurrentSecretV1 {
   @HiveField(104)
   final int totalStages;
 
-  CurrentSecretV1({
+  CurrentSecretV2({
     required this.sid,
     required this.stage,
     required this.progress,
@@ -28,5 +28,5 @@ class CurrentSecretV1 {
   });
 }
 
-//CurrentSecretsV1 model:
-// Map<int,CurrentSecretV1>
+//CurrentSecretsV2 model:
+// Map<int,CurrentSecretV2>

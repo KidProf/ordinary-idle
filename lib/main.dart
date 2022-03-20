@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/MyApp.dart';
 
-import 'package:ordinary_idle/model/CurrentSecretV1.dart';
+import 'package:ordinary_idle/model/CurrentSecretV2.dart';
 
 void main() async {
   WidgetsFlutterBinding
@@ -13,10 +13,10 @@ void main() async {
 
   //Initialize Hive
   await Hive.initFlutter();
-  Hive.registerAdapter(CurrentSecretV1Adapter());
+  Hive.registerAdapter(CurrentSecretV2Adapter());
 
   await Hive.openBox('player');
-  await Hive.openBox('currentSecrets');
+  await Hive.openBox('currentSecretsV2');
   await Hive.openBox('purchases');
   runApp(
     RestartWidget(

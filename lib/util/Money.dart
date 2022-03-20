@@ -98,7 +98,6 @@ class Money extends Shops {
 
   //recompute and update secretsMultiplier and hence multiplier, return new secretsMultiplier
   double updateSecretsMultiplier() {
-    print("updateSecretsMultiplier");
     secretsMultiplier = _computeSecretsMultiplier();
     updateMultiplier();
     return secretsMultiplier;

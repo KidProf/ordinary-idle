@@ -1,46 +1,122 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/util/Background.dart';
+import 'package:flutter/src/material/colors.dart' as Colors;
 import 'package:ordinary_idle/util/Secrets.dart';
+import 'package:vector_math/vector_math.dart';
 
-class TapCountBackground extends StatelessWidget implements Background {
+class TapCountBackground extends StatefulWidget {
   final Secrets pSecrets;
   final Function(double) tap;
-  const TapCountBackground(this.pSecrets, this.tap, {Key? key}) : super(key: key);
+
+  TapCountBackground(this.pSecrets, this.tap, {Key? key}) : super(key: key);
+
+  @override
+  State<TapCountBackground> createState() => _TapCountBackgroundState();
+}
+
+class _TapCountBackgroundState extends State<TapCountBackground> implements Background {
+  late Vector2 canvasSize;
+  late Timer? lolTimer = null;
+  final tapStyle = const TextStyle(fontSize: 130, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
+    canvasSize = Vector2(
+      MediaQuery.of(context).size.width,
+      MediaQuery.of(context).size.height,
+    );
+
     return ValueListenableBuilder<Box>(
-        valueListenable: Hive.box('currentSecrets').listenable(keys: [9999]), //listen to hidden secret only
+        valueListenable: Hive.box('currentSecretsV2').listenable(keys: [9999]), //listen to secret 9999 only
         builder: (context, box, _) {
-          var taps = pSecrets.secretProgress(9999).item2;
-          var size = calcTextSize(taps.toString(), TextStyle(fontSize: 120, fontWeight: FontWeight.bold));
-          print(size);
+          var taps = widget.pSecrets.secretProgress(9999).item2;
+
+          //Secret 7
+          bool isOverflow = _isOverflow(taps.toString(), canvasSize.x);
+          if (isOverflow) {
+            widget.pSecrets.progressSecret(7, 0);
+          }
+
           return GestureDetector(
             onTapDown: onBackgroundTapDown,
-            child: Container(
-                color: Colors.green[100],
-                alignment: Alignment.center,
-                child: Text(
-                  taps.toString(),
-                  style: TextStyle(fontSize: 120, fontWeight: FontWeight.bold),
-                )),
+            child: Column(
+              children: [
+                SizedBox(height: 0),
+                Container(
+                  alignment: Alignment.center,
+                  child: isOverflow
+                      ? const Icon(CupertinoIcons.infinite, size: 130)
+                      : Text(
+                          taps != 303 ? taps.toString() : "LOL",
+                          style: tapStyle,
+                        ),
+                ),
+                ElevatedButton(
+                  child: Text("Reset Count"),
+                  onPressed: () {
+                    widget.pSecrets.resetSecretProgression(9999);
+                  },
+                ),
+                ElevatedButton(
+                  child: Text("+300"), //FIXME: do not put this to release!!!
+                  onPressed: () {
+                    widget.pSecrets.progressSecret(9999, 0, amount: 300);
+                  },
+                ),
+              ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
           );
         });
   }
 
   @override
   void onBackgroundTapDown(TapDownDetails details) {
-    pSecrets.progressSecret(9999, 0);
-    tap(1.0);
+    widget.tap(1.0);
+    widget.pSecrets.progressSecret(9999, 0);
+    var taps = widget.pSecrets.secretProgress(9999).item2;
+
+    //secret 8
+    if (taps == 303) {
+      //activate timer
+      print("timer fired");
+      lolTimer = Timer(const Duration(seconds: 5), () {
+        if (widget.pSecrets.secretProgress(9999).item2 == 303) {
+          //check if it is still 303
+          widget.pSecrets.progressSecret(8, 0);
+        } else {
+          print("timer finished but secret not progressed because number changed");
+        }
+      });
+    }
   }
 
-  Size calcTextSize(String text, TextStyle style) {
+  bool _isOverflow(String text, double canvasX) {
+    var size = _calcTextSize(
+      text,
+      tapStyle,
+    );
+    print("text width: " + size.width.toString() + ", canvas width: " + canvasX.toString());
+    return size.width > canvasX || canvasX > 400;
+  }
+
+  Size _calcTextSize(String text, TextStyle style) {
     final TextPainter textPainter = TextPainter(
       text: TextSpan(text: text, style: style),
       textDirection: TextDirection.ltr,
       textScaleFactor: WidgetsBinding.instance!.window.textScaleFactor,
     )..layout();
     return textPainter.size;
+  }
+
+  @override
+  void dispose() {
+    lolTimer?.cancel();
+    print("timer cancelled in dispose");
+    super.dispose();
   }
 }

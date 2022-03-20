@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
-import 'package:ordinary_idle/model/CurrentSecretV1.dart';
+import 'package:ordinary_idle/model/CurrentSecretV2.dart';
 import 'package:ordinary_idle/model/PurchaseV1.dart';
 import 'package:ordinary_idle/util/CurrentVolatileSecret.dart';
 import 'package:ordinary_idle/util/Money.dart';

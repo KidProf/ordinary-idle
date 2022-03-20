@@ -12,18 +12,21 @@ class SecretsPage extends StatelessWidget {
     return Container(
       alignment: Alignment.topCenter,
       margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-      child: Wrap(
-        children: [
-          Text("Secrets", style: titleStyle),
-          SizedBox(height: 10),
-          ..._printSecrets(pSecrets, context),
-        ],
-        // spacing: 30,
-        runAlignment: WrapAlignment.start,
-        crossAxisAlignment: WrapCrossAlignment.start,
-        direction: Axis.vertical,
-        // mainAxisAlignment: MainAxisAlignment.start,
-        // crossAxisAlignment: CrossAxisAlignment.center,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Wrap(
+          children: [
+            Text("Secrets", style: titleStyle),
+            SizedBox(height: 10),
+            ..._printSecrets(pSecrets, context),
+          ],
+          // spacing: 30,
+          runAlignment: WrapAlignment.start,
+          crossAxisAlignment: WrapCrossAlignment.start,
+          direction: Axis.vertical,
+          // mainAxisAlignment: MainAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.center,
+        ),
       ),
     );
   }

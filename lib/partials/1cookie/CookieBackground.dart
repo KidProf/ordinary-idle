@@ -54,7 +54,7 @@ class _CookieBackgroundState extends State<CookieBackground> implements Backgrou
         child: Container(
           width: double.infinity,
           height: double.infinity,
-          color: const Color(0xFFFAFAFA), //the color is necessary or else taps outside the cookie cannot be registered
+          color: Colors.Colors.amber[100], //the color is necessary or else taps outside the cookie cannot be registered
           child: Stack(
             children: [
               Positioned(

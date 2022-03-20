@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'CurrentSecretV1.dart';
+part of 'CurrentSecretV2.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CurrentSecretV1Adapter extends TypeAdapter<CurrentSecretV1> {
+class CurrentSecretV2Adapter extends TypeAdapter<CurrentSecretV2> {
   @override
-  final int typeId = 101;
+  final int typeId = 202;
 
   @override
-  CurrentSecretV1 read(BinaryReader reader) {
+  CurrentSecretV2 read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CurrentSecretV1(
+    return CurrentSecretV2(
       sid: fields[100] as int,
       stage: fields[101] as int,
       progress: fields[102] as int,
@@ -26,7 +26,7 @@ class CurrentSecretV1Adapter extends TypeAdapter<CurrentSecretV1> {
   }
 
   @override
-  void write(BinaryWriter writer, CurrentSecretV1 obj) {
+  void write(BinaryWriter writer, CurrentSecretV2 obj) {
     writer
       ..writeByte(5)
       ..writeByte(100)
@@ -47,5 +47,5 @@ class CurrentSecretV1Adapter extends TypeAdapter<CurrentSecretV1> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CurrentSecretV1Adapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      other is CurrentSecretV2Adapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
