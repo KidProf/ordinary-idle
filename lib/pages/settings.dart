@@ -7,7 +7,7 @@ import 'package:restart_app/restart_app.dart';
 
 class Settings extends StatelessWidget {
   final Secrets pSecrets;
-  final Function(int,BuildContext) onItemTapped;
+  final Function(int, BuildContext) onItemTapped;
   const Settings(this.pSecrets, this.onItemTapped, {Key? key}) : super(key: key);
 
   static const TextStyle titleStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -79,19 +79,19 @@ class Settings extends StatelessWidget {
     await Hive.box('currentSecrets').clear();
     //Initialize deleted boxes
     await Hive.openBox('currentSecrets');
-    
   }
 
   Future<void> _changeTheme(BuildContext context) async {
     final numberOfThemes = 2; //TODO: change when number of themes increases
     var player = Hive.box('player');
-    await player.put("unlockedThemes", <int>[1,2]); //TODO: temp, so that all themes are unlocked without constraints
+    await player.put("unlockedThemes", <int>[1, 2]); //TODO: temp, so that all themes are unlocked without constraints
 
-    var currentTheme = player.get("currentTheme",defaultValue: 1);
-    var unlockedThemes = player.get("unlockedThemes",defaultValue: <int>[1]);
-    var newTheme = unlockedThemes[(unlockedThemes.indexOf(currentTheme)+1)%unlockedThemes.length]; //cycle to the next theme
-    player.put('currentTheme',newTheme);
+    var currentTheme = player.get("currentTheme", defaultValue: 1);
+    var unlockedThemes = player.get("unlockedThemes", defaultValue: <int>[1]);
+    var newTheme =
+        unlockedThemes[(unlockedThemes.indexOf(currentTheme) + 1) % unlockedThemes.length]; //cycle to the next theme
+    player.put('currentTheme', newTheme);
     RestartWidget.restartApp(context);
-    onItemTapped(0,context); //switch to home page
+    onItemTapped(0, context); //switch to home page
   }
 }

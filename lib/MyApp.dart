@@ -52,7 +52,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     Home(pSecrets, pMoney),
     SecretsPage(pSecrets),
     // Achievements(pSecrets),
-    Settings(pSecrets,_onItemTapped),
+    Settings(pSecrets, _onItemTapped),
   ];
   int _selectedIndex = 0;
   late FToast fToast;

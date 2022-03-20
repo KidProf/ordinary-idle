@@ -16,7 +16,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var currentBackground;
-    switch(pMoney.getCurrentTheme()){
+    switch (pMoney.getCurrentTheme()) {
       case 1:
         currentBackground = CookieBackground(pSecrets, pMoney.tap);
         break;

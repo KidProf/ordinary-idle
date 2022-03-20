@@ -47,7 +47,5 @@ class CurrentSecretV1Adapter extends TypeAdapter<CurrentSecretV1> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CurrentSecretV1Adapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is CurrentSecretV1Adapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

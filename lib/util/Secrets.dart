@@ -139,10 +139,10 @@ class Secrets {
 
   bool prerequisiteMet(int id) {
     final s = getSecretById(id);
-    
+
     // print(unlockedThemes);
     //if theme is 0, can be accessed anywhere
-    if(s.theme!=0 && !unlockedThemes.contains(s.theme)) return false; 
+    if (s.theme != 0 && !unlockedThemes.contains(s.theme)) return false;
 
     for (var prerequisite in s.prerequisites) {
       if (!secretCompleted(prerequisite)) return false;

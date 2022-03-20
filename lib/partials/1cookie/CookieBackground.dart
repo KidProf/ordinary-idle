@@ -10,7 +10,7 @@ import 'package:vector_math/vector_math.dart';
 
 import 'package:ordinary_idle/util/RotateDetector.dart';
 
-class CookieBackground extends StatefulWidget{
+class CookieBackground extends StatefulWidget {
   final Function(double) tap;
   final Secrets pSecrets;
 
@@ -20,7 +20,7 @@ class CookieBackground extends StatefulWidget{
   State<CookieBackground> createState() => _CookieBackgroundState();
 }
 
-class _CookieBackgroundState extends State<CookieBackground>  implements Background{
+class _CookieBackgroundState extends State<CookieBackground> implements Background {
   late Vector2 canvasSize;
   late Vector2 canvasCenter;
   late Vector2 cookieCenter;

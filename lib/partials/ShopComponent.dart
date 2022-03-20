@@ -17,7 +17,7 @@ class ShopComponent extends StatelessWidget {
         builder: (context, vitals, _) {
           return Row(
             children: [
-              ...vitals["hotbarShop"].map((int x)=> HotbarShop(pMoney, x)),
+              ...vitals["hotbarShop"].map((int x) => HotbarShop(pMoney, x)),
               const SizedBox(width: 10),
               CircleAvatar(
                 backgroundColor: Colors.amber[800],
@@ -39,9 +39,9 @@ class ShopComponent extends StatelessWidget {
                               // itemExtent: 100,
                               scrollDirection: Axis.vertical,
                               itemCount: pMoney.shops.length,
-                              itemBuilder: (BuildContext context, int i) { 
+                              itemBuilder: (BuildContext context, int i) {
                                 return DetailShop(pMoney, i, vitals);
-                               },
+                              },
                             ),
                           );
                         },

@@ -25,7 +25,7 @@ class Money extends Shops {
       "multiplier": _computeMultiplier(),
       "coinsPerSecond": computeCoinsPerSecond(),
       "coinsPerTap": computeCoinsPerTap(),
-      "hotbarShop": player.get("hotbarShop",defaultValue: <int>[0,1]),
+      "hotbarShop": player.get("hotbarShop", defaultValue: <int>[0, 1]),
     });
 
     //initialize idle timer
@@ -143,33 +143,35 @@ class Money extends Shops {
 
   @override
   bool possibleById(int id, {int? level}) {
-    var cost = getCostById(id,level: level);
+    var cost = getCostById(id, level: level);
     return cost <= vitals.value["coins"];
   }
 
-  void setHotbarShop(int id, bool value){
-    if(value==true&&!vitals.value["hotbarShop"].contains(id)){ //add
-      if(vitals.value["hotbarShop"].length<hotbarShopLimit){
-        var newHotbar = <int>[...vitals.value["hotbarShop"],id];
+  void setHotbarShop(int id, bool value) {
+    if (value == true && !vitals.value["hotbarShop"].contains(id)) {
+      //add
+      if (vitals.value["hotbarShop"].length < hotbarShopLimit) {
+        var newHotbar = <int>[...vitals.value["hotbarShop"], id];
         newHotbar.sort();
-        vitals.value = {...vitals.value,"hotbarShop":newHotbar};
+        vitals.value = {...vitals.value, "hotbarShop": newHotbar};
         player.put("hotbarShop", newHotbar);
-      }else{
-        Fluttertoast.showToast(msg: "You can have at most "+ hotbarShopLimit.toString() + " items in the hotbar");
+      } else {
+        Fluttertoast.showToast(msg: "You can have at most " + hotbarShopLimit.toString() + " items in the hotbar");
       }
-    }else if(value==false&&vitals.value["hotbarShop"].contains(id)){ //remove
+    } else if (value == false && vitals.value["hotbarShop"].contains(id)) {
+      //remove
       print(vitals.value["hotbarShop"]);
-      if(vitals.value["hotbarShop"].length>1){
-        var newHotbar = vitals.value["hotbarShop"].where((int x)=>x!=id).toList();
-        vitals.value = {...vitals.value,"hotbarShop":newHotbar};
+      if (vitals.value["hotbarShop"].length > 1) {
+        var newHotbar = vitals.value["hotbarShop"].where((int x) => x != id).toList();
+        vitals.value = {...vitals.value, "hotbarShop": newHotbar};
         player.put("hotbarShop", newHotbar);
-      }else{
+      } else {
         Fluttertoast.showToast(msg: "You need at least 1 item in the hotbar");
       }
     }
   }
 
-  int getCurrentTheme(){
-    return player.get("currentTheme",defaultValue: 1);
+  int getCurrentTheme() {
+    return player.get("currentTheme", defaultValue: 1);
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
 
-abstract class Background{
+abstract class Background {
   void onBackgroundTapDown(TapDownDetails details);
 }

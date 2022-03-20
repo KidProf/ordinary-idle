@@ -24,9 +24,7 @@ class HotbarShop extends StatelessWidget {
             valueListenable: Hive.box('purchases').listenable(keys: [id]),
             builder: (context, box, _) {
               return ElevatedButton(
-                style: pMoney.possibleById(id)
-                    ? Util.greenRounded
-                    : Util.disabledRounded,
+                style: pMoney.possibleById(id) ? Util.greenRounded : Util.disabledRounded,
                 child: Stack(
                   children: [
                     Positioned(
@@ -40,8 +38,7 @@ class HotbarShop extends StatelessWidget {
                             child: Text(
                               shop.title,
                               style: TextStyle(fontSize: 20),
-                              overflow: TextOverflow
-                                  .ellipsis, //wont work, it would just flow out of the screen
+                              overflow: TextOverflow.ellipsis, //wont work, it would just flow out of the screen
                             ),
                           ),
                         ],
@@ -54,8 +51,7 @@ class HotbarShop extends StatelessWidget {
                       child: Row(
                         children: [
                           Text(
-                            Util.doubleRepresentation(
-                                pMoney.getCostById(id, level: box.get(id))),
+                            Util.doubleRepresentation(pMoney.getCostById(id, level: box.get(id))),
                             style: TextStyle(fontSize: 10),
                           ),
                           const Image(

@@ -31,7 +31,7 @@ class SecretsPage extends StatelessWidget {
   List<Widget> _printSecrets(Secrets pSecrets, BuildContext context) {
     var ss = Secrets.secrets;
     //TODO: group them into different categories based on theme
-    return ss.where((Secret s)=>s.type!="hidden").map((Secret s) {
+    return ss.where((Secret s) => s.type != "hidden").map((Secret s) {
       bool completed = pSecrets.secretCompleted(s.id);
       Color color = completed ? Colors.black : Colors.black38;
       return GestureDetector(

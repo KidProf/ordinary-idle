@@ -41,7 +41,8 @@ abstract class Shops {
         prerequisites: <Map<String, dynamic>>[],
         title: "Tap",
         description: "Increase coins per tap",
-        descriptionI: (int i) => "Increase coins per tap from ${Util.doubleRepresentation(_gain0(i))} to ${Util.doubleRepresentation(_gain0(i+1))}",
+        descriptionI: (int i) =>
+            "Increase coins per tap from ${Util.doubleRepresentation(_gain0(i))} to ${Util.doubleRepresentation(_gain0(i + 1))}",
         type: "tap",
         gain: Resource(
           type: "tap",
@@ -66,7 +67,8 @@ abstract class Shops {
         prerequisites: <Map<String, dynamic>>[],
         title: "Auto Clicker",
         description: "Increase coins per second",
-        descriptionI: (int i) => "Increase coins per second by ${Util.doubleRepresentation(_gain1(i))} -> ${Util.doubleRepresentation(_gain1(i+1))}",
+        descriptionI: (int i) =>
+            "Increase coins per second by ${Util.doubleRepresentation(_gain1(i))} -> ${Util.doubleRepresentation(_gain1(i + 1))}",
         type: "idle",
         gain: Resource(
           type: "idle",
@@ -91,7 +93,8 @@ abstract class Shops {
         prerequisites: <Map<String, dynamic>>[],
         title: "Family Business",
         description: "Increase coins per second",
-        descriptionI: (int i) => "Increase coins per second by ${Util.doubleRepresentation(_gain2(i))} -> ${Util.doubleRepresentation(_gain2(i+1))}",
+        descriptionI: (int i) =>
+            "Increase coins per second by ${Util.doubleRepresentation(_gain2(i))} -> ${Util.doubleRepresentation(_gain2(i + 1))}",
         type: "idle",
         gain: Resource(
           type: "idle",
@@ -116,7 +119,8 @@ abstract class Shops {
         prerequisites: <Map<String, dynamic>>[],
         title: "Village Help",
         description: "Increase coins per second",
-        descriptionI: (int i) => "Increase coins per second by ${Util.doubleRepresentation(_gain3(i))} -> ${Util.doubleRepresentation(_gain3(i+1))}",
+        descriptionI: (int i) =>
+            "Increase coins per second by ${Util.doubleRepresentation(_gain3(i))} -> ${Util.doubleRepresentation(_gain3(i + 1))}",
         type: "idle",
         gain: Resource(
           type: "idle",
@@ -209,7 +213,7 @@ class Shop {
   final String
       type; //"tap","idle","achievements",..., this may not be necessary because class Resource already has a type
   final Resource gain; //gain when upgrading from level to level + 1
-  final Resource cost; //cost when upgrading from level - 1 to level 
+  final Resource cost; //cost when upgrading from level - 1 to level
 
   Shop({
     required this.id,
