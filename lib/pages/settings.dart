@@ -6,7 +6,9 @@ import 'package:ordinary_idle/main.dart';
 import 'package:ordinary_idle/util/Money.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
 import 'package:ordinary_idle/util/Util.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:restart_app/restart_app.dart';
+import 'package:tuple/tuple.dart';
 
 class Settings extends StatelessWidget {
   final Secrets pSecrets;
@@ -14,7 +16,7 @@ class Settings extends StatelessWidget {
   final Function(int, BuildContext) onItemTapped;
   const Settings(this.pSecrets, this.pMoney, this.onItemTapped, {Key? key})
       : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -22,16 +24,17 @@ class Settings extends StatelessWidget {
       child: Util.WarpBody(
         context: context,
         children: [
+          const SizedBox(height: 10),
           const Text(
             'Settings',
             style: Util.titleStyle,
           ),
           const Text(
             'Danger Zone',
-            style: TextStyle(fontSize: 30, color: Colors.red),
+            style: TextStyle(fontSize: 25, color: Colors.red),
           ),
           Text(
-              "Note that these actions cannot be undone. The reset secrets only button is only temporary available during beta stage."),
+              "Note that these actions cannot be undone. The reset secrets only button is only temporary available during development stage."),
           Row(
             children: [
               ElevatedButton(
@@ -134,7 +137,7 @@ class Settings extends StatelessWidget {
             style: Util.subtitleStyle,
           ),
           Text(
-              "Changing themes unlock the possibility of finding different secrets. Reach 1e6 coins net worth to unlock the option of changing themes. Although there will only be a few during beta stage, expect to see more as we are approaching release."),
+              "Changing themes unlock the possibility of finding different secrets. Reach 1e6 coins net worth to unlock the option of changing themes. Although there will only be a few during development stage, expect to see more as we are approaching release."),
           Row(
             children: [
               ElevatedButton(
@@ -158,6 +161,45 @@ class Settings extends StatelessWidget {
               ),
             ],
             mainAxisAlignment: MainAxisAlignment.center,
+          ),
+          Util.divider(),
+          const Text(
+            'Abouts',
+            style: Util.subtitleStyle,
+          ),
+          Text(
+              "Thank you for joining the beta test. This game is to test out the idea of fusing an idle game with some puzzle-solving components.\n\nDon't be too stressed not being able to find the secrets, as they are supposed to be difficult. You will eventually find some as you progress more and earn more money. The in-game hints system which would be introduced in the future would also definitely help. For now, if you desperately get stuck, you could join our Discord server and discuss.\n\nI am well aware that the number of secrets it has right now is not enough for players to engage long-term, but it will slowly be increasing as time goes by, especially with the support and feedback from players. \n\nOrdinaryIdle is currently in its very early stage of development, there would possibly be bugs or something that is not done very well. If there is something you would like to voice out, you could join our Discord server."),
+          Row(
+            children: [
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255,88,101,242)),),
+                onPressed: () async {
+                  Util.launchURL("https://discord.gg/G3MsQFzSFe");
+                },
+                child: Text("Discord Invite Link"),
+              ),
+            ],
+            mainAxisAlignment: MainAxisAlignment.center,
+          ),
+          FutureBuilder(
+            future: () async {
+              PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+              // String appName = packageInfo.appName;
+              // String packageName = packageInfo.packageName;
+              String version = packageInfo.version;
+              String buildNumber = packageInfo.buildNumber;
+              return Tuple2(version,buildNumber);
+            }(),
+            builder: (context, AsyncSnapshot<Tuple2<String,String>> snapshot) {
+              if(snapshot.hasData){
+                return Text("Version: "+snapshot.data!.item1 + "\nBuild Number: "+snapshot.data!.item2);
+              }else{
+              return SizedBox();
+              }
+              
+            }
           ),
         ],
       ),

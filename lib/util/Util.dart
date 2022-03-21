@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 mixin Util {
   static String doubleRepresentation(double value) {
@@ -51,7 +52,7 @@ mixin Util {
   static const TextStyle titleStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const TextStyle subtitleStyle =
-      TextStyle(fontSize: 30);
+      TextStyle(fontSize: 25);
 
   //normally used to build body of pages
   //if you want to center something, warp it with a Row and use flex center
@@ -63,10 +64,14 @@ mixin Util {
         direction: Axis.vertical,
         alignment: WrapAlignment.start,
         crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: spacing ?? 20,
+        spacing: spacing ?? 15,
         children: children.map((Widget w) => SizedBox( width: MediaQuery.of(context).size.width - 20, child: w,)).toList(),
       ),
     );
   }
   static Widget divider() => const Divider(color: Colors.black45);
+
+  static void launchURL(String url) async {
+  if (!await launch(url)) throw 'Could not launch $url';
+}
 }
