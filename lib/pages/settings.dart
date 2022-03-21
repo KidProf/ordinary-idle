@@ -194,9 +194,9 @@ class Settings extends StatelessWidget {
             }(),
             builder: (context, AsyncSnapshot<Tuple2<String,String>> snapshot) {
               if(snapshot.hasData){
-                return Text("Version: "+snapshot.data!.item1 + "\nBuild Number: "+snapshot.data!.item2);
+                return Text("Created by KidProf with Flutter\nVersion: "+snapshot.data!.item1 + "\nBuild Number: "+snapshot.data!.item2);
               }else{
-              return SizedBox();
+              return Text("Created by KidProf with Flutter");
               }
               
             }
