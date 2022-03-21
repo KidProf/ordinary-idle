@@ -28,7 +28,7 @@ class Money extends Shops {
     });
   }
 
-  void addIdleCoins(){
+  void addIdleCoins() {
     addCoins(vitals.value["coinsPerSecond"]);
   }
 

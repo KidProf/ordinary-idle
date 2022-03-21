@@ -92,7 +92,9 @@ class SecretsPage extends StatelessWidget {
                 if (completed) {
                   children = [
                     SizedBox(width: MediaQuery.of(context).size.width - 20, height: 0), //maintain width and top padding
-                    Text(s.title, style: TextStyle(fontSize: 20)),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width - 20,
+                        child: Text(s.title, style: TextStyle(fontSize: 20))),
                     SizedBox(width: MediaQuery.of(context).size.width - 20, child: Text(s.description)),
                     ElevatedButton(
                       child: const Text('Close'),
@@ -103,7 +105,9 @@ class SecretsPage extends StatelessWidget {
                   children = [
                     SizedBox(width: MediaQuery.of(context).size.width - 20, height: 0), //maintain width and top padding
                     pSecrets.prerequisiteMet(s.id)
-                        ? Text(s.title, style: TextStyle(fontSize: 20))
+                        ? SizedBox(
+                            width: MediaQuery.of(context).size.width - 20,
+                            child: Text(s.title, style: TextStyle(fontSize: 20)))
                         : const Icon(Icons.lock),
                     SizedBox(
                         width: MediaQuery.of(context).size.width - 20,

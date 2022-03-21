@@ -20,8 +20,7 @@ class TapCountBackground extends StatefulWidget {
   State<TapCountBackground> createState() => _TapCountBackgroundState();
 }
 
-class _TapCountBackgroundState extends State<TapCountBackground>
-    implements Background {
+class _TapCountBackgroundState extends State<TapCountBackground> implements Background {
   late Vector2 canvasSize;
   late Timer? lolTimer = null;
   final tapStyle = const TextStyle(fontSize: 130, fontWeight: FontWeight.bold);
@@ -37,8 +36,7 @@ class _TapCountBackgroundState extends State<TapCountBackground>
         useSensor: true,
         builder: (context) {
           return ValueListenableBuilder<Box>(
-              valueListenable: Hive.box('currentSecretsV2')
-                  .listenable(keys: [9999]), //listen to secret 9999 only
+              valueListenable: Hive.box('currentSecretsV2').listenable(keys: [9999]), //listen to secret 9999 only
               builder: (context, box, _) {
                 var taps = widget.pSecrets.secretProgress(9999).item2;
                 bool isOverflow = _isOverflow(taps.toString(), canvasSize.x);
@@ -49,8 +47,8 @@ class _TapCountBackgroundState extends State<TapCountBackground>
                 return GestureDetector(
                   onTapDown: onBackgroundTapDown,
                   child: Container(
-                    color: Colors.Colors.green[
-                        100], //the color is necessary or else taps outside the cookie cannot be registered
+                    color: Colors.Colors
+                        .green[100], //the color is necessary or else taps outside the cookie cannot be registered
                     child: Column(
                       children: [
                         SizedBox(height: 0),
@@ -123,8 +121,7 @@ class _TapCountBackgroundState extends State<TapCountBackground>
           //check if it is still 303
           widget.pSecrets.progressSecret(8, 0);
         } else {
-          print(
-              "timer finished but secret not progressed because number changed");
+          print("timer finished but secret not progressed because number changed");
         }
       });
     }
@@ -152,7 +149,7 @@ class _TapCountBackgroundState extends State<TapCountBackground>
   }
 
   bool _check69(int taps) {
-    if(taps==0) return false;
+    if (taps == 0) return false;
     while (taps > 0) {
       var digit = taps % 10;
       if (digit != 6 && digit != 9) return false;
