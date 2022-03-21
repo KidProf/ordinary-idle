@@ -24,7 +24,7 @@ class Settings extends StatelessWidget {
       child: Util.WarpBody(
         context: context,
         children: [
-          const SizedBox(height: 10),
+          const SizedBox(height: 30),
           const Text(
             'Settings',
             style: Util.titleStyle,
