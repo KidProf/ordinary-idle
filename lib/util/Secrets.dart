@@ -127,7 +127,7 @@ class Secrets {
       id: 6,
       exid: "2.2",
       prerequisites: [1],
-      title: "Change in perspective to make you feel better",
+      title: "Change in perspective makes you feel better",
       description: "Invert the phone so that the number appears to be at least 700 larger than the actual number.",
       theme: 2,
       reward: 1.0,
@@ -170,8 +170,27 @@ class Secrets {
     ),
   ];
 
+  static final secretHeaders = {
+    0: {
+      "title": "General Secrets",
+      "description": "Can be discovered no matter which theme you are in"
+    },
+    1: {
+      "title": "Cookie",
+      "description": "A remix of the classic cookie clicker"
+    },
+    2: {
+      "title": "Tap Count",
+      "description": "A less graphic-intensive theme",
+    },
+  };
+
   static Secret getSecretById(int id) {
     return secrets.where((s) => s.id == id).first;
+  }
+
+  static List<int> getSecretsByTheme(int theme){
+    return secrets.where((s)=>s.theme == theme).map((s)=>s.id).toList();
   }
 
   bool secretDoable(int id) {

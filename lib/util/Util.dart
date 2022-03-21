@@ -46,4 +46,27 @@ mixin Util {
   );
 
   static const Color disabled = Colors.black54;
+
+
+  static const TextStyle titleStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle subtitleStyle =
+      TextStyle(fontSize: 30);
+
+  //normally used to build body of pages
+  //if you want to center something, warp it with a Row and use flex center
+  //for text: textAlign: TextAlign.center,
+  static Widget WarpBody({required BuildContext context, required List<Widget> children, double? spacing}) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Wrap(
+        direction: Axis.vertical,
+        alignment: WrapAlignment.start,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: spacing ?? 20,
+        children: children.map((Widget w) => SizedBox( width: MediaQuery.of(context).size.width - 20, child: w,)).toList(),
+      ),
+    );
+  }
+  static Widget divider() => const Divider(color: Colors.black45);
 }

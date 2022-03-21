@@ -91,12 +91,18 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
   void _checkSecrets(BuildContext context) {
     var taps = widget.pSecrets.secretProgress(9999).item2;
 
+    //Secret 7
+    bool isOverflow = _isOverflow(taps.toString(), canvasSize.x);
+    if (isOverflow) {
+      widget.pSecrets.progressSecret(7, 0);
+    }
+
     //Secret 5,6
     final orientation = NativeDeviceOrientationReader.orientation(context);
     print('Received new orientation: $orientation');
     if (orientation == NativeDeviceOrientation.portraitDown) {
       //inverted
-      if (_check69(taps)) {
+      if (!isOverflow&&_check69(taps)) { // wont check if overflow
         widget.pSecrets.progressSecret(5, 0);
       }
       var inverted = _invert(taps);
@@ -104,12 +110,6 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
       if (inverted.item1 == true && inverted.item2 >= taps + 700) {
         widget.pSecrets.progressSecret(6, 0);
       }
-    }
-
-    //Secret 7
-    bool isOverflow = _isOverflow(taps.toString(), canvasSize.x);
-    if (isOverflow) {
-      widget.pSecrets.progressSecret(7, 0);
     }
 
     //Secret 8
