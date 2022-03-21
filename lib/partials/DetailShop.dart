@@ -9,13 +9,9 @@ class DetailShop extends StatelessWidget {
   final Money pMoney;
   final Map<String, dynamic> vitals;
   final int sid;
-  late Shop s;
-  late int level;
 
-  DetailShop(this.pMoney, this.sid, this.vitals, {Key? key}) : super(key: key) {
-    s = pMoney.getShopById(sid);
-    level = pMoney.getLevelById(sid);
-  }
+  const DetailShop(this.pMoney, this.sid, this.vitals, {Key? key})
+      : super(key: key);
 
   Color getColor(Set<MaterialState> states) {
     const Set<MaterialState> interactiveStates = <MaterialState>{
@@ -31,19 +27,24 @@ class DetailShop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Shop s = pMoney.getShopById(sid);
     return ValueListenableBuilder<Box>(
         valueListenable: Hive.box('purchases').listenable(keys: [sid]),
         builder: (context, box, _) {
           return ValueListenableBuilder<Map<String, dynamic>>(
               valueListenable: pMoney.getVitalsListener,
               builder: (context, vitals, _) {
+                int level = pMoney.getLevelById(sid);
                 return Card(
                   child: ListTile(
                     title: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         s.title,
-                        style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                     subtitle: Container(
@@ -70,7 +71,9 @@ class DetailShop extends StatelessWidget {
                       width: 80,
                       child: Column(children: [
                         ElevatedButton(
-                          style: pMoney.possibleById(sid) ? Util.greenRounded : Util.disabledRounded,
+                          style: pMoney.possibleById(sid)
+                              ? Util.greenRounded
+                              : Util.disabledRounded,
                           child: Text("BUY"),
                           onPressed: () {
                             pMoney.purchaseItem(sid);
@@ -79,7 +82,8 @@ class DetailShop extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              Util.doubleRepresentation(pMoney.getCostById(sid, level: box.get(sid))),
+                              Util.doubleRepresentation(
+                                  pMoney.getCostById(sid, level: box.get(sid))),
                               style: TextStyle(fontSize: 10),
                             ),
                             const SizedBox(width: 5),
