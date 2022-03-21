@@ -127,7 +127,7 @@ class Secrets {
       id: 6,
       exid: "2.2",
       prerequisites: [1],
-      title: "Disguise",
+      title: "Change in perspective to make you feel better",
       description: "Invert the phone so that the number appears to be at least 700 larger than the actual number.",
       theme: 2,
       reward: 1.0,
