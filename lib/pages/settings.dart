@@ -142,14 +142,14 @@ class Settings extends StatelessWidget {
                 ),
                 onPressed: () async {
                   //CRACK: do not put this to release!!!
-                  // if (pMoney.getNetWorth() >= 1000000) {
+                  if (pMoney.getNetWorth() >= 1000000) {
                   //1e6
                   await _changeTheme(context);
-                  // } else {
-                  //   Fluttertoast.showToast(
-                  //       msg:
-                  //           "Reach 1e6 coins net worth to unlock the option of changing themes. ");
-                  // }
+                  } else {
+                    Fluttertoast.showToast(
+                        msg:
+                            "Reach 1e6 coins net worth to unlock the option of changing themes. ");
+                  }
                 },
                 child: Text("Change Theme"),
               ),

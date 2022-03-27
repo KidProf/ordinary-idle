@@ -65,12 +65,12 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
                             widget.pSecrets.resetSecretProgression(9999);
                           },
                         ),
-                        ElevatedButton(
-                          child: Text("+99"), //CRACK: do not put this to release!!!
-                          onPressed: () {
-                            widget.pSecrets.progressSecret(9999, 0, amount: 99);
-                          },
-                        ),
+                        // ElevatedButton(
+                        //   child: Text("+99"), //CRACK: do not put this to release!!!
+                        //   onPressed: () {
+                        //     widget.pSecrets.progressSecret(9999, 0, amount: 99);
+                        //   },
+                        // ),
                         Text(
                           "Text Width: " +
                               _calcTextSize(
