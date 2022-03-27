@@ -86,8 +86,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         });
       } else {
         if (progress >= 3) {
-          MyToast.showBottomToast(fToast,
-              "You are now ${8 - progress} steps away from revealing the secret");
+          MyToast.showBottomToast(fToast, "You are now ${8 - progress} steps away from revealing the secret");
         }
       }
     }

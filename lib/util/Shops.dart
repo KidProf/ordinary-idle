@@ -155,8 +155,8 @@ abstract class Shops {
     return shops.where((s) => s.id == id).first;
   }
 
-  List<int> getShopsByType(String type){
-    return shops.where((Shop s)=>s.type==type).map((Shop s)=>s.id).toList();
+  List<int> getShopsByType(String type) {
+    return shops.where((Shop s) => s.type == type).map((Shop s) => s.id).toList();
   }
 
   int getLevelById(int id) {

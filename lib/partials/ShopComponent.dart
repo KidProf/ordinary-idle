@@ -63,7 +63,10 @@ class ShopComponent extends StatelessWidget {
   List<Widget> _printShops(String type, Map<String, dynamic> vitals) {
     return [
       const SizedBox(height: 10),
-      Text(pMoney.shopHeaders[type]!["title"]!, style: TextStyle(fontSize: 25),),
+      Text(
+        pMoney.shopHeaders[type]!["title"]!,
+        style: TextStyle(fontSize: 25),
+      ),
       ...pMoney.getShopsByType(type).map((int id) => DetailShop(pMoney, id, vitals)),
     ];
   }

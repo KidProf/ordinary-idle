@@ -10,8 +10,7 @@ class DetailShop extends StatelessWidget {
   final Map<String, dynamic> vitals;
   final int sid;
 
-  const DetailShop(this.pMoney, this.sid, this.vitals, {Key? key})
-      : super(key: key);
+  const DetailShop(this.pMoney, this.sid, this.vitals, {Key? key}) : super(key: key);
 
   Color getColor(Set<MaterialState> states) {
     const Set<MaterialState> interactiveStates = <MaterialState>{
@@ -41,10 +40,7 @@ class DetailShop extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         s.title,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
                     subtitle: Container(
@@ -71,9 +67,7 @@ class DetailShop extends StatelessWidget {
                       width: 80,
                       child: Column(children: [
                         ElevatedButton(
-                          style: pMoney.possibleById(sid)
-                              ? Util.greenRounded
-                              : Util.disabledRounded,
+                          style: pMoney.possibleById(sid) ? Util.greenRounded : Util.disabledRounded,
                           child: Text("BUY"),
                           onPressed: () {
                             pMoney.purchaseItem(sid);
@@ -82,8 +76,7 @@ class DetailShop extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              Util.doubleRepresentation(
-                                  pMoney.getCostById(sid, level: box.get(sid))),
+                              Util.doubleRepresentation(pMoney.getCostById(sid, level: box.get(sid))),
                               style: TextStyle(fontSize: 10),
                             ),
                             const SizedBox(width: 5),

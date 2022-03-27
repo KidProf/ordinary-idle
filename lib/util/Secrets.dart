@@ -32,8 +32,7 @@ class Secrets {
         exid: "0.1",
         prerequisites: [],
         title: "You are now a developer!",
-        description:
-            "Tapping the secret button 8 times.",
+        description: "Tapping the secret button 8 times.",
         theme: 0,
         reward: 1.0,
         progressComponent: [
@@ -171,14 +170,8 @@ class Secrets {
   ];
 
   static final secretHeaders = {
-    0: {
-      "title": "General Secrets",
-      "description": "Can be discovered no matter which theme you are in"
-    },
-    1: {
-      "title": "Cookie",
-      "description": "A remix of the classic cookie clicker"
-    },
+    0: {"title": "General Secrets", "description": "Can be discovered no matter which theme you are in"},
+    1: {"title": "Cookie", "description": "A remix of the classic cookie clicker"},
     2: {
       "title": "Tap Count",
       "description": "A less graphic-intensive theme",
@@ -189,8 +182,8 @@ class Secrets {
     return secrets.where((s) => s.id == id).first;
   }
 
-  static List<int> getSecretsByTheme(int theme){
-    return secrets.where((s)=>s.theme == theme).map((s)=>s.id).toList();
+  static List<int> getSecretsByTheme(int theme) {
+    return secrets.where((s) => s.theme == theme).map((s) => s.id).toList();
   }
 
   bool secretDoable(int id) {

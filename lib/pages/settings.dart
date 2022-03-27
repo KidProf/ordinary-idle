@@ -14,9 +14,8 @@ class Settings extends StatelessWidget {
   final Secrets pSecrets;
   final Money pMoney;
   final Function(int, BuildContext) onItemTapped;
-  const Settings(this.pSecrets, this.pMoney, this.onItemTapped, {Key? key})
-      : super(key: key);
-  
+  const Settings(this.pSecrets, this.pMoney, this.onItemTapped, {Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -51,8 +50,7 @@ class Settings extends StatelessWidget {
                         content: SingleChildScrollView(
                           child: ListBody(
                             children: const <Widget>[
-                              Text(
-                                  'Would you like reset all your progress? This process cannot be undone.'),
+                              Text('Would you like reset all your progress? This process cannot be undone.'),
                             ],
                           ),
                         ),
@@ -65,8 +63,7 @@ class Settings extends StatelessWidget {
                                     await _resetAll(context);
                                   },
                                   style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
+                                    backgroundColor: MaterialStateProperty.all<Color>(
                                       Colors.red,
                                     ),
                                   )),
@@ -97,8 +94,7 @@ class Settings extends StatelessWidget {
                         content: SingleChildScrollView(
                           child: ListBody(
                             children: const <Widget>[
-                              Text(
-                                  'Would you like reset your secrets? This process cannot be undone.'),
+                              Text('Would you like reset your secrets? This process cannot be undone.'),
                             ],
                           ),
                         ),
@@ -106,11 +102,11 @@ class Settings extends StatelessWidget {
                           Row(
                             children: [
                               ElevatedButton(
-                                  child: const Text('Yes'),
-                                  onPressed: () async {
-                                    await _resetSecretsOnly(context);
-                                  },
-                                  ),
+                                child: const Text('Yes'),
+                                onPressed: () async {
+                                  await _resetSecretsOnly(context);
+                                },
+                              ),
                               ElevatedButton(
                                 child: const Text('No'),
                                 onPressed: () {
@@ -124,7 +120,6 @@ class Settings extends StatelessWidget {
                       );
                     },
                   );
-                  
                 },
                 child: Text("Reset Secrets Only"),
               ),
@@ -142,16 +137,14 @@ class Settings extends StatelessWidget {
             children: [
               ElevatedButton(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      pMoney.getNetWorth() >= 1000000
-                          ? Colors.green
-                          : Util.disabled),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(pMoney.getNetWorth() >= 1000000 ? Colors.green : Util.disabled),
                 ),
                 onPressed: () async {
                   //CRACK: do not put this to release!!!
                   // if (pMoney.getNetWorth() >= 1000000) {
-                    //1e6
-                    await _changeTheme(context);
+                  //1e6
+                  await _changeTheme(context);
                   // } else {
                   //   Fluttertoast.showToast(
                   //       msg:
@@ -174,7 +167,8 @@ class Settings extends StatelessWidget {
             children: [
               ElevatedButton(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255,88,101,242)),),
+                  backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 88, 101, 242)),
+                ),
                 onPressed: () async {
                   Util.launchURL("https://discord.gg/G3MsQFzSFe");
                 },
@@ -183,25 +177,24 @@ class Settings extends StatelessWidget {
             ],
             mainAxisAlignment: MainAxisAlignment.center,
           ),
-          FutureBuilder(
-            future: () async {
-              PackageInfo packageInfo = await PackageInfo.fromPlatform();
+          FutureBuilder(future: () async {
+            PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-              // String appName = packageInfo.appName;
-              // String packageName = packageInfo.packageName;
-              String version = packageInfo.version;
-              String buildNumber = packageInfo.buildNumber;
-              return Tuple2(version,buildNumber);
-            }(),
-            builder: (context, AsyncSnapshot<Tuple2<String,String>> snapshot) {
-              if(snapshot.hasData){
-                return Text("Created by KidProf with Flutter\nVersion: "+snapshot.data!.item1 + "\nBuild Number: "+snapshot.data!.item2);
-              }else{
+            // String appName = packageInfo.appName;
+            // String packageName = packageInfo.packageName;
+            String version = packageInfo.version;
+            String buildNumber = packageInfo.buildNumber;
+            return Tuple2(version, buildNumber);
+          }(), builder: (context, AsyncSnapshot<Tuple2<String, String>> snapshot) {
+            if (snapshot.hasData) {
+              return Text("Created by KidProf with Flutter\nVersion: " +
+                  snapshot.data!.item1 +
+                  "\nBuild Number: " +
+                  snapshot.data!.item2);
+            } else {
               return Text("Created by KidProf with Flutter");
-              }
-              
             }
-          ),
+          }),
         ],
       ),
     );
@@ -234,15 +227,12 @@ class Settings extends StatelessWidget {
   Future<void> _changeTheme(BuildContext context) async {
     final numberOfThemes = 2; //TODO: change when number of themes increases
     var player = Hive.box('player');
-    await player.put("unlockedThemes", <int>[
-      1,
-      2
-    ]); //TODO: temp, so that all themes are unlocked without constraints
+    await player.put("unlockedThemes", <int>[1, 2]); //TODO: temp, so that all themes are unlocked without constraints
 
     var currentTheme = player.get("currentTheme", defaultValue: 1);
     var unlockedThemes = player.get("unlockedThemes", defaultValue: <int>[1]);
-    var newTheme = unlockedThemes[(unlockedThemes.indexOf(currentTheme) + 1) %
-        unlockedThemes.length]; //cycle to the next theme
+    var newTheme =
+        unlockedThemes[(unlockedThemes.indexOf(currentTheme) + 1) % unlockedThemes.length]; //cycle to the next theme
     player.put('currentTheme', newTheme);
     print("PLAYER GET" + player.get("coins").toString());
     RestartWidget.restartApp(context);
