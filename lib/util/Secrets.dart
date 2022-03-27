@@ -168,6 +168,21 @@ class Secrets {
         },
       ],
     ),
+    Secret(
+      id: 9,
+      exid: "2.5",
+      prerequisites: [],
+      title: "There is an end",
+      description: "Click until 1100, where it resets back to 0. You should be able to do all the secrets without tapping more than 1100. So think twice if you still haven't found some of them at this stage.",
+      theme: 2,
+      reward: 1.0,
+      progressComponent: [
+        {
+          "total": 1,
+          "volatile": true,
+        },
+      ],
+    ),
   ];
 
   static final secretHeaders = {
@@ -190,7 +205,9 @@ class Secrets {
   }
 
   static List<int> getSecretsByTheme(int theme) {
-    return secrets.where((s) => s.theme == theme).map((s) => s.id).toList();
+    var matches = secrets.where((s) => s.theme == theme).toList(); //list of matching secrets
+    matches.sort((a, b) => a.exid.compareTo(b.exid));
+    return matches.map((s) => s.id).toList(); //only extract their ids
   }
 
   bool secretDoable(int id) {
