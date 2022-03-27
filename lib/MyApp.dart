@@ -85,21 +85,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           _selectedIndex = index;
         });
       } else {
-        if (progress <= 3) {
-          MyToast.showBottomToast(fToast, "This is a secret");
-        } else if (progress <= 6) {
-          MyToast.showBottomToast(fToast, "I said, THIS IS A SECRET!");
-        } else if (progress <= 9) {
-          MyToast.showBottomToast(fToast, "You will NEVER be able to get in");
-        } else {
-          MyToast.showBottomToast(fToast, "You are now ${15 - progress} steps away from revealing the secret");
+        if (progress >= 3) {
+          MyToast.showBottomToast(fToast,
+              "You are now ${8 - progress} steps away from revealing the secret");
         }
       }
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
     }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   // child: ValueListenableBuilder<Box>(

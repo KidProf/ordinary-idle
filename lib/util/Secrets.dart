@@ -31,14 +31,14 @@ class Secrets {
         id: 1,
         exid: "0.1",
         prerequisites: [],
-        title: "Welcome",
+        title: "You are now a developer!",
         description:
-            "Tapping the secret button 15 times.\n\nCongratulations on discovering your first secret. I would say this is the most important secret, as it unlocks the secrets page and your ability to find other secrets.",
+            "Tapping the secret button 8 times.",
         theme: 0,
         reward: 1.0,
         progressComponent: [
           {
-            "total": 15,
+            "total": 8,
             "volatile": true,
           },
         ]),
@@ -48,7 +48,7 @@ class Secrets {
     Secret(
       id: 2,
       exid: "1.1",
-      prerequisites: [1],
+      prerequisites: [],
       title: "More space to tap",
       description:
           "Tapping outside the cookie but inside the canvas 10 times.\n\nAs the cookie will move around and even change in size, I think making taps outside the cookie count is a good idea.",
@@ -65,7 +65,7 @@ class Secrets {
     Secret(
       id: 3,
       exid: "1.2",
-      prerequisites: [1],
+      prerequisites: [],
       title: "Where did it go?",
       description: "Swipe the cookie up until it disappears from the screen.",
       theme: 1,
@@ -80,7 +80,7 @@ class Secrets {
     Secret(
       id: 4,
       exid: "1.3",
-      prerequisites: [1, 3],
+      prerequisites: [3],
       title: "Diode",
       description: "Rotate the cookie anticlockwise for 4 cycles.",
       theme: 1,
@@ -111,7 +111,7 @@ class Secrets {
     Secret(
       id: 5,
       exid: "2.1",
-      prerequisites: [1],
+      prerequisites: [],
       title: "96966696966969699999666",
       description: "Invert the phone when the tap count only contains 6s and 9s.",
       theme: 2,
@@ -126,7 +126,7 @@ class Secrets {
     Secret(
       id: 6,
       exid: "2.2",
-      prerequisites: [1],
+      prerequisites: [],
       title: "Change in perspective makes you feel better",
       description: "Invert the phone so that the number appears to be at least 700 larger than the actual number.",
       theme: 2,
@@ -141,7 +141,7 @@ class Secrets {
     Secret(
       id: 7,
       exid: "2.3",
-      prerequisites: [1],
+      prerequisites: [],
       title: "Text Overflow",
       description: "Make the tap count overflowing the screen.",
       theme: 2,
@@ -156,7 +156,7 @@ class Secrets {
     Secret(
       id: 8,
       exid: "2.4",
-      prerequisites: [1],
+      prerequisites: [],
       title: "Remain LOL",
       description: "Stop at 303 for 5 seconds, which is replaced by LOL.",
       theme: 2,
