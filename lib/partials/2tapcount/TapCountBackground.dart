@@ -20,7 +20,8 @@ class TapCountBackground extends StatefulWidget {
   State<TapCountBackground> createState() => _TapCountBackgroundState();
 }
 
-class _TapCountBackgroundState extends State<TapCountBackground> implements Background {
+class _TapCountBackgroundState extends State<TapCountBackground>
+    implements Background {
   late Vector2 canvasSize;
   late Timer? lolTimer = null;
   final tapStyle = const TextStyle(fontSize: 130, fontWeight: FontWeight.bold);
@@ -36,7 +37,8 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
         useSensor: true,
         builder: (context) {
           return ValueListenableBuilder<Box>(
-              valueListenable: Hive.box('currentSecretsV2').listenable(keys: [9999]), //listen to secret 9999 only
+              valueListenable: Hive.box('currentSecretsV2')
+                  .listenable(keys: [9999]), //listen to secret 9999 only
               builder: (context, box, _) {
                 var taps = widget.pSecrets.secretProgress(9999).item2;
                 bool isOverflow = _isOverflow(taps.toString(), canvasSize.x);
@@ -47,19 +49,17 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
                 return GestureDetector(
                   onTapDown: onBackgroundTapDown,
                   child: Container(
-                    color: Colors.Colors
-                        .green[100], //the color is necessary or else taps outside the cookie cannot be registered
+                    color: Colors.Colors.green[
+                        100], //the color is necessary or else taps outside the cookie cannot be registered
                     child: Column(
                       children: [
                         SizedBox(height: 0),
                         Container(
                           alignment: Alignment.center,
-                          child: isOverflow
-                              ? const Icon(CupertinoIcons.infinite, size: 130)
-                              : Text(
-                                  taps != 303 ? taps.toString() : "LOL",
-                                  style: tapStyle,
-                                ),
+                          child: Text(
+                            taps != 303 ? taps.toString() : "LOL",
+                            style: tapStyle,
+                          ),
                         ),
                         ElevatedButton(
                           child: Text("Reset Count"),
@@ -67,12 +67,22 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
                             widget.pSecrets.resetSecretProgression(9999);
                           },
                         ),
-                        // ElevatedButton(
-                        //   child: Text("+300"), //FIXME: do not put this to release!!!
-                        //   onPressed: () {
-                        //     widget.pSecrets.progressSecret(9999, 0, amount: 300);
-                        //   },
-                        // ),
+                        ElevatedButton(
+                          child: Text(
+                              "+99"), //CRACK: do not put this to release!!!
+                          onPressed: () {
+                            widget.pSecrets.progressSecret(9999, 0, amount: 99);
+                          },
+                        ),
+                        Text(
+                          "Text Width: " +
+                              _calcTextSize(
+                                taps.toString(),
+                                tapStyle,
+                              ).width.toString() +
+                              "     Canvas Width: " +
+                              canvasSize.x.toString(),
+                        ),
                       ],
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
@@ -102,7 +112,8 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
     print('Received new orientation: $orientation');
     if (orientation == NativeDeviceOrientation.portraitDown) {
       //inverted
-      if (!isOverflow&&_check69(taps)) { // wont check if overflow
+      if (!isOverflow && _check69(taps)) {
+        // wont check if overflow
         widget.pSecrets.progressSecret(5, 0);
       }
       var inverted = _invert(taps);
@@ -121,7 +132,8 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
           //check if it is still 303
           widget.pSecrets.progressSecret(8, 0);
         } else {
-          print("timer finished but secret not progressed because number changed");
+          print(
+              "timer finished but secret not progressed because number changed");
         }
       });
     }
