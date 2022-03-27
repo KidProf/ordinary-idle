@@ -173,7 +173,8 @@ class Secrets {
       exid: "2.5",
       prerequisites: [],
       title: "There is an end",
-      description: "Click until 1100, where it resets back to 0. You should be able to do all the secrets without tapping more than 1100. So think twice if you still haven't found some of them at this stage.",
+      description:
+          "Click until 1100, where it resets back to 0. You should be able to do all the secrets without tapping more than 1100. So think twice if you still haven't found some of them at this stage.",
       theme: 2,
       reward: 1.0,
       progressComponent: [

@@ -92,13 +92,12 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
   @override
   void onBackgroundTapDown(TapDownDetails details) {
     widget.tap(1.0);
-    if(widget.pSecrets.secretProgress(9999).item2>=1100){
+    if (widget.pSecrets.secretProgress(9999).item2 >= 1100) {
       widget.pSecrets.resetSecretProgression(9999);
       widget.pSecrets.progressSecret(9, 0);
-    }else{
+    } else {
       widget.pSecrets.progressSecret(9999, 0);
     }
-    
   }
 
   void _checkSecrets(BuildContext context) {
