@@ -55,7 +55,7 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
                         Container(
                           alignment: Alignment.center,
                           child: Text(
-                            taps != 303 ? taps.toString() : "LOL",
+                            !_isLol(taps) ? taps.toString() : "LOL",
                             style: tapStyle,
                           ),
                         ),
@@ -109,7 +109,7 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
     print('Received new orientation: $orientation');
     if (orientation == NativeDeviceOrientation.portraitDown) {
       //inverted
-      if (!isOverflow && _check69(taps)) {
+      if (_check69(taps)) {
         // wont check if overflow
         widget.pSecrets.progressSecret(5, 0);
       }
@@ -121,18 +121,22 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
     }
 
     //Secret 8
-    if (taps == 303) {
+    if (_isLol(taps)) {
       //activate timer
       print("timer fired");
       lolTimer = Timer(const Duration(seconds: 5), () {
-        if (widget.pSecrets.secretProgress(9999).item2 == 303) {
-          //check if it is still 303
+        if (_isLol(widget.pSecrets.secretProgress(9999).item2)) {
+          //check if it is still a lol number
           widget.pSecrets.progressSecret(8, 0);
         } else {
           print("timer finished but secret not progressed because number changed");
         }
       });
     }
+  }
+
+  bool _isLol(int taps) {
+    return taps == 303 || taps == 505 || taps == 707;
   }
 
   bool _isOverflow(String text, double canvasX) {

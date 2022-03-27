@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/util/Secrets.dart';
 import 'package:ordinary_idle/util/Util.dart';
 
@@ -12,16 +13,20 @@ class SecretsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      child: Util.WarpBody(
-        context: context,
-        children: [
-          const SizedBox(height: 10),
-          const Text("Secrets", style: titleStyle),
-          const SizedBox(height: 10),
-          ..._printSecrets(pSecrets, context),
-        ],
-        spacing: 0,
-      ),
+      child: ValueListenableBuilder<Box>(
+          valueListenable: Hive.box('player').listenable(keys: ["completedSecrets"]),
+          builder: (context, _, __) {
+            return Util.WarpBody(
+              context: context,
+              children: [
+                const SizedBox(height: 10),
+                const Text("Secrets", style: titleStyle),
+                const SizedBox(height: 10),
+                ..._printSecrets(pSecrets, context),
+              ],
+              spacing: 0,
+            );
+          }),
     );
   }
 
@@ -125,15 +130,10 @@ class SecretsPage extends StatelessWidget {
               if (completed) {
                 children = [
                   const SizedBox(height: 0),
-                  Row(
-                    children: [
-                      Text(
-                        s.title,
-                        style: TextStyle(fontSize: 20),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Text(
+                    s.title,
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
                   ),
                   Text(s.description),
                   Row(

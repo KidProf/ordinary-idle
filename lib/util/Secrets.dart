@@ -142,7 +142,8 @@ class Secrets {
       exid: "2.3",
       prerequisites: [],
       title: "Text Overflow",
-      description: "Make the tap count overflowing the screen.",
+      description:
+          "Make the tap count overflowing the screen (or wider than 400 pixels in case you are using a tablet).",
       theme: 2,
       reward: 2.0,
       progressComponent: [
@@ -157,7 +158,7 @@ class Secrets {
       exid: "2.4",
       prerequisites: [],
       title: "Remain LOL",
-      description: "Stop at 303 for 5 seconds, which is replaced by LOL.",
+      description: "Stop at 303, 505 or 707 for 5 seconds, which are replaced by LOL.",
       theme: 2,
       reward: 1.0,
       progressComponent: [
@@ -170,8 +171,14 @@ class Secrets {
   ];
 
   static final secretHeaders = {
-    0: {"title": "General Secrets", "description": "Can be discovered no matter which theme you are in"},
-    1: {"title": "Cookie", "description": "A remix of the classic cookie clicker"},
+    0: {
+      "title": "General Secrets",
+      "description": "Can be discovered no matter which theme you are in",
+    },
+    1: {
+      "title": "Cookie",
+      "description": "A remix of the classic cookie clicker",
+    },
     2: {
       "title": "Tap Count",
       "description": "A less graphic-intensive theme",
