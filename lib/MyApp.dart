@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:ordinary_idle/data/Player.dart';
 
 import 'package:ordinary_idle/pages/Home.dart';
 import 'package:ordinary_idle/pages/Achievements.dart';
@@ -15,10 +16,10 @@ import 'package:ordinary_idle/pages/Settings.dart';
 
 import 'package:ordinary_idle/partials/ValueHeader.dart';
 
-import 'package:ordinary_idle/util/Money.dart';
-import 'package:ordinary_idle/util/Secrets.dart';
+import 'package:ordinary_idle/data/Money.dart';
+import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
-import 'package:ordinary_idle/util/Shops.dart';
+import 'package:ordinary_idle/data/Shops.dart';
 
 // import 'partials/1cookie.dart';
 
@@ -48,13 +49,13 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  final Money pMoney = Money();
+  final Player p = Player();
   late Secrets pSecrets;
   late final List<Widget> _widgetOptions = <Widget>[
-    Home(pSecrets, pMoney),
+    Home(pSecrets, p),
     SecretsPage(pSecrets),
     // Achievements(pSecrets),
-    Settings(pSecrets, pMoney, _onItemTapped),
+    Settings(pSecrets, p, _onItemTapped),
   ];
   int _selectedIndex = 0;
   late FToast fToast;
@@ -65,10 +66,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     super.initState();
     fToast = FToast();
     fToast.init(context);
-    pSecrets = Secrets(pMoney.updateSecretsMultiplier, fToast);
+    pSecrets = Secrets(p.updateSecretsMultiplier, fToast);
     //initialize idle timer
     idleTimer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
-      pMoney.addIdleCoins();
+      p.addIdleCoins();
     });
   }
 
@@ -111,7 +112,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               preferredSize: const Size.fromHeight(
                   80), //FIXME: Please change CookieBackground to match the height of the header (specified in MyApp.dart)
               child: ValueListenableBuilder<Map<String, dynamic>>(
-                  valueListenable: pMoney.getVitalsListener,
+                  valueListenable: p.getVitalsListener,
                   builder: (ctx, vitals, _) {
                     // print("update");
                     return AppBar(

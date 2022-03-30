@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:ordinary_idle/util/Money.dart';
-import 'package:ordinary_idle/util/Shops.dart';
+import 'package:ordinary_idle/data/Player.dart';
+import 'package:ordinary_idle/data/Shops.dart';
 import 'package:ordinary_idle/util/Util.dart';
 
 class DetailShop extends StatelessWidget {
-  final Money pMoney;
+  final Player p;
   final Map<String, dynamic> vitals;
   final int sid;
 
-  const DetailShop(this.pMoney, this.sid, this.vitals, {Key? key}) : super(key: key);
+  const DetailShop(this.p, this.sid, this.vitals, {Key? key}) : super(key: key);
 
   Color getColor(Set<MaterialState> states) {
     const Set<MaterialState> interactiveStates = <MaterialState>{
@@ -26,14 +25,14 @@ class DetailShop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Shop s = pMoney.getShopById(sid);
+    Shop s = p.getShopById(sid);
     return ValueListenableBuilder<Box>(
         valueListenable: Hive.box('purchases').listenable(keys: [sid]),
         builder: (context, box, _) {
           return ValueListenableBuilder<Map<String, dynamic>>(
-              valueListenable: pMoney.getVitalsListener,
+              valueListenable: p.getVitalsListener,
               builder: (context, vitals, _) {
-                int level = pMoney.getLevelById(sid);
+                int level = p.getLevelById(sid);
                 return Card(
                   child: ListTile(
                     title: Align(
@@ -60,23 +59,23 @@ class DetailShop extends StatelessWidget {
                       fillColor: MaterialStateProperty.resolveWith(getColor),
                       value: vitals["hotbarShop"].contains(sid),
                       onChanged: (bool? value) {
-                        pMoney.setHotbarShop(sid, value!);
+                        p.setHotbarShop(sid, value!);
                       },
                     ),
                     trailing: Container(
                       width: 80,
                       child: Column(children: [
                         ElevatedButton(
-                          style: pMoney.possibleById(sid) ? Util.greenRounded : Util.disabledRounded,
+                          style: p.possibleByShopId(sid) ? Util.greenRounded : Util.disabledRounded,
                           child: Text("BUY"),
                           onPressed: () {
-                            pMoney.purchaseItem(sid);
+                            p.purchaseItem(sid);
                           },
                         ),
                         Row(
                           children: [
                             Text(
-                              Util.doubleRepresentation(pMoney.getCostById(sid, level: box.get(sid))),
+                              Util.doubleRepresentation(p.getCostByShopId(sid, level: box.get(sid))),
                               style: TextStyle(fontSize: 10),
                             ),
                             const SizedBox(width: 5),

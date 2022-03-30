@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/colors.dart' as Colors;
 import 'package:ordinary_idle/util/Background.dart';
-import 'package:ordinary_idle/util/Secrets.dart';
+import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/util/SwipeDetector.dart';
 import 'package:vector_math/vector_math.dart';
 

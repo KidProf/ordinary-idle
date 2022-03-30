@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/main.dart';
-import 'package:ordinary_idle/util/Money.dart';
-import 'package:ordinary_idle/util/Secrets.dart';
+import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/util/Util.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:restart_app/restart_app.dart';
 import 'package:tuple/tuple.dart';
 
 class Settings extends StatelessWidget {
   final Secrets pSecrets;
-  final Money pMoney;
+  final Player p;
   final Function(int, BuildContext) onItemTapped;
-  const Settings(this.pSecrets, this.pMoney, this.onItemTapped, {Key? key}) : super(key: key);
+  const Settings(this.pSecrets, this.p, this.onItemTapped, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -138,11 +137,11 @@ class Settings extends StatelessWidget {
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all<Color>(pMoney.getNetWorth() >= 1000000 ? Colors.green : Util.disabled),
+                      MaterialStateProperty.all<Color>(p.getNetWorth() >= 1000000 ? Colors.green : Util.disabled),
                 ),
                 onPressed: () async {
                   //CRACK: do not put this to release!!!
-                  if (pMoney.getNetWorth() >= 1000000) {
+                  if (p.getNetWorth() >= 1000000) {
                     //1e6
                     await _changeTheme(context);
                   } else {

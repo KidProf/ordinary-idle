@@ -6,17 +6,17 @@ import 'package:hive/hive.dart';
 import 'package:ordinary_idle/model/CurrentSecretV2.dart';
 import 'package:ordinary_idle/model/PurchaseV1.dart';
 import 'package:ordinary_idle/util/CurrentVolatileSecret.dart';
-import 'package:ordinary_idle/util/Money.dart';
+import 'package:ordinary_idle/data/Money.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
 import 'package:ordinary_idle/util/Util.dart';
 import 'package:tuple/tuple.dart';
 
-abstract class Shops {
+mixin Shops {
   //INTERFACE
-  void updateCoinsPerTap();
-  void updateCoinsPerSecond();
+  double updateCoinsPerTap();
+  double updateCoinsPerSecond();
   bool subtractCoins(double x);
-  bool possibleById(int id, {int? level});
+  bool possibleByShopId(int id, {int? level});
 
   late Box purchases;
   late List<Shop> shops;
@@ -31,8 +31,9 @@ abstract class Shops {
   static double _gain3(int i) => (i * 1800).toDouble();
   static double _cost3(int i) => (300000 * pow(1.2, i)).toDouble();
 
-  @mustCallSuper
-  Shops() {
+  //ctor
+  @protected
+  void initShops() {
     purchases = Hive.box("purchases");
     shops = [
       Shop(
@@ -184,15 +185,19 @@ abstract class Shops {
 
   @protected
   double computeCoinsPerTap() {
+    //Money.dart interface
     return shops.where((s) => s.type == "tap").fold(0, (xs, x) => xs + x.gain.value!(getLevelById(x.id)));
   }
 
   @protected
   double computeCoinsPerSecond() {
+    //Money.dart interface
     return shops.where((s) => s.type == "idle").fold(0, (xs, x) => xs + x.gain.value!(getLevelById(x.id)));
   }
 
-  double getCostById(int id, {int? level}) {
+  @protected
+  double getCostByShopId(int id, {int? level}) {
+    //Money.dart interface
     var s = getShopById(id);
     var level1 = level ?? getLevelById(id);
     return s.cost.value!(level1);

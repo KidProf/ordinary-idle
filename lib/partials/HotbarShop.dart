@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:ordinary_idle/util/Money.dart';
-import 'package:ordinary_idle/util/Shops.dart';
+import 'package:ordinary_idle/data/Player.dart';
+import 'package:ordinary_idle/data/Shops.dart';
 import 'package:ordinary_idle/util/Util.dart';
 
 class HotbarShop extends StatelessWidget {
-  final Money pMoney;
+  final Player p;
   final int id;
   late Shop shop;
 
-  HotbarShop(this.pMoney, this.id, {Key? key}) : super(key: key) {
-    shop = pMoney.getShopById(id);
+  HotbarShop(this.p, this.id, {Key? key}) : super(key: key) {
+    shop = p.getShopById(id);
   }
 
   @override
@@ -24,7 +23,7 @@ class HotbarShop extends StatelessWidget {
             valueListenable: Hive.box('purchases').listenable(keys: [id]),
             builder: (context, box, _) {
               return ElevatedButton(
-                style: pMoney.possibleById(id) ? Util.greenRounded : Util.disabledRounded,
+                style: p.possibleByShopId(id) ? Util.greenRounded : Util.disabledRounded,
                 child: Stack(
                   children: [
                     Positioned(
@@ -51,7 +50,7 @@ class HotbarShop extends StatelessWidget {
                       child: Row(
                         children: [
                           Text(
-                            Util.doubleRepresentation(pMoney.getCostById(id, level: box.get(id))),
+                            Util.doubleRepresentation(p.getCostByShopId(id, level: box.get(id))),
                             style: TextStyle(fontSize: 10),
                           ),
                           const Image(
@@ -66,7 +65,7 @@ class HotbarShop extends StatelessWidget {
                   ],
                 ),
                 onPressed: () {
-                  pMoney.purchaseItem(id);
+                  p.purchaseItem(id);
                 },
               );
             }),

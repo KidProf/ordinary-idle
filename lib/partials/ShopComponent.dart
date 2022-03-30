@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/partials/DetailShop.dart';
 import 'package:ordinary_idle/partials/HotbarShop.dart';
-import 'package:ordinary_idle/util/Money.dart';
-import 'package:ordinary_idle/util/Shops.dart';
 import 'package:ordinary_idle/util/Util.dart';
 
 class ShopComponent extends StatelessWidget {
-  final Money pMoney;
+  final Player p;
 
-  const ShopComponent(this.pMoney, {Key? key}) : super(key: key);
+  const ShopComponent(this.p, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Map<String, dynamic>>(
-      valueListenable: pMoney.getVitalsListener,
+      valueListenable: p.getVitalsListener,
       builder: (context, vitals, _) {
         return Row(
           children: [
-            ...vitals["hotbarShop"].map((int x) => HotbarShop(pMoney, x)),
+            ...vitals["hotbarShop"].map((int x) => HotbarShop(p, x)),
             const SizedBox(width: 10),
             CircleAvatar(
               backgroundColor: Colors.amber[800],
@@ -64,10 +62,10 @@ class ShopComponent extends StatelessWidget {
     return [
       const SizedBox(height: 10),
       Text(
-        pMoney.shopHeaders[type]!["title"]!,
+        p.shopHeaders[type]!["title"]!,
         style: TextStyle(fontSize: 25),
       ),
-      ...pMoney.getShopsByType(type).map((int id) => DetailShop(pMoney, id, vitals)),
+      ...p.getShopsByType(type).map((int id) => DetailShop(p, id, vitals)),
     ];
   }
 }

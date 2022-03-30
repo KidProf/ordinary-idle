@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/partials/1cookie/CookieBackground.dart';
 import 'package:ordinary_idle/partials/2tapcount/TapCountBackground.dart';
 import 'package:ordinary_idle/partials/ShopComponent.dart';
-import 'package:ordinary_idle/util/Money.dart';
-import 'package:ordinary_idle/util/Secrets.dart';
+import 'package:ordinary_idle/data/Secrets.dart';
 
 class Home extends StatelessWidget {
-  final Money pMoney;
+  final Player p;
   final Secrets pSecrets;
 
-  Home(this.pSecrets, this.pMoney, {Key? key}) : super(key: key);
+  Home(this.pSecrets, this.p, {Key? key}) : super(key: key);
 
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
@@ -17,17 +17,17 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     var currentBackground;
     var backgroundColor;
-    switch (pMoney.getCurrentTheme()) {
+    switch (p.getCurrentTheme()) {
       case 1:
-        currentBackground = CookieBackground(pSecrets, pMoney.tap);
+        currentBackground = CookieBackground(pSecrets, p.tap);
         backgroundColor = Colors.amber[100];
         break;
       case 2:
-        currentBackground = TapCountBackground(pSecrets, pMoney.tap);
+        currentBackground = TapCountBackground(pSecrets, p.tap);
         backgroundColor = Colors.green[100];
         break;
       default:
-        currentBackground = CookieBackground(pSecrets, pMoney.tap);
+        currentBackground = CookieBackground(pSecrets, p.tap);
         backgroundColor = Colors.amber[100];
         break;
     }
@@ -38,7 +38,7 @@ class Home extends StatelessWidget {
         child: Column(
           children: [
             Expanded(child: currentBackground),
-            Container(height: 70, child: ShopComponent(pMoney)),
+            Container(height: 70, child: ShopComponent(p)),
           ],
         ),
       ),

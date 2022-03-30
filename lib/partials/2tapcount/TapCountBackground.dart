@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/util/Background.dart';
 import 'package:flutter/src/material/colors.dart' as Colors;
-import 'package:ordinary_idle/util/Secrets.dart';
+import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:tuple/tuple.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';

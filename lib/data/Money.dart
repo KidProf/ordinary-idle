@@ -2,28 +2,34 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
-import 'package:ordinary_idle/util/Secrets.dart';
-import 'package:ordinary_idle/util/Shops.dart';
+import 'package:ordinary_idle/data/Secrets.dart';
+import 'package:ordinary_idle/data/Shops.dart';
 import 'package:ordinary_idle/util/Util.dart';
 
-class Money extends Shops {
-  //TODO: add functionality to store the log of the value
+mixin Money {
+  //INTERFACE
+  double computeCoinsPerSecond();
+  double computeCoinsPerTap();
+  double getCostByShopId(int id, {int? level});
 
+  //TODO: add functionality to store the log of the value
   late ValueNotifier<Map<String, dynamic>> vitals;
   late Box player;
   late double secretsMultiplier;
   late double otherMultiplier;
   final hotbarShopLimit = 3;
 
-  Money() : super() {
+  //ctor
+  @protected
+  void initMoney() {
     player = Hive.box("player");
     otherMultiplier = player.get("otherMultiplier", defaultValue: 0.0);
     secretsMultiplier = _computeSecretsMultiplier();
     vitals = ValueNotifier<Map<String, dynamic>>({
       "coins": player.get("coins", defaultValue: 1.0),
       "multiplier": _computeMultiplier(),
-      "coinsPerSecond": computeCoinsPerSecond(),
-      "coinsPerTap": computeCoinsPerTap(),
+      "coinsPerSecond": computeCoinsPerSecond(), //from shops: need call initShops first
+      "coinsPerTap": computeCoinsPerTap(), //from shops: need call initShops first
       "hotbarShop": player.get("hotbarShop", defaultValue: <int>[0, 1]),
     });
   }
@@ -134,7 +140,7 @@ class Money extends Shops {
     return coinsPerTap;
   }
 
-  @override
+  @override //Shops.dart interface
   double updateCoinsPerSecond() {
     var coinsPerSecond = computeCoinsPerSecond();
     print("coins per second is: " + coinsPerSecond.toString());
@@ -142,9 +148,9 @@ class Money extends Shops {
     return coinsPerSecond;
   }
 
-  @override
-  bool possibleById(int id, {int? level}) {
-    var cost = getCostById(id, level: level);
+  @override //Shops.dart interface
+  bool possibleByShopId(int id, {int? level}) {
+    var cost = getCostByShopId(id, level: level);
     return cost <= vitals.value["coins"];
   }
 

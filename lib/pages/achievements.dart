@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ordinary_idle/util/Secrets.dart';
+import 'package:ordinary_idle/data/Secrets.dart';
 
 class Achievements extends StatelessWidget {
   final Secrets pSecrets;
