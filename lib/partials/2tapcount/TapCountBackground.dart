@@ -71,15 +71,15 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
                         //     widget.pSecrets.progressSecret(9999, 0, amount: 99);
                         //   },
                         // ),
-                        Text(
-                          "Text Width: " +
-                              _calcTextSize(
-                                taps.toString(),
-                                tapStyle,
-                              ).width.toString() +
-                              "     Canvas Width: " +
-                              canvasSize.x.toString(),
-                        ),
+                        // Text(
+                        //   "Text Width: " +
+                        //       _calcTextSize(
+                        //         taps.toString(),
+                        //         tapStyle,
+                        //       ).width.toString() +
+                        //       "     Canvas Width: " +
+                        //       canvasSize.x.toString(),
+                        // ),
                       ],
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
