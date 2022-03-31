@@ -18,9 +18,114 @@ mixin Shops {
   bool subtractCoins(double x);
   bool possibleByShopId(int id, {int? level});
 
-  late Box purchases;
-  late List<Shop> shops;
-  Map<int, CurrentVolatileSecret> currentVolatileSecrets = {};
+  final Box purchases = Hive.box("purchases");
+
+  late List<Shop> shops = [
+    Shop(
+      id: 0,
+      exid: "0",
+      prerequisites: <Map<String, dynamic>>[],
+      title: "Tap",
+      description: "Increase coins per tap",
+      descriptionI: (int i) =>
+          "Increase coins per tap from ${Util.doubleRepresentation(_gain0(i))} to ${Util.doubleRepresentation(_gain0(i + 1))}",
+      type: "tap",
+      gain: Resource(
+        type: "tap",
+        value: _gain0,
+        callback: (int i) {
+          updateCoinsPerTap();
+
+          return true;
+        },
+      ),
+      cost: Resource(
+        type: "money",
+        value: _cost0,
+        callback: (int i) {
+          return subtractCoins(_cost0(i));
+        },
+      ),
+    ),
+    Shop(
+      id: 1,
+      exid: "1",
+      prerequisites: <Map<String, dynamic>>[],
+      title: "Auto Clicker",
+      description: "Increase coins per second",
+      descriptionI: (int i) =>
+          "Increase coins per second by ${Util.doubleRepresentation(_gain1(i))} -> ${Util.doubleRepresentation(_gain1(i + 1))}",
+      type: "idle",
+      gain: Resource(
+        type: "idle",
+        value: _gain1,
+        callback: (int i) {
+          updateCoinsPerSecond();
+
+          return true;
+        },
+      ),
+      cost: Resource(
+        type: "money",
+        value: _cost1,
+        callback: (int i) {
+          return subtractCoins(_cost1(i));
+        },
+      ),
+    ),
+    Shop(
+      id: 2,
+      exid: "2",
+      prerequisites: <Map<String, dynamic>>[],
+      title: "Family Business",
+      description: "Increase coins per second",
+      descriptionI: (int i) =>
+          "Increase coins per second by ${Util.doubleRepresentation(_gain2(i))} -> ${Util.doubleRepresentation(_gain2(i + 1))}",
+      type: "idle",
+      gain: Resource(
+        type: "idle",
+        value: _gain2,
+        callback: (int i) {
+          updateCoinsPerSecond();
+
+          return true;
+        },
+      ),
+      cost: Resource(
+        type: "money",
+        value: _cost2,
+        callback: (int i) {
+          return subtractCoins(_cost2(i));
+        },
+      ),
+    ),
+    Shop(
+      id: 3,
+      exid: "3",
+      prerequisites: <Map<String, dynamic>>[],
+      title: "Village Help",
+      description: "Increase coins per second",
+      descriptionI: (int i) =>
+          "Increase coins per second by ${Util.doubleRepresentation(_gain3(i))} -> ${Util.doubleRepresentation(_gain3(i + 1))}",
+      type: "idle",
+      gain: Resource(
+        type: "idle",
+        value: _gain3,
+        callback: (int i) {
+          updateCoinsPerSecond();
+
+          return true;
+        },
+      ),
+      cost: Resource(
+        type: "money",
+        value: _cost3,
+        callback: (int i) {
+          return subtractCoins(_cost3(i));
+        },
+      ),
+    ),
+  ];
 
   static double _gain0(int i) => pow(1.2, i).toDouble();
   static double _cost0(int i) => (50 * pow(1.3, i)).toDouble();
@@ -34,113 +139,7 @@ mixin Shops {
   //ctor
   @protected
   void initShops() {
-    purchases = Hive.box("purchases");
-    shops = [
-      Shop(
-        id: 0,
-        exid: "0",
-        prerequisites: <Map<String, dynamic>>[],
-        title: "Tap",
-        description: "Increase coins per tap",
-        descriptionI: (int i) =>
-            "Increase coins per tap from ${Util.doubleRepresentation(_gain0(i))} to ${Util.doubleRepresentation(_gain0(i + 1))}",
-        type: "tap",
-        gain: Resource(
-          type: "tap",
-          value: _gain0,
-          callback: (int i) {
-            updateCoinsPerTap();
-
-            return true;
-          },
-        ),
-        cost: Resource(
-          type: "money",
-          value: _cost0,
-          callback: (int i) {
-            return subtractCoins(_cost0(i));
-          },
-        ),
-      ),
-      Shop(
-        id: 1,
-        exid: "1",
-        prerequisites: <Map<String, dynamic>>[],
-        title: "Auto Clicker",
-        description: "Increase coins per second",
-        descriptionI: (int i) =>
-            "Increase coins per second by ${Util.doubleRepresentation(_gain1(i))} -> ${Util.doubleRepresentation(_gain1(i + 1))}",
-        type: "idle",
-        gain: Resource(
-          type: "idle",
-          value: _gain1,
-          callback: (int i) {
-            updateCoinsPerSecond();
-
-            return true;
-          },
-        ),
-        cost: Resource(
-          type: "money",
-          value: _cost1,
-          callback: (int i) {
-            return subtractCoins(_cost1(i));
-          },
-        ),
-      ),
-      Shop(
-        id: 2,
-        exid: "2",
-        prerequisites: <Map<String, dynamic>>[],
-        title: "Family Business",
-        description: "Increase coins per second",
-        descriptionI: (int i) =>
-            "Increase coins per second by ${Util.doubleRepresentation(_gain2(i))} -> ${Util.doubleRepresentation(_gain2(i + 1))}",
-        type: "idle",
-        gain: Resource(
-          type: "idle",
-          value: _gain2,
-          callback: (int i) {
-            updateCoinsPerSecond();
-
-            return true;
-          },
-        ),
-        cost: Resource(
-          type: "money",
-          value: _cost2,
-          callback: (int i) {
-            return subtractCoins(_cost2(i));
-          },
-        ),
-      ),
-      Shop(
-        id: 3,
-        exid: "3",
-        prerequisites: <Map<String, dynamic>>[],
-        title: "Village Help",
-        description: "Increase coins per second",
-        descriptionI: (int i) =>
-            "Increase coins per second by ${Util.doubleRepresentation(_gain3(i))} -> ${Util.doubleRepresentation(_gain3(i + 1))}",
-        type: "idle",
-        gain: Resource(
-          type: "idle",
-          value: _gain3,
-          callback: (int i) {
-            updateCoinsPerSecond();
-
-            return true;
-          },
-        ),
-        cost: Resource(
-          type: "money",
-          value: _cost3,
-          callback: (int i) {
-            return subtractCoins(_cost3(i));
-          },
-        ),
-      ),
-    ];
+    //nth
   }
 
   final shopHeaders = {

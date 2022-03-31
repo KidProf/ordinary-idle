@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ordinary_idle/data/Player.dart';
+
 class Achievements extends StatelessWidget {
   final Player p;
   const Achievements(this.p, {Key? key}) : super(key: key);

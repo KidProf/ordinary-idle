@@ -14,7 +14,7 @@ mixin Money {
 
   //TODO: add functionality to store the log of the value
   late ValueNotifier<Map<String, dynamic>> vitals;
-  late Box player;
+  final Box player = Hive.box("player");
   late double secretsMultiplier;
   late double otherMultiplier;
   final hotbarShopLimit = 3;
@@ -22,7 +22,6 @@ mixin Money {
   //ctor
   @protected
   void initMoney() {
-    player = Hive.box("player");
     otherMultiplier = player.get("otherMultiplier", defaultValue: 0.0);
     secretsMultiplier = _computeSecretsMultiplier();
     vitals = ValueNotifier<Map<String, dynamic>>({

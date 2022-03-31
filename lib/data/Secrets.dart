@@ -12,22 +12,18 @@ mixin Secrets {
   double updateSecretsMultiplier();
 
   late FToast fToast;
-  
-  late Box player;
-  late Box currentSecrets;
-  late List<int> completedSecrets;
-  late List<int> unlockedThemes;
-  
+
+  final Box player = Hive.box("player");
+  final Box currentSecrets = Hive.box("currentSecretsV2");
+  late List<int> completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);
+  late List<int> unlockedThemes = player.get("unlockedThemes", defaultValue: <int>[1]);
+
   Map<int, CurrentVolatileSecret> currentVolatileSecrets = {};
 
   //ctor
   @protected
   void initSecrets(fToast) {
     this.fToast = fToast;
-    player = Hive.box("player");
-    currentSecrets = Hive.box("currentSecretsV2");
-    completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);
-    unlockedThemes = player.get("unlockedThemes", defaultValue: <int>[1]);
   }
 
   //TODO: Gen from CSV
