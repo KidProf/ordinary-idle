@@ -10,7 +10,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/data/Player.dart';
 
 import 'package:ordinary_idle/pages/Home.dart';
-import 'package:ordinary_idle/pages/Achievements.dart';
+import 'package:ordinary_idle/pages/AchievementsPage.dart';
 import 'package:ordinary_idle/pages/SecretsPage.dart';
 import 'package:ordinary_idle/pages/Settings.dart';
 
@@ -53,7 +53,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   late final List<Widget> _widgetOptions = <Widget>[
     Home(p),
     SecretsPage(p),
-    // Achievements(p),
+    AchievementsPage(p),
     Settings(p, _onItemTapped),
   ];
   int _selectedIndex = 0;
@@ -106,7 +106,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _selectedIndex != 2 //TODO: Change back to 3 later
+      appBar: _selectedIndex != 3
           ? PreferredSize(
               preferredSize: const Size.fromHeight(
                   80), //FIXME: Please change CookieBackground to match the height of the header (specified in MyApp.dart)
@@ -136,10 +136,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             icon: Icon(Icons.lock),
             label: "",
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.assignment_turned_in),
-          //   label: "",
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assignment_turned_in),
+            label: "",
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: "",

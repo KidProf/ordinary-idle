@@ -3,7 +3,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:ordinary_idle/model/CurrentSecretV2.dart';
 import 'package:ordinary_idle/util/CurrentVolatileSecret.dart';
-import 'package:ordinary_idle/data/Money.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
 import 'package:tuple/tuple.dart';
 
