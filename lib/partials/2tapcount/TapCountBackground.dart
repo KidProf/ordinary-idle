@@ -3,18 +3,17 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/util/Background.dart';
 import 'package:flutter/src/material/colors.dart' as Colors;
-import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:tuple/tuple.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 
 class TapCountBackground extends StatefulWidget {
-  final Secrets pSecrets;
-  final Function(double) tap;
+  final Player p;
 
-  TapCountBackground(this.pSecrets, this.tap, {Key? key}) : super(key: key);
+  TapCountBackground(this.p, {Key? key}) : super(key: key);
 
   @override
   State<TapCountBackground> createState() => _TapCountBackgroundState();
@@ -38,7 +37,7 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
           return ValueListenableBuilder<Box>(
               valueListenable: Hive.box('currentSecretsV2').listenable(keys: [9999]), //listen to secret 9999 only
               builder: (context, box, _) {
-                var taps = widget.pSecrets.secretProgress(9999).item2;
+                var taps = widget.p.secretProgress(9999).item2;
                 bool isOverflow = _isOverflow(taps.toString(), canvasSize.x);
                 WidgetsBinding.instance?.addPostFrameCallback((_) {
                   _checkSecrets(context);
@@ -62,13 +61,13 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
                         ElevatedButton(
                           child: Text("Reset Count"),
                           onPressed: () {
-                            widget.pSecrets.resetSecretProgression(9999);
+                            widget.p.resetSecretProgression(9999);
                           },
                         ),
                         // ElevatedButton(
                         //   child: Text("+99"), //CRACK: do not put this to release!!!
                         //   onPressed: () {
-                        //     widget.pSecrets.progressSecret(9999, 0, amount: 99);
+                        //     widget.p.progressSecret(9999, 0, amount: 99);
                         //   },
                         // ),
                         // Text(
@@ -91,22 +90,22 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
 
   @override
   void onBackgroundTapDown(TapDownDetails details) {
-    widget.tap(1.0);
-    if (widget.pSecrets.secretProgress(9999).item2 >= 1100) {
-      widget.pSecrets.resetSecretProgression(9999);
-      widget.pSecrets.progressSecret(9, 0);
+    widget.p.tap(1.0);
+    if (widget.p.secretProgress(9999).item2 >= 1100) {
+      widget.p.resetSecretProgression(9999);
+      widget.p.progressSecret(9, 0);
     } else {
-      widget.pSecrets.progressSecret(9999, 0);
+      widget.p.progressSecret(9999, 0);
     }
   }
 
   void _checkSecrets(BuildContext context) {
-    var taps = widget.pSecrets.secretProgress(9999).item2;
+    var taps = widget.p.secretProgress(9999).item2;
 
     //Secret 7
     bool isOverflow = _isOverflow(taps.toString(), canvasSize.x);
     if (isOverflow) {
-      widget.pSecrets.progressSecret(7, 0);
+      widget.p.progressSecret(7, 0);
     }
 
     //Secret 5,6
@@ -116,12 +115,12 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
       //inverted
       if (_check69(taps)) {
         // wont check if overflow
-        widget.pSecrets.progressSecret(5, 0);
+        widget.p.progressSecret(5, 0);
       }
       var inverted = _invert(taps);
       print(inverted);
       if (inverted.item1 == true && inverted.item2 >= taps + 700) {
-        widget.pSecrets.progressSecret(6, 0);
+        widget.p.progressSecret(6, 0);
       }
     }
 
@@ -130,9 +129,9 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
       //activate timer
       print("timer fired");
       lolTimer = Timer(const Duration(seconds: 5), () {
-        if (_isLol(widget.pSecrets.secretProgress(9999).item2)) {
+        if (_isLol(widget.p.secretProgress(9999).item2)) {
           //check if it is still a lol number
-          widget.pSecrets.progressSecret(8, 0);
+          widget.p.progressSecret(8, 0);
         } else {
           print("timer finished but secret not progressed because number changed");
         }

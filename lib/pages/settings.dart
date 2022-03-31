@@ -4,16 +4,14 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/main.dart';
-import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/util/Util.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tuple/tuple.dart';
 
 class Settings extends StatelessWidget {
-  final Secrets pSecrets;
   final Player p;
   final Function(int, BuildContext) onItemTapped;
-  const Settings(this.pSecrets, this.p, this.onItemTapped, {Key? key}) : super(key: key);
+  const Settings(this.p, this.onItemTapped, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

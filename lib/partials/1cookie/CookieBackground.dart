@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/colors.dart' as Colors;
+import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/util/Background.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/util/SwipeDetector.dart';
@@ -11,10 +12,9 @@ import 'package:vector_math/vector_math.dart';
 import 'package:ordinary_idle/util/RotateDetector.dart';
 
 class CookieBackground extends StatefulWidget {
-  final Function(double) tap;
-  final Secrets pSecrets;
+  final Player p;
 
-  const CookieBackground(this.pSecrets, this.tap, {Key? key}) : super(key: key);
+  const CookieBackground(this.p, {Key? key}) : super(key: key);
 
   @override
   State<CookieBackground> createState() => _CookieBackgroundState();
@@ -45,7 +45,7 @@ class _CookieBackgroundState extends State<CookieBackground> implements Backgrou
     cookieCenter = canvasCenter + cookieOffset;
 
     //FIXME: temporary: secret4Completed = set to whether secret has unlocked before, so that rotation animation would persist, but have to switch to secret 5 later
-    secret4Completed = widget.pSecrets.secretCompleted(4);
+    secret4Completed = widget.p.secretCompleted(4);
 
     var gestureChild = GestureDetector(
         onTapDown: onBackgroundTapDown,
@@ -76,9 +76,9 @@ class _CookieBackgroundState extends State<CookieBackground> implements Backgrou
             ],
           ),
         ));
-    if (widget.pSecrets.secretDoable(3)) {
+    if (widget.p.secretDoable(3)) {
       return _swipeDetectorSecret3(gestureChild);
-    } else if (widget.pSecrets.secretDoable(4) || secret4Completed) {
+    } else if (widget.p.secretDoable(4) || secret4Completed) {
       return _panDetectorSecret4(gestureChild);
     } else {
       return gestureChild;
@@ -92,7 +92,7 @@ class _CookieBackgroundState extends State<CookieBackground> implements Backgrou
     // or user the local position method to get the offset
     // print(details.localPosition);
     // print("tap down " + x.toString() + ", " + y.toString());
-    widget.tap(1.0);
+    widget.p.tap(1.0);
     // print((x - cookieCenter.x) * (x - cookieCenter.x) +
     //     (y - cookieCenter.y) * (y - cookieCenter.y));
     // print(Vector2(x - cookieCenter.x,y-cookieCenter.y));
@@ -102,7 +102,7 @@ class _CookieBackgroundState extends State<CookieBackground> implements Backgrou
       //   cookieAngle += 0.1;
       // });
     } else {
-      widget.pSecrets.progressSecret(2, 0);
+      widget.p.progressSecret(2, 0);
     }
   }
 
@@ -127,13 +127,13 @@ class _CookieBackgroundState extends State<CookieBackground> implements Backgrou
 
   Widget _swipeDetectorSecret3(Widget child) {
     return SwipeDetector(
-      onSwipeUp: widget.pSecrets.secretDoable(3)
+      onSwipeUp: widget.p.secretDoable(3)
           ? () {
               if (cookieOffset.y < -canvasSize.y * 0.35) {
                 setState(() {
                   cookieShow = false;
                 });
-                widget.pSecrets.progressSecret(3, 0);
+                widget.p.progressSecret(3, 0);
               } else {
                 setState(() {
                   cookieOffset += Vector2(0, -canvasSize.y * 0.05);
@@ -191,7 +191,7 @@ class _CookieBackgroundState extends State<CookieBackground> implements Backgrou
       secret4Progression = newInternalAngle;
       if (secret4Progression > 8 * pi) {
         //4 cycles
-        widget.pSecrets.progressSecret(4, 0);
+        widget.p.progressSecret(4, 0);
         secret4Completed = true;
         setState(() {
           cookieAngle = internalAngle;

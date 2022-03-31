@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/util/Util.dart';
 
 class SecretsPage extends StatelessWidget {
-  final Secrets pSecrets;
-  const SecretsPage(this.pSecrets, {Key? key}) : super(key: key);
+  final Secrets p;
+  const SecretsPage(this.p, {Key? key}) : super(key: key);
 
   static const TextStyle titleStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
@@ -22,7 +23,7 @@ class SecretsPage extends StatelessWidget {
                 const SizedBox(height: 10),
                 const Text("Secrets", style: titleStyle),
                 const SizedBox(height: 10),
-                ..._printSecrets(pSecrets, context),
+                ..._printSecrets(p, context),
               ],
               spacing: 0,
             );
@@ -30,7 +31,7 @@ class SecretsPage extends StatelessWidget {
     );
   }
 
-  List<Widget> _printSecrets(Secrets pSecrets, BuildContext context) {
+  List<Widget> _printSecrets(Secrets p, BuildContext context) {
     var ss = Secrets.secrets;
     var ssh = Secrets.secretHeaders;
 
@@ -42,9 +43,9 @@ class SecretsPage extends StatelessWidget {
           ...Secrets.getSecretsByTheme(key)
               .map((int id) => Secrets.getSecretById(id))
               .where((Secret s) => s.type != "hidden")
-              .map((Secret s) => _printSecret(pSecrets, context, s)),
+              .map((Secret s) => _printSecret(p, context, s)),
         ];
-      } else if (pSecrets.unlockedThemes.contains(key)) {
+      } else if (p.unlockedThemes.contains(key)) {
         return [
           Util.divider(),
           const SizedBox(height: 10),
@@ -53,7 +54,7 @@ class SecretsPage extends StatelessWidget {
           ...Secrets.getSecretsByTheme(key)
               .map((int id) => Secrets.getSecretById(id))
               .where((Secret s) => s.type != "hidden")
-              .map((Secret s) => _printSecret(pSecrets, context, s)),
+              .map((Secret s) => _printSecret(p, context, s)),
         ];
       } else {
         return [
@@ -64,7 +65,7 @@ class SecretsPage extends StatelessWidget {
           ...Secrets.getSecretsByTheme(key)
               .map((int id) => Secrets.getSecretById(id))
               .where((Secret s) => s.type != "hidden")
-              .map((Secret s) => _printSecret(pSecrets, context, s)),
+              .map((Secret s) => _printSecret(p, context, s)),
         ];
       }
     });

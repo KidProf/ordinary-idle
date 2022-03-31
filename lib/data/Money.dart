@@ -105,6 +105,7 @@ mixin Money {
   // }
 
   //recompute and update secretsMultiplier and hence multiplier, return new secretsMultiplier
+  @protected //Secrets.dart interface
   double updateSecretsMultiplier() {
     secretsMultiplier = _computeSecretsMultiplier();
     updateMultiplier();
@@ -132,7 +133,7 @@ mixin Money {
     return secretsMultiplier + otherMultiplier + 1;
   }
 
-  @override //Shops.dart interface
+  @protected //Shops.dart interface
   double updateCoinsPerTap() {
     var coinsPerTap = computeCoinsPerTap();
     print("coins per tap is: " + coinsPerTap.toString());
@@ -140,7 +141,7 @@ mixin Money {
     return coinsPerTap;
   }
 
-  @override //Shops.dart interface
+  @protected //Shops.dart interface
   double updateCoinsPerSecond() {
     var coinsPerSecond = computeCoinsPerSecond();
     print("coins per second is: " + coinsPerSecond.toString());
@@ -148,7 +149,7 @@ mixin Money {
     return coinsPerSecond;
   }
 
-  @override //Shops.dart interface
+  @protected //Shops.dart interface
   bool possibleByShopId(int id, {int? level}) {
     var cost = getCostByShopId(id, level: level);
     return cost <= vitals.value["coins"];

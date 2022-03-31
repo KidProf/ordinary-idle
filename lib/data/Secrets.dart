@@ -7,16 +7,23 @@ import 'package:ordinary_idle/data/Money.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
 import 'package:tuple/tuple.dart';
 
-class Secrets {
+mixin Secrets {
+  //INTERFACE
+  double updateSecretsMultiplier();
+
+  late FToast fToast;
+  
   late Box player;
   late Box currentSecrets;
   late List<int> completedSecrets;
   late List<int> unlockedThemes;
-  late Function updateSecretsMultiplier;
-  late FToast fToast;
+  
   Map<int, CurrentVolatileSecret> currentVolatileSecrets = {};
 
-  Secrets(this.updateSecretsMultiplier, this.fToast) {
+  //ctor
+  @protected
+  void initSecrets(fToast) {
+    this.fToast = fToast;
     player = Hive.box("player");
     currentSecrets = Hive.box("currentSecretsV2");
     completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);

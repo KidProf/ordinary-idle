@@ -7,9 +7,8 @@ import 'package:ordinary_idle/data/Secrets.dart';
 
 class Home extends StatelessWidget {
   final Player p;
-  final Secrets pSecrets;
 
-  Home(this.pSecrets, this.p, {Key? key}) : super(key: key);
+  Home(this.p, {Key? key}) : super(key: key);
 
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
@@ -19,15 +18,15 @@ class Home extends StatelessWidget {
     var backgroundColor;
     switch (p.getCurrentTheme()) {
       case 1:
-        currentBackground = CookieBackground(pSecrets, p.tap);
+        currentBackground = CookieBackground(p);
         backgroundColor = Colors.amber[100];
         break;
       case 2:
-        currentBackground = TapCountBackground(pSecrets, p.tap);
+        currentBackground = TapCountBackground(p);
         backgroundColor = Colors.green[100];
         break;
       default:
-        currentBackground = CookieBackground(pSecrets, p.tap);
+        currentBackground = CookieBackground(p);
         backgroundColor = Colors.amber[100];
         break;
     }

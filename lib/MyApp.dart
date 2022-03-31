@@ -49,13 +49,12 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  final Player p = Player();
-  late Secrets pSecrets;
+  late Player p;
   late final List<Widget> _widgetOptions = <Widget>[
-    Home(pSecrets, p),
-    SecretsPage(pSecrets),
-    // Achievements(pSecrets),
-    Settings(pSecrets, p, _onItemTapped),
+    Home(p),
+    SecretsPage(p),
+    // Achievements(p),
+    Settings(p, _onItemTapped),
   ];
   int _selectedIndex = 0;
   late FToast fToast;
@@ -66,7 +65,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     super.initState();
     fToast = FToast();
     fToast.init(context);
-    pSecrets = Secrets(p.updateSecretsMultiplier, fToast);
+    p = Player(fToast);
     //initialize idle timer
     idleTimer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       p.addIdleCoins();
@@ -74,9 +73,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 
   void _onItemTapped(int index, BuildContext context) {
-    if (index == 1 && !pSecrets.secretCompleted(1)) {
-      pSecrets.progressSecret(1, 0);
-      final tuple = pSecrets.secretProgress(1);
+    if (index == 1 && !p.secretCompleted(1)) {
+      p.progressSecret(1, 0);
+      final tuple = p.secretProgress(1);
       final isFinished = tuple.item1;
       final progress = tuple.item2;
 
