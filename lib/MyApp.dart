@@ -131,19 +131,19 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home, size: 30),
             label: "",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.lock),
+            icon: Icon(Icons.lock, size: 25),
             label: "",
           ),
           BottomNavigationBarItem(
-            icon: Icon(CustomIcons.trophy),
+            icon: Icon(CustomIcons.trophy, size: 20),
             label: "",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.settings, size: 25),
             label: "",
           ),
         ],
