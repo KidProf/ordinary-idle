@@ -9,6 +9,8 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/data/Player.dart';
 
+import 'package:ordinary_idle/util/CustomIcons.dart';
+
 import 'package:ordinary_idle/pages/Home.dart';
 import 'package:ordinary_idle/pages/AchievementsPage.dart';
 import 'package:ordinary_idle/pages/SecretsPage.dart';
@@ -137,7 +139,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             label: "",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.assignment_turned_in),
+            icon: Icon(CustomIcons.trophy),
             label: "",
           ),
           BottomNavigationBarItem(
