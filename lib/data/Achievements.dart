@@ -14,8 +14,8 @@ mixin Achievements {
 
   final Box player = Hive.box("player");
   final Box currentSecrets = Hive.box("currentSecretsV2");
-  late Map<int,int> achievementsLevel =
-      player.get("achievementsLevel", defaultValue: <int, int>{});
+  late Map<dynamic,dynamic> achievementsLevel =
+      player.get("achievementsLevel", defaultValue: <dynamic, dynamic>{}); //should be Map<int,int> but Hive can only store it in the form of <dynamic, dynamic>
   late int trophies = player.get("trophies",defaultValue: 0);
 
   //ctor
@@ -118,7 +118,7 @@ mixin Achievements {
       currentLevel++;
       print("Achievement unlocked with id: "+ id.toString() + ", level: "+ currentLevel.toString());
       achievementsLevel[id] = currentLevel;
-      player.put("achievementsLevel",Map<int,int>.from(achievementsLevel));
+      player.put("achievementsLevel",achievementsLevel);
       trophies += int.parse(aType.children[currentLevel]["reward"].toString());
       player.put("trophies",trophies);
       MyToast.showAchievementToast(fToast, "Secret Unlocked! ${aType.children[currentLevel]["title"]}");
