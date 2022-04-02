@@ -109,7 +109,7 @@ class MyToast {
         });
   }
 
-    static void showAchievementToast(FToast fToast, String msg) {
+  static void showAchievementToast(FToast fToast, String msg) {
     fToast.showToast(
         child: _buildAchievementToast(msg),
         toastDuration: const Duration(seconds: 1),

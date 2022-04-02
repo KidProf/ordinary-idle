@@ -27,8 +27,8 @@ mixin Money {
   @protected
   void initMoney() {
     otherMultiplier = player.get("otherMultiplier", defaultValue: 0.0);
-    taps = player.get("taps",defaultValue: 0);
-    prestigeCount = player.get("prestigeCount",defaultValue: 0);
+    taps = player.get("taps", defaultValue: 0);
+    prestigeCount = player.get("prestigeCount", defaultValue: 0);
 
     secretsMultiplier = _computeSecretsMultiplier();
 
@@ -68,14 +68,14 @@ mixin Money {
   double tap(double coins) {
     addCoins(vitals.value["coinsPerTap"] * coins);
     taps += 1;
-    player.put("taps",taps);
-    updateAchievementLevel(Achievements.getIdByExid("tap"),taps);
+    player.put("taps", taps);
+    updateAchievementLevel(Achievements.getIdByExid("tap"), taps);
     return vitals.value["coins"];
   }
 
   double addCoins(double coins) {
     addCoinsWithoutMultiplier(coins * vitals.value["multiplier"]);
-    updateAchievementLevel(Achievements.getIdByExid("money"),vitals.value["coins"]);
+    updateAchievementLevel(Achievements.getIdByExid("money"), vitals.value["coins"]);
     return vitals.value["coins"];
   }
 
