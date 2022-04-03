@@ -44,7 +44,7 @@ class _CookieBackgroundState extends State<CookieBackground> implements Backgrou
     canvasCenter = Vector2(canvasSize.x / 2, canvasSize.y / 2);
     cookieCenter = canvasCenter + cookieOffset;
 
-    //FIXME: temporary: secret4Completed = set to whether secret has unlocked before, so that rotation animation would persist, but have to switch to secret 5 later
+    //! temporary: secret4Completed = set to whether secret has unlocked before, so that rotation animation would persist, but have to switch to secret 5 later
     secret4Completed = widget.p.secretCompleted(4);
 
     var gestureChild = GestureDetector(
@@ -61,7 +61,7 @@ class _CookieBackgroundState extends State<CookieBackground> implements Backgrou
                 left: cookieCenter.x - cookieSize / 2,
                 top: cookieCenter.y -
                     cookieSize / 2 -
-                    80, //FIXME: this is the approximate height of the header (specified in MyApp.dart)
+                    80, //! this is the approximate height of the header (specified in MyApp.dart)
                 height: cookieSize,
                 width: cookieSize,
                 child: cookieShow

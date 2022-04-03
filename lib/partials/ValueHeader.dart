@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ordinary_idle/data/Money.dart';
 import 'package:ordinary_idle/util/Util.dart';
 
-//FIXME: Please change CookieBackground to match the height of the header (specified in MyApp.dart)
+//! Please change CookieBackground to match the height of the header (specified in MyApp.dart)
 class ValueHeader extends StatelessWidget {
   final Map<String, dynamic> vitals;
 

@@ -111,7 +111,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       appBar: _selectedIndex != 3
           ? PreferredSize(
               preferredSize: const Size.fromHeight(
-                  80), //FIXME: Please change CookieBackground to match the height of the header (specified in MyApp.dart)
+                  80), //! Please change CookieBackground to match the height of the header (specified in MyApp.dart)
               child: ValueListenableBuilder<Map<String, dynamic>>(
                   valueListenable: p.getVitalsListener,
                   builder: (ctx, vitals, _) {
@@ -121,7 +121,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                         vitals,
                       ),
                       toolbarHeight:
-                          80, //FIXME: Please change CookieBackground to match the height of the header (specified in MyApp.dart)
+                          80, //! Please change CookieBackground to match the height of the header (specified in MyApp.dart)
                     );
                   }))
           : null,
