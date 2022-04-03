@@ -24,6 +24,8 @@ class AchievementsPage extends StatelessWidget {
               children: [
                 const SizedBox(height: 10),
                 const Text("Achievements", style: titleStyle),
+                const Text(
+                    "NOTE: The trophies currently have no use other than making you feel proud of yourself. Its use will be introduced later, but it will definitely take some time."),
                 const SizedBox(height: 10),
                 ..._printSecrets(p, context),
               ],

@@ -119,6 +119,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                     return AppBar(
                       title: ValueHeader(
                         vitals,
+                        _selectedIndex,
                       ),
                       toolbarHeight:
                           80, //! Please change CookieBackground to match the height of the header (specified in MyApp.dart)

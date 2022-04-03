@@ -113,7 +113,7 @@ mixin Secrets {
       id: 5,
       exid: "2.1",
       prerequisites: [],
-      title: "96966696966969699999666",
+      title: "69",
       description: "Invert the phone when the tap count only contains 6s and 9s.",
       theme: 2,
       reward: 1.0,

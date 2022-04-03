@@ -9,7 +9,7 @@ import 'package:tuple/tuple.dart';
 
 mixin Achievements {
   //INTERFACE
-  //nth
+  addTrophies(int t);
 
   late FToast fToast;
 
@@ -17,7 +17,6 @@ mixin Achievements {
   final Box currentSecrets = Hive.box("currentSecretsV2");
   late Map<dynamic, dynamic> achievementsLevel = player.get("achievementsLevel", defaultValue: <dynamic,
       dynamic>{}); //should be Map<int,int> but Hive can only store it in the form of <dynamic, dynamic>
-  late int trophies = player.get("trophies", defaultValue: 0);
 
   //ctor
   @protected
@@ -135,8 +134,7 @@ mixin Achievements {
       print("Achievement unlocked with id: " + id.toString() + ", level: " + currentLevel.toString());
       achievementsLevel[id] = currentLevel;
       player.put("achievementsLevel", achievementsLevel);
-      trophies += int.parse(aType.children[currentLevel]["reward"].toString());
-      player.put("trophies", trophies);
+      addTrophies(int.parse(aType.children[currentLevel]["reward"].toString()));
       MyToast.showAchievementToast(fToast, "Secret Unlocked! ${aType.children[currentLevel]["title"]}");
     }
     return currentLevel;

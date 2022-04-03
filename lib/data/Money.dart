@@ -38,6 +38,7 @@ mixin Money {
       "coinsPerSecond": computeCoinsPerSecond(), //from shops: need call initShops first
       "coinsPerTap": computeCoinsPerTap(), //from shops: need call initShops first
       "hotbarShop": player.get("hotbarShop", defaultValue: <int>[0, 1]),
+      "trophies": player.get("trophies", defaultValue: 0),
     });
   }
 
@@ -196,5 +197,10 @@ mixin Money {
 
   double getNetWorth() {
     return player.get("netWorth", defaultValue: 1.0);
+  }
+
+  void addTrophies(int t) {
+    //Achievements.dart interface
+    vitals.value = {...vitals.value, "trophies": vitals.value["trophies"] + t};
   }
 }
