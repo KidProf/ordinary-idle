@@ -1,6 +1,6 @@
-# ordinary_idle
+# OrdinaryIdle
 
-A new Flutter project.
+An game built using Flutter that is able to run on both Android and iOS devices. Testing out the idea of fusing an idle game with some puzzle-solving components.
 
 ## Getting Started
 
