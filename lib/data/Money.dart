@@ -202,5 +202,6 @@ mixin Money {
   void addTrophies(int t) {
     //Achievements.dart interface
     vitals.value = {...vitals.value, "trophies": vitals.value["trophies"] + t};
+    player.put("trophies", vitals.value["trophies"]);
   }
 }

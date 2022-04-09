@@ -215,7 +215,7 @@ mixin Shops {
   }
 
   bool prerequisiteMet(int id) {
-    return true; //TODO:
+    return true; //TODO
   }
 }
 
@@ -229,8 +229,8 @@ class Shop {
   final String Function(int) descriptionI;
   final String
       type; //"tap","idle","achievements",..., this may not be necessary because class Resource already has a type
-  final Resource gain; //gain when upgrading from level to level + 1
-  final Resource cost; //cost when upgrading from level - 1 to level
+  final Resource gain; //! gain when upgrading from level to level + 1
+  final Resource cost; //! cost when upgrading from level - 1 to level
 
   Shop({
     required this.id,
