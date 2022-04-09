@@ -34,7 +34,7 @@ class ValueHeader extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
               ),
               Text(
-                vitals["multiplier"].toString() + "x",
+                Util.doubleRepresentation(vitals["multiplier"]) + "x",
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,

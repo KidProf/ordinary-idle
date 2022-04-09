@@ -98,7 +98,7 @@ class MyToast {
   static void showSecretToast(FToast fToast, String msg) {
     fToast.showToast(
         child: _buildSecretToast(msg),
-        toastDuration: const Duration(seconds: 1),
+        toastDuration: const Duration(seconds: 2),
         positionedToastBuilder: (context, child) {
           return Positioned(
             child: Align(alignment: Alignment.center, child: child),
@@ -112,7 +112,7 @@ class MyToast {
   static void showAchievementToast(FToast fToast, String msg) {
     fToast.showToast(
         child: _buildAchievementToast(msg),
-        toastDuration: const Duration(seconds: 1),
+        toastDuration: const Duration(seconds: 2),
         positionedToastBuilder: (context, child) {
           return Positioned(
             child: Align(alignment: Alignment.center, child: child),

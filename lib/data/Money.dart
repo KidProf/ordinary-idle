@@ -26,7 +26,7 @@ mixin Money {
   //ctor
   @protected
   void initMoney() {
-    otherMultiplier = player.get("otherMultiplier", defaultValue: 0.0);
+    otherMultiplier = player.get("otherMultiplierV2", defaultValue: 1.0);
     taps = player.get("taps", defaultValue: 0);
     prestigeCount = player.get("prestigeCount", defaultValue: 0);
 
@@ -132,17 +132,17 @@ mixin Money {
   }
 
   double _computeSecretsMultiplier() {
-    double sum = 0;
+    double product = 1;
     final completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);
     completedSecrets.forEach((id) {
       var s = Secrets.getSecretById(id);
-      sum += s.reward;
+      product *= s.reward;
     });
-    return sum;
+    return product;
   }
 
   double _computeMultiplier() {
-    return secretsMultiplier + otherMultiplier + 1;
+    return secretsMultiplier * otherMultiplier;
   }
 
   @protected //Shops.dart interface

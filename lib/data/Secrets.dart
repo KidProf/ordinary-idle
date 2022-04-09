@@ -36,7 +36,7 @@ mixin Secrets {
         title: "You are now a developer!",
         description: "Tapping the secret button 8 times.",
         theme: 0,
-        reward: 1.0,
+        reward: 1.5,
         progressComponent: [
           {
             "total": 8,
@@ -54,7 +54,7 @@ mixin Secrets {
       description:
           "Tapping outside the cookie but inside the canvas 10 times.\n\nAs the cookie will move around and even change in size, I think making taps outside the cookie count is a good idea.",
       theme: 1,
-      reward: 0.5,
+      reward: 1.2,
       progressComponent: [
         {
           "total": 10,
@@ -70,7 +70,7 @@ mixin Secrets {
       title: "Where did it go?",
       description: "Swipe the cookie up until it disappears from the screen.",
       theme: 1,
-      reward: 1.0,
+      reward: 1.5,
       progressComponent: [
         {
           "total": 1,
@@ -85,7 +85,7 @@ mixin Secrets {
       title: "Diode",
       description: "Rotate the cookie anticlockwise for 4 cycles.",
       theme: 1,
-      reward: 1.0,
+      reward: 1.5,
       progressComponent: [
         {
           "total": 1,
@@ -116,7 +116,7 @@ mixin Secrets {
       title: "69",
       description: "Invert the phone when the tap count only contains 6s and 9s.",
       theme: 2,
-      reward: 1.0,
+      reward: 1.5,
       progressComponent: [
         {
           "total": 1,
@@ -131,7 +131,7 @@ mixin Secrets {
       title: "Change in perspective makes you feel better",
       description: "Invert the phone so that the number appears to be at least 700 larger than the actual number.",
       theme: 2,
-      reward: 1.0,
+      reward: 1.5,
       progressComponent: [
         {
           "total": 1,
@@ -162,7 +162,7 @@ mixin Secrets {
       title: "Remain LOL",
       description: "Stop at 303, 505 or 707 for 5 seconds, which are replaced by LOL.",
       theme: 2,
-      reward: 1.0,
+      reward: 1.5,
       progressComponent: [
         {
           "total": 1,
@@ -178,7 +178,7 @@ mixin Secrets {
       description:
           "Click until 1100, where it resets back to 0. You should be able to do all the secrets without tapping more than 1100. So think twice if you still haven't found some of them at this stage.",
       theme: 2,
-      reward: 1.0,
+      reward: 1.5,
       progressComponent: [
         {
           "total": 1,
