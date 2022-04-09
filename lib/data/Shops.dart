@@ -129,11 +129,11 @@ mixin Shops {
 
   static double _gain0(int i) => pow(1.2, i).toDouble();
   static double _cost0(int i) => (50 * pow(1.3, i)).toDouble();
-  static double _gain1(int i) => (i * 0.1).toDouble();
+  static double _gain1(int i) => (pow(2,i~/10)*(i * 0.1)).toDouble();
   static double _cost1(int i) => (10 * pow(1.2, i)).toDouble();
-  static double _gain2(int i) => (i * 16).toDouble();
+  static double _gain2(int i) => (pow(2,i~/10)*(i * 16)).toDouble();
   static double _cost2(int i) => (2000 * pow(1.2, i)).toDouble();
-  static double _gain3(int i) => (i * 1800).toDouble();
+  static double _gain3(int i) => (pow(2,i~/10)*(i * 1800)).toDouble();
   static double _cost3(int i) => (300000 * pow(1.2, i)).toDouble();
 
   //ctor
