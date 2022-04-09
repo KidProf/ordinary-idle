@@ -45,7 +45,7 @@ class SecretsPage extends StatelessWidget {
               .where((Secret s) => s.type != "hidden")
               .map((Secret s) => _printSecret(p, context, s)),
         ];
-      } else if (p.unlockedThemes.contains(key)) {
+      } else if (p.visitedThemes.contains(key)) {
         return [
           Util.divider(),
           const SizedBox(height: 10),

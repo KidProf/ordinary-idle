@@ -211,7 +211,7 @@ class Settings extends StatelessWidget {
     //Delete Hive storage related to secrets
     await Hive.box('player').put("completedSecrets", <int>[]);
     await Hive.box('player').put("currentTheme", 1);
-    await Hive.box('player').put("unlockedThemes", <int>[1]);
+    await Hive.box('player').put("visitedThemes", <int>[1]);
     await Hive.box('currentSecretsV2').clear();
 
     //Initialize deleted boxes
@@ -220,18 +220,18 @@ class Settings extends StatelessWidget {
   }
 
   Future<void> _changeTheme(BuildContext context) async {
-    final numberOfThemes = 2; //TODO: change when number of themes increases
     var player = Hive.box('player');
-    await player.put("unlockedThemes", <int>[1, 2]); //TODO: temp, so that all themes are unlocked without constraints
-
-    var currentTheme = player.get("currentTheme", defaultValue: 1);
-    var unlockedThemes = player.get("unlockedThemes", defaultValue: <int>[1]);
+    var visitedThemes = player.get("visitedThemes",defaultValue: <int>[1]);
+    final availableThemes = [1,2,3]; //TODO: change when number of themes increases
+    final currentTheme = player.get("currentTheme", defaultValue: 1);
     var newTheme =
-        unlockedThemes[(unlockedThemes.indexOf(currentTheme) + 1) % unlockedThemes.length]; //cycle to the next theme
+        availableThemes[(availableThemes.indexOf(currentTheme) + 1) % availableThemes.length]; //cycle to the next theme
+    
+    if(!visitedThemes.contains(newTheme)){
+      player.put("visitedThemes",[...visitedThemes,newTheme]);
+    }
     player.put('currentTheme', newTheme);
-    print("PLAYER GET" + player.get("coins").toString());
     RestartWidget.restartApp(context);
-    print("PLAYER GET" + player.get("coins").toString());
     onItemTapped(0, context); //switch to home page
   }
 }

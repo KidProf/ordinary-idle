@@ -15,7 +15,7 @@ mixin Secrets {
   final Box player = Hive.box("player");
   final Box currentSecrets = Hive.box("currentSecretsV2");
   late List<int> completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);
-  late List<int> unlockedThemes = player.get("unlockedThemes", defaultValue: <int>[1]);
+  late List<int> visitedThemes = player.get("visitedThemes", defaultValue: <int>[1]);
 
   Map<int, CurrentVolatileSecret> currentVolatileSecrets = {};
 
@@ -186,6 +186,70 @@ mixin Secrets {
         },
       ],
     ),
+    Secret(
+      id: 10,
+      exid: "3.1",
+      prerequisites: [],
+      title: "Shake Shake",
+      description:
+          "Shake the soft drink",
+      theme: 3,
+      reward: 1.2,
+      progressComponent: [
+        {
+          "total": 1,
+          "volatile": true,
+        },
+      ],
+    ),
+    Secret(
+      id: 11,
+      exid: "3.2",
+      prerequisites: [],
+      title: "Colourful",
+      description:
+          "Long tap the background to change colour",
+      theme: 3,
+      reward: 1.2,
+      progressComponent: [
+        {
+          "total": 1,
+          "volatile": true,
+        },
+      ],
+    ),
+    Secret(
+      id: 12,
+      exid: "3.3",
+      prerequisites: [],
+      title: "Fanta",
+      description:
+          "Change the colour of the soft drink to orange.",
+      theme: 3,
+      reward: 1.5,
+      progressComponent: [
+        {
+          "total": 1,
+          "volatile": true,
+        },
+      ],
+    ),
+    Secret(
+      id: 13,
+      exid: "3.4",
+      prerequisites: [],
+      title: "Ooh! Our competitor!",
+      description:
+          "Change the colour of the soft drink to blue (Pepsi).",
+      theme: 3,
+      reward: 1.5,
+      progressComponent: [
+        {
+          "total": 1,
+          "volatile": true,
+        },
+      ],
+    ),
   ];
 
   static final secretHeaders = {
@@ -200,6 +264,10 @@ mixin Secrets {
     2: {
       "title": "Tap Count",
       "description": "A less graphic-intensive theme",
+    },
+    3: {
+      "title": "Soft Drinks",
+      "description": "Source of evil",
     },
   };
 
@@ -224,9 +292,9 @@ mixin Secrets {
   bool prerequisiteMet(int id) {
     final s = getSecretById(id);
 
-    // print(unlockedThemes);
+    // print(visitedThemes);
     //if theme is 0, can be accessed anywhere
-    if (s.theme != 0 && !unlockedThemes.contains(s.theme)) return false;
+    if (s.theme != 0 && !visitedThemes.contains(s.theme)) return false;
 
     for (var prerequisite in s.prerequisites) {
       if (!secretCompleted(prerequisite)) return false;

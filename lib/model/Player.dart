@@ -3,4 +3,4 @@
 // double otherMultiplier = 0.0;
 // List<int> completedSecrets = [];
 // int currentTheme = 1;
-// List<int> unlockedThemes = [1];
+// List<int> visitedThemes = [1];
