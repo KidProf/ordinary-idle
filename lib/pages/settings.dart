@@ -138,13 +138,13 @@ class Settings extends StatelessWidget {
                       MaterialStateProperty.all<Color>(p.getNetWorth() >= 1000000 ? Colors.green : Util.disabled),
                 ),
                 onPressed: () async {
-                  //CRACK: do not put this to release!!!
-                  if (p.getNetWorth() >= 1000000) {
-                    //1e6
-                    await _changeTheme(context);
-                  } else {
-                    Fluttertoast.showToast(msg: "Reach 1e6 coins net worth to unlock the option of changing themes. ");
-                  }
+                  //! CRACK: do not put this to release!!!
+                  // if (p.getNetWorth() >= 1000000) {
+                  //1e6
+                  await _changeTheme(context);
+                  // } else {
+                  //   Fluttertoast.showToast(msg: "Reach 1e6 coins net worth to unlock the option of changing themes. ");
+                  // }
                 },
                 child: Text("Change Theme"),
               ),
@@ -221,14 +221,14 @@ class Settings extends StatelessWidget {
 
   Future<void> _changeTheme(BuildContext context) async {
     var player = Hive.box('player');
-    var visitedThemes = player.get("visitedThemes",defaultValue: <int>[1]);
-    final availableThemes = [1,2,3]; //TODO: change when number of themes increases
+    var visitedThemes = player.get("visitedThemes", defaultValue: <int>[1]);
+    final availableThemes = [1, 2, 3]; //TODO: change when number of themes increases
     final currentTheme = player.get("currentTheme", defaultValue: 1);
     var newTheme =
         availableThemes[(availableThemes.indexOf(currentTheme) + 1) % availableThemes.length]; //cycle to the next theme
-    
-    if(!visitedThemes.contains(newTheme)){
-      player.put("visitedThemes",[...visitedThemes,newTheme]);
+
+    if (!visitedThemes.contains(newTheme)) {
+      player.put("visitedThemes", <int>[...visitedThemes, newTheme]);
     }
     player.put('currentTheme', newTheme);
     RestartWidget.restartApp(context);

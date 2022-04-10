@@ -15,7 +15,8 @@ mixin Secrets {
   final Box player = Hive.box("player");
   final Box currentSecrets = Hive.box("currentSecretsV2");
   late List<int> completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);
-  late List<int> visitedThemes = player.get("visitedThemes", defaultValue: <int>[1]);
+  late List<int> visitedThemes = player.get("visitedThemes", defaultValue: <int>[1]); //used in SecretsPage.dart
+  late int currentTheme = player.get("currentTheme", defaultValue: 1);
 
   Map<int, CurrentVolatileSecret> currentVolatileSecrets = {};
 
@@ -54,7 +55,7 @@ mixin Secrets {
       description:
           "Tapping outside the cookie but inside the canvas 10 times.\n\nAs the cookie will move around and even change in size, I think making taps outside the cookie count is a good idea.",
       theme: 1,
-      reward: 1.2,
+      reward: 1.3,
       progressComponent: [
         {
           "total": 10,
@@ -191,10 +192,9 @@ mixin Secrets {
       exid: "3.1",
       prerequisites: [],
       title: "Shake Shake",
-      description:
-          "Shake the soft drink",
+      description: "Shake the soft drink",
       theme: 3,
-      reward: 1.2,
+      reward: 1.3,
       progressComponent: [
         {
           "total": 1,
@@ -207,10 +207,9 @@ mixin Secrets {
       exid: "3.2",
       prerequisites: [],
       title: "Colourful",
-      description:
-          "Long tap the background to change colour",
+      description: "Long tap the background to change colour",
       theme: 3,
-      reward: 1.2,
+      reward: 1.3,
       progressComponent: [
         {
           "total": 1,
@@ -223,10 +222,9 @@ mixin Secrets {
       exid: "3.3",
       prerequisites: [],
       title: "Fanta",
-      description:
-          "Change the colour of the soft drink to orange.",
+      description: "Change the colour of the soft drink to orange.",
       theme: 3,
-      reward: 1.5,
+      reward: 1.3,
       progressComponent: [
         {
           "total": 1,
@@ -239,14 +237,43 @@ mixin Secrets {
       exid: "3.4",
       prerequisites: [],
       title: "Ooh! Our competitor!",
-      description:
-          "Change the colour of the soft drink to blue (Pepsi).",
+      description: "Change the colour of the soft drink to blue (Pepsi).",
       theme: 3,
-      reward: 1.5,
+      reward: 1.3,
       progressComponent: [
         {
           "total": 1,
           "volatile": true,
+        },
+      ],
+    ),
+    Secret(
+      id: 14,
+      exid: "3.5",
+      prerequisites: [],
+      title: "Discover all",
+      description: "Discover all soft drinks in the game.",
+      theme: 3,
+      reward: 1.5,
+      progressComponent: [
+        {
+          "total": int.parse("11111", radix: 2),
+          "volatile": false,
+        },
+      ],
+    ),
+    Secret(
+      id: 15,
+      exid: "3.6",
+      prerequisites: [],
+      title: "Discover and shake",
+      description: "Shake all soft drinks in the game.",
+      theme: 3,
+      reward: 1.5,
+      progressComponent: [
+        {
+          "total": int.parse("11111", radix: 2),
+          "volatile": false,
         },
       ],
     ),
@@ -294,7 +321,8 @@ mixin Secrets {
 
     // print(visitedThemes);
     //if theme is 0, can be accessed anywhere
-    if (s.theme != 0 && !visitedThemes.contains(s.theme)) return false;
+    // if (s.theme != 0 && !visitedThemes.contains(s.theme)) return false;
+    if (s.theme != 0 && s.theme != currentTheme) return false;
 
     for (var prerequisite in s.prerequisites) {
       if (!secretCompleted(prerequisite)) return false;
