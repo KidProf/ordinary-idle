@@ -20,40 +20,44 @@ class SoftDrinksBackground extends StatefulWidget {
   State<SoftDrinksBackground> createState() => _SoftDrinksBackgroundState();
 }
 
-class _SoftDrinksBackgroundState extends State<SoftDrinksBackground>
-    implements Background {
+class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements Background {
   late Timer? longPressTimer = null;
   double hue = 0;
+  String softDrink = "none";
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<Box>(
-        valueListenable: Hive.box('currentSecretsV2')
-            .listenable(keys: [9999]), //listen to secret 9999 only
-        builder: (context, box, _) {
-          // WidgetsBinding.instance?.addPostFrameCallback((_) {
-          //   _checkSecrets(context);
-          // });
+    // WidgetsBinding.instance?.addPostFrameCallback((_) {
+    //   _checkSecrets(context);
+    // });
 
-          return GestureDetector(
-            onTapDown: onBackgroundTapDown,
-            onLongPress: onLongPress,
-            onLongPressUp: onLongPressUp,
-            child: ChangeColors(
-              hue: hue,
-              child: Container(
-                color: Colors.Colors.red[
-                    900], //the color is necessary or else taps outside the cookie cannot be registered
-                child: Container(
-                    alignment: Alignment.center,
-                    child: const Image(
+    return GestureDetector(
+      onTapDown: onBackgroundTapDown,
+      onLongPress: onLongPress,
+      onLongPressUp: onLongPressUp,
+      child: ChangeColors(
+        hue: hue,
+        brightness: getBrightness(hue),
+        child: Container(
+          color: Colors.Colors.red[900], //the color is necessary or else taps outside the cookie cannot be registered
+          child: Container(
+              alignment: Alignment.center,
+              child: softDrink == "none"
+                  ? Image(
                       width: 100,
-                      image: AssetImage('assets/images/softDrink.png'),
+                      image: AssetImage('assets/images/softDrinks/' + softDrink + '.png'),
+                    )
+                  : ChangeColors(
+                      hue: -hue,
+                      brightness: -getBrightness(hue),
+                      child: Image(
+                        width: 100,
+                        image: AssetImage('assets/images/softDrinks/' + softDrink + '.png'),
+                      ),
                     )),
-              ),
-            ),
-          );
-        });
+        ),
+      ),
+    );
   }
 
   @override
@@ -65,19 +69,61 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground>
 
   void onLongPress() {
     print("onLongPress");
-    widget.p.progressSecret(11,0);
-
-    longPressTimer =
-        Timer.periodic(const Duration(milliseconds: 100), (Timer t) {
+    widget.p.progressSecret(11, 0);
+    setState((){
+      softDrink = "none";
+    });
+    longPressTimer = Timer.periodic(const Duration(milliseconds: 100), (Timer t) {
       setState(() {
         hue += 0.01;
       });
     });
   }
 
+  double getBrightness(double hue) {
+    //increase the brightness at orange to make it more like fanta
+    var h = hue % 2;
+    if (0 <= h && h < 0.15) {
+      return 0.2 - 0.2 * (h - 0.15).abs() / 0.15; //an increase slope h=0 to 0.15 and brightness=0.2
+    } else if (0.15 <= h && h < 0.40) {
+      return 0.2 - 0.2 * (h - 0.15).abs() / 0.25; //an decrease slope h=0.15 to 0.40
+    } else {
+      return 0;
+    }
+  }
+
+  String getSoftDrink(double hue) {
+    var h = hue % 2;
+    if (hue >= 0.08 && (1.90 <= h || 0 <= h && h < 0.08)) {
+      //does not allow cola to be discovered first cycle
+      return "cola";
+    } else if (0.08 <= h && h < 0.23) {
+      return "fanta";
+    } else if (0.60 <= h && h < 0.85) {
+      return "sprite";
+    } else if (1.05 <= h && h < 1.25) {
+      return "pepsi";
+    } else if (1.35 <= h && h < 1.50) {
+      return "grape";
+    } else {
+      return "none";
+    }
+  }
+
   void onLongPressUp() {
-    print("onLongPressUp");
     longPressTimer?.cancel();
+    var softDrink = getSoftDrink(hue);
+    if(softDrink=="fanta"){
+      widget.p.progressSecret(12, 0);
+    }
+    if(softDrink=="pepsi"){
+      widget.p.progressSecret(13,0);
+    }
+
+    setState((){
+      this.softDrink = softDrink;
+    });
+    print("onLongPressUp, hue: " + (hue % 2).toString() + ", softDrink: " + softDrink);
   }
 
   @override

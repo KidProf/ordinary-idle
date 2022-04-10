@@ -259,6 +259,7 @@ mixin Secrets {
         {
           "total": int.parse("11111", radix: 2),
           "volatile": false,
+          "type": "bitmap",
         },
       ],
     ),
@@ -274,6 +275,7 @@ mixin Secrets {
         {
           "total": int.parse("11111", radix: 2),
           "volatile": false,
+          "type": "bitmap",
         },
       ],
     ),
