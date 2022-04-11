@@ -22,10 +22,13 @@ class SoftDrinksBackground extends StatefulWidget {
 }
 
 class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements Background {
+  late Vector2 canvasSize;
   Timer? longPressTimer;
   Timer? shakeAnimationTimer;
+  Timer? splashAnimationTimer;
   int timeSinceLastShake = 0;
   int timeSinceAnimationStart = 0;
+  bool isSplashing = false;
   double hue = 0;
   String softDrink = "none";
   late ShakeDetector shakeDetector;
@@ -34,28 +37,48 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
   void initState() {
     super.initState();
     ShakeDetector.autoStart(onPhoneShake: () {
-    print("SHAKE");
-    timeSinceLastShake = 0;
-    if (shakeAnimationTimer == null || shakeAnimationTimer?.isActive == false) {
-      shakeAnimationTimer = Timer.periodic(const Duration(milliseconds: 33), (Timer t) {
-        setState(() {
-          timeSinceLastShake += 1;
-          timeSinceAnimationStart += 1;
+      print("SHAKE");
+      timeSinceLastShake = 0;
+      if (!isSplashing && (shakeAnimationTimer == null || shakeAnimationTimer?.isActive == false)) {
+        print("start shake timer");
+        shakeAnimationTimer = Timer.periodic(const Duration(milliseconds: 33), (Timer t) { //1/30 seconds per fire
+          setState(() {
+            timeSinceLastShake += 1;
+            timeSinceAnimationStart += 1;
+          });
+          if (timeSinceLastShake >= 60) {
+            timeSinceAnimationStart = 0;
+            t.cancel();
+            print("stop shake timer");
+          }
+
+          //if shake animation for more than 2.66 seconds (i.e. phone saked around 0.66 -> 1 sec (because it samples every 0.5 secs) seconds straight?)
+          print(timeSinceAnimationStart);
+          if (timeSinceAnimationStart > 80 && (splashAnimationTimer == null || splashAnimationTimer?.isActive == false)) {
+            widget.p.progressSecret(10, 0);
+            setState(() {
+              isSplashing = true;
+            });
+            splashAnimationTimer = Timer(const Duration(seconds: 3), () {
+              setState(() {
+                isSplashing = false;
+              });
+            });
+            timeSinceAnimationStart = 0;
+            t.cancel();
+            print("stop shake timer due to splash");
+          }
         });
-        if (timeSinceLastShake >= 60) {
-          timeSinceAnimationStart = 0;
-          t.cancel();
-        }
-      });
-    }
-  });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance?.addPostFrameCallback((_) {
-    //   _checkSecrets(context);
-    // });
+    canvasSize = Vector2(
+      MediaQuery.of(context).size.width,
+      MediaQuery.of(context).size.height,
+    );
 
     return GestureDetector(
       onTapDown: onBackgroundTapDown,
@@ -65,24 +88,58 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
         hue: hue,
         brightness: getBrightness(hue),
         child: Container(
+            width: double.infinity,
+            height: double.infinity,
             color: Colors.Colors.red[900], //the color is necessary or else taps outside the cookie cannot be registered
-            child: Container(
-              alignment: Alignment.center,
-              child: Transform.rotate(
-                  angle: _calculateAngle(timeSinceAnimationStart),
-                  child: softDrink == "none"
-                      ? Image(
-                          width: 100,
-                          image: AssetImage('assets/images/softDrinks/' + softDrink + '.png'),
-                        )
-                      : ChangeColors(
-                          hue: -hue,
-                          brightness: -getBrightness(hue),
-                          child: Image(
+            child: Stack(
+              children: [
+                Positioned(
+                  left: canvasSize.x / 2 - 100 / 2,
+                  top: canvasSize.y / 2 -
+                      190 / 2 -
+                      80, //! this is the approximate height of the header (specified in MyApp.dart)
+                  width: 100,
+                  height: 190,
+                  child: Transform.rotate(
+                    angle: _calculateAngle(timeSinceAnimationStart),
+                    child: softDrink == "none"
+                        ? Image(
                             width: 100,
+                            height: 190,
                             image: AssetImage('assets/images/softDrinks/' + softDrink + '.png'),
+                          )
+                        : ChangeColors(
+                            hue: -hue,
+                            brightness: -getBrightness(hue),
+                            child: Image(
+                              width: 100,
+                              height: 190,
+                              image: AssetImage('assets/images/softDrinks/' + softDrink + '.png'),
+                            ),
                           ),
-                        )),
+                  ),
+                ),
+                Positioned(
+                  left: canvasSize.x / 2 - 100 / 2,
+                  top: canvasSize.y / 2 -
+                      190 / 2
+                      - 100 //higher than the coke by 100 px
+                      - 80, //! this is the approximate height of the header (specified in MyApp.dart)
+                  width: 100,
+                  height: 100,
+                  child: isSplashing 
+                      ? ChangeColors(
+                        hue: -hue,
+                        brightness: -getBrightness(hue),
+                        child: Image(
+                            width: 100,
+                            height: 100,
+                            image: AssetImage('assets/images/splashs/' + softDrink + '.png'),
+                          ),
+                      )
+                      : Container(),
+                ),
+              ],
             )),
       ),
     );
@@ -158,18 +215,19 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
   void dispose() {
     longPressTimer?.cancel();
     shakeAnimationTimer?.cancel();
+    splashAnimationTimer?.cancel();
     super.dispose();
   }
 
   double _calculateAngle(int timeSinceAnimationStart) {
-    double t = timeSinceAnimationStart%16;
-    print(timeSinceAnimationStart.toString());
-    if(t<=4){
-      return 0.15*t;
-    }else if(t<=12){
-      return 0.75-(t-4)*0.15;
-    }else{
-      return 0.15*(t-16);
+    double t = timeSinceAnimationStart % 16;
+    // print(timeSinceAnimationStart.toString());
+    if (t <= 4) {
+      return 0.15 * t;
+    } else if (t <= 12) {
+      return 0.75 - (t - 4) * 0.15;
+    } else {
+      return 0.15 * (t - 16);
     }
   }
 }
