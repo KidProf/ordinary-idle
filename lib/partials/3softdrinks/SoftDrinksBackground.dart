@@ -32,6 +32,14 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
   double hue = 0;
   String softDrink = "none";
   late ShakeDetector shakeDetector;
+  
+  final softDrinksToInt = {
+    "cola": 0,
+    "fanta": 1,
+    "sprite": 2,
+    "pepsi": 3,
+    "grape": 4,
+  };
 
   @override
   void initState() {
@@ -56,6 +64,7 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
           print(timeSinceAnimationStart);
           if (timeSinceAnimationStart > 80 && (splashAnimationTimer == null || splashAnimationTimer?.isActive == false)) {
             widget.p.progressSecret(10, 0);
+            recordSoftDrinkShake();
             setState(() {
               isSplashing = true;
             });
@@ -195,9 +204,24 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
     }
   }
 
+  String getAndRecordSoftDrink(double hue) {
+    final softDrinkString = getSoftDrink(hue);
+    if(softDrinkString != "none"){
+      widget.p.progressSecret(14, 0,  amount:  softDrinksToInt[softDrinkString]!,isBitmap: true);
+    }
+    return softDrinkString;
+  }
+
+  void recordSoftDrinkShake(){
+    final softDrinkString = getSoftDrink(hue);
+    if(softDrinkString != "none"){
+      widget.p.progressSecret(15, 0, amount: softDrinksToInt[softDrinkString]!,isBitmap: true);
+    }
+  }
+
   void onLongPressUp() {
     longPressTimer?.cancel();
-    var softDrink = getSoftDrink(hue);
+    var softDrink = getAndRecordSoftDrink(hue);
     if (softDrink == "fanta") {
       widget.p.progressSecret(12, 0);
     }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
@@ -349,7 +351,7 @@ mixin Secrets {
     //return 0 if not in current list
   }
 
-  void progressSecret(int id, int stage, {int amount = 1}) {
+  void progressSecret(int id, int stage, {int amount = 1, bool isBitmap = false}) {
     print("entered progressSecret function with id: " + id.toString() + ", stage: " + stage.toString());
     if (secretCompleted(id) || !prerequisiteMet(id)) {
       return; //completed already, so no need tracking OR prerequisite not met, cannot start
@@ -357,7 +359,12 @@ mixin Secrets {
       final CurrentSecretV2 c = currentSecrets.get(id);
       if (c.stage == stage) {
         //no progression if wrong stage, the ! is for null checking, which I think doesnt needed because we are sure it contains the key
-        c.progress += amount;
+        if(!isBitmap){
+          c.progress += amount;
+        }else{
+          c.progress = c.progress | pow(2,amount).toInt();
+        }
+        
         print("current progress: " + c.progress.toString());
         currentSecrets.put(id, c);
         if (c.progress >= c.total) {
@@ -373,7 +380,11 @@ mixin Secrets {
       final CurrentVolatileSecret cv = currentVolatileSecrets[id]!;
       if (cv.stage == stage) {
         //no progression if wrong stage, the ! is for null checking, which I think doesnt needed because we are sure it contains the key
-        cv.progress += amount;
+        if(!isBitmap){
+          cv.progress += amount;
+        }else{
+          cv.progress = cv.progress | pow(2,amount).toInt();
+        }
         print("current progress (volatile): " + cv.progress.toString());
         if (cv.progress >= cv.total) {
           currentVolatileSecrets.remove(id);
