@@ -116,7 +116,7 @@ class SecretsPage extends StatelessWidget {
                       ),
               ),
               const SizedBox(width: 10),
-              Text("+" + s.reward.toString() + "x", style: TextStyle(fontSize: 20, color: color)),
+              Text("x" + s.reward.toString(), style: TextStyle(fontSize: 20, color: color)),
               const SizedBox(width: 10),
             ],
             mainAxisAlignment: MainAxisAlignment.center,

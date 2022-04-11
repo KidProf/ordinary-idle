@@ -230,6 +230,7 @@ class Settings extends StatelessWidget {
     if (!visitedThemes.contains(newTheme)) {
       player.put("visitedThemes", <int>[...visitedThemes, newTheme]);
     }
+    print(visitedThemes);
     player.put('currentTheme', newTheme);
     RestartWidget.restartApp(context);
     onItemTapped(0, context); //switch to home page

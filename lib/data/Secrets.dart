@@ -254,7 +254,7 @@ mixin Secrets {
       exid: "3.5",
       prerequisites: [],
       title: "Discover all",
-      description: "Discover all soft drinks in the game.",
+      description: "Discover all soft drinks in the game. (Cola, Fanta, Sprite, Pepsi, Fanta Grape)",
       theme: 3,
       reward: 1.5,
       progressComponent: [
@@ -269,8 +269,8 @@ mixin Secrets {
       id: 15,
       exid: "3.6",
       prerequisites: [],
-      title: "Discover and shake",
-      description: "Shake all soft drinks in the game.",
+      title: "Shake all",
+      description: "Shake all soft drinks in the game. (Cola, Fanta, Sprite, Pepsi, Fanta Grape)",
       theme: 3,
       reward: 1.5,
       progressComponent: [
@@ -313,7 +313,14 @@ mixin Secrets {
   }
 
   bool secretDoable(int id) {
-    return prerequisiteMet(id) && !secretCompleted(id);
+    final s = getSecretById(id);
+    //if theme is 0, can be accessed anywhere
+    if (s.theme != 0 && s.theme != currentTheme) return false;
+
+    for (var prerequisite in s.prerequisites) {
+      if (!secretCompleted(prerequisite)) return false;
+    }
+    return !secretCompleted(id);
   }
 
   bool secretCompleted(int id) {
@@ -323,10 +330,8 @@ mixin Secrets {
   bool prerequisiteMet(int id) {
     final s = getSecretById(id);
 
-    // print(visitedThemes);
     //if theme is 0, can be accessed anywhere
-    // if (s.theme != 0 && !visitedThemes.contains(s.theme)) return false;
-    if (s.theme != 0 && s.theme != currentTheme) return false;
+    if (s.theme != 0 && !visitedThemes.contains(s.theme)) return false;
 
     for (var prerequisite in s.prerequisites) {
       if (!secretCompleted(prerequisite)) return false;
