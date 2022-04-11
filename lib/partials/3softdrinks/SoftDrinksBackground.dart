@@ -9,7 +9,8 @@ import 'package:flutter/src/material/colors.dart' as Colors;
 import 'package:ordinary_idle/util/ChangeColors.dart';
 import 'package:tuple/tuple.dart';
 import 'package:vector_math/vector_math.dart';
-import 'package:native_device_orientation/native_device_orientation.dart';
+
+import 'package:shake/shake.dart';
 
 class SoftDrinksBackground extends StatefulWidget {
   final Player p;
@@ -21,9 +22,34 @@ class SoftDrinksBackground extends StatefulWidget {
 }
 
 class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements Background {
-  late Timer? longPressTimer = null;
+  Timer? longPressTimer;
+  Timer? shakeAnimationTimer;
+  int timeSinceLastShake = 0;
+  int timeSinceAnimationStart = 0;
   double hue = 0;
   String softDrink = "none";
+  late ShakeDetector shakeDetector;
+
+  @override
+  void initState() {
+    super.initState();
+    ShakeDetector.autoStart(onPhoneShake: () {
+    print("SHAKE");
+    timeSinceLastShake = 0;
+    if (shakeAnimationTimer == null || shakeAnimationTimer?.isActive == false) {
+      shakeAnimationTimer = Timer.periodic(const Duration(milliseconds: 33), (Timer t) {
+        setState(() {
+          timeSinceLastShake += 1;
+          timeSinceAnimationStart += 1;
+        });
+        if (timeSinceLastShake >= 60) {
+          timeSinceAnimationStart = 0;
+          t.cancel();
+        }
+      });
+    }
+  });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,23 +65,25 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
         hue: hue,
         brightness: getBrightness(hue),
         child: Container(
-          color: Colors.Colors.red[900], //the color is necessary or else taps outside the cookie cannot be registered
-          child: Container(
+            color: Colors.Colors.red[900], //the color is necessary or else taps outside the cookie cannot be registered
+            child: Container(
               alignment: Alignment.center,
-              child: softDrink == "none"
-                  ? Image(
-                      width: 100,
-                      image: AssetImage('assets/images/softDrinks/' + softDrink + '.png'),
-                    )
-                  : ChangeColors(
-                      hue: -hue,
-                      brightness: -getBrightness(hue),
-                      child: Image(
-                        width: 100,
-                        image: AssetImage('assets/images/softDrinks/' + softDrink + '.png'),
-                      ),
-                    )),
-        ),
+              child: Transform.rotate(
+                  angle: _calculateAngle(timeSinceAnimationStart),
+                  child: softDrink == "none"
+                      ? Image(
+                          width: 100,
+                          image: AssetImage('assets/images/softDrinks/' + softDrink + '.png'),
+                        )
+                      : ChangeColors(
+                          hue: -hue,
+                          brightness: -getBrightness(hue),
+                          child: Image(
+                            width: 100,
+                            image: AssetImage('assets/images/softDrinks/' + softDrink + '.png'),
+                          ),
+                        )),
+            )),
       ),
     );
   }
@@ -70,7 +98,7 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
   void onLongPress() {
     print("onLongPress");
     widget.p.progressSecret(11, 0);
-    setState((){
+    setState(() {
       softDrink = "none";
     });
     longPressTimer = Timer.periodic(const Duration(milliseconds: 100), (Timer t) {
@@ -113,14 +141,14 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
   void onLongPressUp() {
     longPressTimer?.cancel();
     var softDrink = getSoftDrink(hue);
-    if(softDrink=="fanta"){
+    if (softDrink == "fanta") {
       widget.p.progressSecret(12, 0);
     }
-    if(softDrink=="pepsi"){
-      widget.p.progressSecret(13,0);
+    if (softDrink == "pepsi") {
+      widget.p.progressSecret(13, 0);
     }
 
-    setState((){
+    setState(() {
       this.softDrink = softDrink;
     });
     print("onLongPressUp, hue: " + (hue % 2).toString() + ", softDrink: " + softDrink);
@@ -129,6 +157,19 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
   @override
   void dispose() {
     longPressTimer?.cancel();
+    shakeAnimationTimer?.cancel();
     super.dispose();
+  }
+
+  double _calculateAngle(int timeSinceAnimationStart) {
+    double t = timeSinceAnimationStart%16;
+    print(timeSinceAnimationStart.toString());
+    if(t<=4){
+      return 0.15*t;
+    }else if(t<=12){
+      return 0.75-(t-4)*0.15;
+    }else{
+      return 0.15*(t-16);
+    }
   }
 }
