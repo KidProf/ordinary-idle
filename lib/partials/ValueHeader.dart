@@ -19,6 +19,7 @@ class ValueHeader extends StatelessWidget {
           width: double.infinity,
           child: Wrap(
             children: [
+              SizedBox(width: 50),
               Row(
                 children: [
                   const Image(image: AssetImage('assets/images/coin.png'), width: 30, height: 30),
@@ -41,7 +42,7 @@ class ValueHeader extends StatelessWidget {
                 ),
               ),
             ],
-            alignment: WrapAlignment.spaceAround,
+            alignment: WrapAlignment.spaceBetween,
             direction: Axis.horizontal,
           ),
         ),
