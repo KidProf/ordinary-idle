@@ -51,12 +51,12 @@ mixin Secrets {
     // CookieBackground.dart, check if it taps outside the cookie
     Secret(
       id: 2,
-      exid: "1.1",
+      exid: "3.1",
       prerequisites: [],
       title: "More space to tap",
       description:
           "Tapping outside the cookie but inside the canvas 10 times.\n\nAs the cookie will move around and even change in size, I think making taps outside the cookie count is a good idea.",
-      theme: 1,
+      theme: 3,
       reward: 1.3,
       progressComponent: [
         {
@@ -68,11 +68,11 @@ mixin Secrets {
 
     Secret(
       id: 3,
-      exid: "1.2",
+      exid: "3.2",
       prerequisites: [],
       title: "Where did it go?",
       description: "Swipe the cookie up until it disappears from the screen.",
-      theme: 1,
+      theme: 3,
       reward: 1.5,
       progressComponent: [
         {
@@ -83,11 +83,11 @@ mixin Secrets {
     ),
     Secret(
       id: 4,
-      exid: "1.3",
+      exid: "3.3",
       prerequisites: [3],
       title: "Diode",
       description: "Rotate the cookie anticlockwise for 4 cycles.",
-      theme: 1,
+      theme: 3,
       reward: 1.5,
       progressComponent: [
         {
@@ -191,11 +191,11 @@ mixin Secrets {
     ),
     Secret(
       id: 10,
-      exid: "3.1",
+      exid: "1.1",
       prerequisites: [],
       title: "Shake Shake",
       description: "Shake the soft drink",
-      theme: 3,
+      theme: 1,
       reward: 1.3,
       progressComponent: [
         {
@@ -206,11 +206,11 @@ mixin Secrets {
     ),
     Secret(
       id: 11,
-      exid: "3.2",
+      exid: "1.2",
       prerequisites: [],
       title: "Colourful",
       description: "Long tap the background to change colour",
-      theme: 3,
+      theme: 1,
       reward: 1.3,
       progressComponent: [
         {
@@ -221,11 +221,11 @@ mixin Secrets {
     ),
     Secret(
       id: 12,
-      exid: "3.3",
+      exid: "1.3",
       prerequisites: [],
       title: "Fanta",
       description: "Change the colour of the soft drink to orange.",
-      theme: 3,
+      theme: 1,
       reward: 1.3,
       progressComponent: [
         {
@@ -236,11 +236,11 @@ mixin Secrets {
     ),
     Secret(
       id: 13,
-      exid: "3.4",
+      exid: "1.4",
       prerequisites: [],
       title: "Ooh! Our competitor!",
       description: "Change the colour of the soft drink to blue (Pepsi).",
-      theme: 3,
+      theme: 1,
       reward: 1.3,
       progressComponent: [
         {
@@ -251,11 +251,11 @@ mixin Secrets {
     ),
     Secret(
       id: 14,
-      exid: "3.5",
+      exid: "1.5",
       prerequisites: [],
       title: "Discover all",
       description: "Discover all soft drinks in the game. (Cola, Fanta, Sprite, Pepsi, Fanta Grape)",
-      theme: 3,
+      theme: 1,
       reward: 1.5,
       progressComponent: [
         {
@@ -267,11 +267,11 @@ mixin Secrets {
     ),
     Secret(
       id: 15,
-      exid: "3.6",
+      exid: "1.6",
       prerequisites: [],
       title: "Shake all",
       description: "Shake all soft drinks in the game. (Cola, Fanta, Sprite, Pepsi, Fanta Grape)",
-      theme: 3,
+      theme: 1,
       reward: 1.5,
       progressComponent: [
         {
@@ -289,16 +289,16 @@ mixin Secrets {
       "description": "Can be discovered no matter which theme you are in",
     },
     1: {
-      "title": "Cookie",
-      "description": "A remix of the classic cookie clicker",
+      "title": "Soft Drinks",
+      "description": "Source of evil",
     },
     2: {
       "title": "Tap Count",
       "description": "A less graphic-intensive theme",
     },
     3: {
-      "title": "Soft Drinks",
-      "description": "Source of evil",
+      "title": "Cookie",
+      "description": "A remix of the classic cookie clicker",
     },
   };
 
@@ -364,12 +364,12 @@ mixin Secrets {
       final CurrentSecretV2 c = currentSecrets.get(id);
       if (c.stage == stage) {
         //no progression if wrong stage, the ! is for null checking, which I think doesnt needed because we are sure it contains the key
-        if(!isBitmap){
+        if (!isBitmap) {
           c.progress += amount;
-        }else{
-          c.progress = c.progress | pow(2,amount).toInt();
+        } else {
+          c.progress = c.progress | pow(2, amount).toInt();
         }
-        
+
         print("current progress: " + c.progress.toString());
         currentSecrets.put(id, c);
         if (c.progress >= c.total) {
@@ -385,10 +385,10 @@ mixin Secrets {
       final CurrentVolatileSecret cv = currentVolatileSecrets[id]!;
       if (cv.stage == stage) {
         //no progression if wrong stage, the ! is for null checking, which I think doesnt needed because we are sure it contains the key
-        if(!isBitmap){
+        if (!isBitmap) {
           cv.progress += amount;
-        }else{
-          cv.progress = cv.progress | pow(2,amount).toInt();
+        } else {
+          cv.progress = cv.progress | pow(2, amount).toInt();
         }
         print("current progress (volatile): " + cv.progress.toString());
         if (cv.progress >= cv.total) {

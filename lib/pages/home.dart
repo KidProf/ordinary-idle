@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ordinary_idle/data/Player.dart';
-import 'package:ordinary_idle/partials/1cookie/CookieBackground.dart';
+import 'package:ordinary_idle/partials/1softdrinks/SoftDrinksBackground.dart';
 import 'package:ordinary_idle/partials/2tapcount/TapCountBackground.dart';
-import 'package:ordinary_idle/partials/3softdrinks/SoftDrinksBackground.dart';
+import 'package:ordinary_idle/partials/3cookie/CookieBackground.dart';
 import 'package:ordinary_idle/partials/ShopComponent.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
 
@@ -19,16 +19,16 @@ class Home extends StatelessWidget {
     var backgroundColor;
     switch (p.getCurrentTheme()) {
       case 1:
-        currentBackground = CookieBackground(p);
-        backgroundColor = Colors.amber[100];
+        currentBackground = SoftDrinksBackground(p);
+        backgroundColor = Colors.grey[300];
         break;
       case 2:
         currentBackground = TapCountBackground(p);
         backgroundColor = Colors.green[100];
         break;
       case 3:
-        currentBackground = SoftDrinksBackground(p);
-        backgroundColor = Colors.grey[300];
+        currentBackground = CookieBackground(p);
+        backgroundColor = Colors.amber[100];
         break;
       default:
         currentBackground = CookieBackground(p);

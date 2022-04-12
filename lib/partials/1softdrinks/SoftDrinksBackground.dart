@@ -32,7 +32,7 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
   double hue = 0;
   String softDrink = "none";
   late ShakeDetector shakeDetector;
-  
+
   final softDrinksToInt = {
     "cola": 0,
     "fanta": 1,
@@ -49,7 +49,8 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
       timeSinceLastShake = 0;
       if (!isSplashing && (shakeAnimationTimer == null || shakeAnimationTimer?.isActive == false)) {
         print("start shake timer");
-        shakeAnimationTimer = Timer.periodic(const Duration(milliseconds: 33), (Timer t) { //1/30 seconds per fire
+        shakeAnimationTimer = Timer.periodic(const Duration(milliseconds: 33), (Timer t) {
+          //1/30 seconds per fire
           setState(() {
             timeSinceLastShake += 1;
             timeSinceAnimationStart += 1;
@@ -62,7 +63,8 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
 
           //if shake animation for more than 2.66 seconds (i.e. phone saked around 0.66 -> 1 sec (because it samples every 0.5 secs) seconds straight?)
           print(timeSinceAnimationStart);
-          if (timeSinceAnimationStart > 80 && (splashAnimationTimer == null || splashAnimationTimer?.isActive == false)) {
+          if (timeSinceAnimationStart > 80 &&
+              (splashAnimationTimer == null || splashAnimationTimer?.isActive == false)) {
             widget.p.progressSecret(10, 0);
             recordSoftDrinkShake();
             setState(() {
@@ -131,21 +133,22 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
                 Positioned(
                   left: canvasSize.x / 2 - 100 / 2,
                   top: canvasSize.y / 2 -
-                      190 / 2
-                      - 100 //higher than the coke by 100 px
-                      - 80, //! this is the approximate height of the header (specified in MyApp.dart)
+                      190 / 2 -
+                      100 //higher than the coke by 100 px
+                      -
+                      80, //! this is the approximate height of the header (specified in MyApp.dart)
                   width: 100,
                   height: 100,
-                  child: isSplashing 
+                  child: isSplashing
                       ? ChangeColors(
-                        hue: -hue,
-                        brightness: -getBrightness(hue),
-                        child: Image(
+                          hue: -hue,
+                          brightness: -getBrightness(hue),
+                          child: Image(
                             width: 100,
                             height: 100,
                             image: AssetImage('assets/images/splashs/' + softDrink + '.png'),
                           ),
-                      )
+                        )
                       : Container(),
                 ),
               ],
@@ -206,16 +209,16 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
 
   String getAndRecordSoftDrink(double hue) {
     final softDrinkString = getSoftDrink(hue);
-    if(softDrinkString != "none"){
-      widget.p.progressSecret(14, 0,  amount:  softDrinksToInt[softDrinkString]!,isBitmap: true);
+    if (softDrinkString != "none") {
+      widget.p.progressSecret(14, 0, amount: softDrinksToInt[softDrinkString]!, isBitmap: true);
     }
     return softDrinkString;
   }
 
-  void recordSoftDrinkShake(){
+  void recordSoftDrinkShake() {
     final softDrinkString = getSoftDrink(hue);
-    if(softDrinkString != "none"){
-      widget.p.progressSecret(15, 0, amount: softDrinksToInt[softDrinkString]!,isBitmap: true);
+    if (softDrinkString != "none") {
+      widget.p.progressSecret(15, 0, amount: softDrinksToInt[softDrinkString]!, isBitmap: true);
     }
   }
 
