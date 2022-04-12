@@ -23,6 +23,8 @@ class SecretsPage extends StatelessWidget {
                 const SizedBox(height: 10),
                 const Text("Secrets", style: titleStyle),
                 const SizedBox(height: 10),
+                const Text("Of course this is NOT just an idle game. There are numerous easter eggs hidden in the app. You will gain multipliers to your income as a reward for finding them. Good luck!"),
+                const SizedBox(height: 10),
                 ..._printSecrets(p, context),
               ],
               spacing: 0,

@@ -43,7 +43,7 @@ mixin Achievements {
     },
     {
       "title": "Endgame",
-      "threshold": 10000000000.0, //1e10
+      "threshold": 1000000000000.0, //1e12
       "reward": 1,
     },
   ];

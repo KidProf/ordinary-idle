@@ -24,6 +24,9 @@ class AchievementsPage extends StatelessWidget {
               children: [
                 const SizedBox(height: 10),
                 const Text("Achievements", style: titleStyle),
+                const SizedBox(height: 10),
+                const Text("These are obvious goals of the idle game, for example reaching certain amount in money. It is also here to tell you the secrets are not about doing these things below."),
+                const SizedBox(height: 10),
                 const Text(
                     "NOTE: The trophies currently have no use other than making you feel proud of yourself. Its use will be introduced later, but it will definitely take some time."),
                 const SizedBox(height: 10),
