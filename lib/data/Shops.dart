@@ -17,6 +17,7 @@ mixin Shops {
   double updateCoinsPerSecond();
   bool subtractCoins(double x);
   bool possibleByShopId(int id, {int? level});
+  int updateAchievementLevel(int id, num param);
 
   final Box purchases = Hive.box("purchases");
 
@@ -179,6 +180,7 @@ mixin Shops {
     level += 1;
     purchases.put(id, level);
     s.gain.callback(level);
+    updateAchievementLevel(4,shops.where((s) => s.type != "special").fold(0,(xs, x)=> xs + getLevelById(x.id)));
     return true;
   }
 

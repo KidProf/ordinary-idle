@@ -51,6 +51,9 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
         print("start shake timer");
         shakeAnimationTimer = Timer.periodic(const Duration(milliseconds: 33), (Timer t) {
           //1/30 seconds per fire
+          if(!mounted){
+            t.cancel();
+          }
           setState(() {
             timeSinceLastShake += 1;
             timeSinceAnimationStart += 1;
@@ -71,6 +74,9 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
               isSplashing = true;
             });
             splashAnimationTimer = Timer(const Duration(seconds: 3), () {
+              if(!mounted){
+            t.cancel();
+          }
               setState(() {
                 isSplashing = false;
               });

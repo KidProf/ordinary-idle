@@ -44,7 +44,7 @@ class DetailShop extends StatelessWidget {
                     ),
                     subtitle: Container(
                       constraints: BoxConstraints(
-                        minHeight: 60,
+                        minHeight: 75,
                       ),
                       child: Text(
                         s.descriptionI(level),
@@ -87,6 +87,15 @@ class DetailShop extends StatelessWidget {
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),
+                        Row(
+                          children: [
+                            Icon(Icons.arrow_upward, color: Colors.black, size: 10),
+                            const SizedBox(width: 5),
+                            Text("Level "+(p.getLevelById(sid)+1).toString(),style: TextStyle(fontSize: 10),),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+                        
                       ]),
                     ),
                   ),

@@ -37,10 +37,15 @@ mixin Achievements {
       "reward": 1,
     },
     {
-      "title": "Prestige Unlocked",
+      "title": "Change Theme Unlocked", //TEMP
       "threshold": 1000000.0, //1e6
       "reward": 1,
     },
+    // {
+    //   "title": "Prestige Unlocked",
+    //   "threshold": 10000000.0, //1e7
+    //   "reward": 1,
+    // },
     {
       "title": "Endgame",
       "threshold": 1000000000000.0, //1e12
@@ -50,13 +55,13 @@ mixin Achievements {
 
   static final _tapChildren = [
     {
-      "title": "Amateur",
+      "title": "Tapping Amateur",
       "threshold": 100,
       "reward": 1,
     },
     {
       "title": "Broken Screen",
-      "threshold": 10000,
+      "threshold": 2000,
       "reward": 1,
     },
   ];
@@ -70,6 +75,24 @@ mixin Achievements {
     {
       "title": "Second Time",
       "threshold": 2,
+      "reward": 1,
+    },
+  ];
+
+  static final _buyChildren = [
+    {
+      "title": "Small spender",
+      "threshold": 20,
+      "reward": 1,
+    },
+    {
+      "title": "Big spender",
+      "threshold": 100,
+      "reward": 1,
+    },
+    {
+      "title": "Huge spender",
+      "threshold": 200,
       "reward": 1,
     },
   ];
@@ -95,24 +118,37 @@ mixin Achievements {
       descriptionI: (int i) {
         return "Tap " +
             _tapChildren[i]["threshold"].toString() +
-            " time. The reward is " +
+            " "+(_tapChildren[i]["threshold"] == 1 ? " time." : " times.")+" The reward is " +
             _tapChildren[i]["reward"].toString() +
             (_tapChildren[i]["reward"] == 1 ? " trophy." : " trophies.");
       },
       children: _tapChildren,
     ),
+    // AchievementType(
+    //   id: 3,
+    //   exid: "prestige",
+    //   title: "Prestige",
+    //   descriptionI: (int i) {
+    //     return "Prestige " +
+    //         _prestigeChildren[i]["threshold"].toString() +
+    //         " "+(_prestigeChildren[i]["threshold"] == 1 ? " time." : " times.")+" The reward is " +
+    //         _prestigeChildren[i]["reward"].toString() +
+    //         (_prestigeChildren[i]["reward"] == 1 ? " trophy." : " trophies.");
+    //   },
+    //   children: _prestigeChildren,
+    // ),
     AchievementType(
-      id: 3,
-      exid: "prestige",
-      title: "Prestige",
+      id: 4,
+      exid: "buy",
+      title: "Upgrades Purchased",
       descriptionI: (int i) {
-        return "Prestige " +
-            _prestigeChildren[i]["threshold"].toString() +
-            " times. The reward is " +
-            _prestigeChildren[i]["reward"].toString() +
-            (_prestigeChildren[i]["reward"] == 1 ? " trophy." : " trophies.");
+        return "Purchase " +
+            _buyChildren[i]["threshold"].toString() +
+            " "+(_buyChildren[i]["threshold"] == 1 ? " upgrades." : " times.")+" The reward is " +
+            _buyChildren[i]["reward"].toString() +
+            (_buyChildren[i]["reward"] == 1 ? " trophy." : " trophies.");
       },
-      children: _prestigeChildren,
+      children: _buyChildren,
     ),
   ];
 
