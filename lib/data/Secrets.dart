@@ -403,7 +403,7 @@ mixin Secrets {
     } else {
       final s = getSecretById(id);
       if (s.progressComponent[0]["total"] > amount) {
-        _initNewSecret(id, 0, amount: amount);
+        _initNewSecret(id, 0, amount: isBitmap ? pow(2, amount).toInt() : amount);
       } else if (s.progressComponent.length <= 1) {
         _completeSecret(id);
       } else {

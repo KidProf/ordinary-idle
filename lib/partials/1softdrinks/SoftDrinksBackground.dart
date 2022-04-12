@@ -225,6 +225,7 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
   void onLongPressUp() {
     longPressTimer?.cancel();
     var softDrink = getAndRecordSoftDrink(hue);
+    print("onLongPressUp, softDrink: " + softDrink);
     if (softDrink == "fanta") {
       widget.p.progressSecret(12, 0);
     }
@@ -235,7 +236,6 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> implements 
     setState(() {
       this.softDrink = softDrink;
     });
-    print("onLongPressUp, hue: " + (hue % 2).toString() + ", softDrink: " + softDrink);
   }
 
   @override
