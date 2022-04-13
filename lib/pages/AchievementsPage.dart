@@ -59,16 +59,17 @@ class AchievementsPage extends StatelessWidget {
       }
       for (var i = 0; i < aType.children.length; i++) {
         //cannot use map because the index of the element has to be known
-        final formattedProgress = (p.getAchievementProgress(aType.id,i)*100).toInt().toString()+"%";
-        widgetsType.add(_printAchievement(p, context, aType.children[i], aType.descriptionI(i), currentLevel >= i, formattedProgress));
+        final formattedProgress = (p.getAchievementProgress(aType.id, i) * 100).toInt().toString() + "%";
+        widgetsType.add(_printAchievement(
+            p, context, aType.children[i], aType.descriptionI(i), currentLevel >= i, formattedProgress));
       }
       return widgetsType;
     });
     return widgets.expand((x) => x).toList();
   }
 
-  Widget _printAchievement(
-      Secrets pSecrets, BuildContext context, Map<String, dynamic> child, String description, bool completed, String formattedProgress) {
+  Widget _printAchievement(Secrets pSecrets, BuildContext context, Map<String, dynamic> child, String description,
+      bool completed, String formattedProgress) {
     Color color = completed ? Colors.black : Colors.black38;
     return GestureDetector(
         child: Container(
@@ -91,9 +92,10 @@ class AchievementsPage extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               )),
               const SizedBox(width: 10),
-              Text(completed ? child["reward"].toString() : formattedProgress, style: TextStyle(fontSize: 20, color: color)),
+              Text(completed ? child["reward"].toString() : formattedProgress,
+                  style: TextStyle(fontSize: 20, color: color)),
               const SizedBox(width: 5),
-              Icon(CustomIcons.trophy, size: 20, color: completed ? Colors.amber[800] :  Colors.grey),
+              Icon(CustomIcons.trophy, size: 20, color: completed ? Colors.amber[800] : Colors.grey),
               const SizedBox(width: 10),
             ],
             mainAxisAlignment: MainAxisAlignment.center,

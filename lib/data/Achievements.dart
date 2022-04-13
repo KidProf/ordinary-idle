@@ -17,8 +17,7 @@ mixin Achievements {
   final Box currentSecrets = Hive.box("currentSecretsV2");
   late Map<dynamic, dynamic> achievementsLevel = player.get("achievementsLevel", defaultValue: <dynamic,
       dynamic>{}); //should be Map<int,int> but Hive can only store it in the form of <dynamic, dynamic>
-  late Map<dynamic, dynamic> achievementsParam = player.get("achievementsParam", defaultValue: <dynamic,
-      dynamic>{});
+  late Map<dynamic, dynamic> achievementsParam = player.get("achievementsParam", defaultValue: <dynamic, dynamic>{});
   //ctor
   @protected
   void initAchievements(fToast) {
@@ -182,9 +181,9 @@ mixin Achievements {
     return currentLevel;
   }
 
-  int incrementAchievementParam(int id){
+  int incrementAchievementParam(int id) {
     //Money.dart interface
-    num newParam = getAchievementParam(id)+1;
+    num newParam = getAchievementParam(id) + 1;
     return updateAchievementParam(id, newParam);
   }
 
