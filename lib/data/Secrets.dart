@@ -33,19 +33,20 @@ mixin Secrets {
     //referenced in:
     //main.dart: check if it is completed before opening secrets page
     Secret(
-        id: 1,
-        exid: "0.1",
-        prerequisites: [],
-        title: "You are now a developer!",
-        description: "Tapping the secret button 8 times.",
-        theme: 0,
-        reward: 1.5,
-        progressComponent: [
-          {
-            "total": 8,
-            "volatile": true,
-          },
-        ]),
+      id: 1,
+      exid: "0.1",
+      prerequisites: [],
+      title: "You are now a developer!",
+      description: "Tapping the secret button 8 times.",
+      theme: 0,
+      reward: 1.5,
+      progressComponent: [
+        {
+          "total": 8,
+          "volatile": true,
+        },
+      ],
+    ),
 
     //referenced in:
     // CookieBackground.dart, check if it taps outside the cookie
@@ -278,6 +279,23 @@ mixin Secrets {
           "total": int.parse("11111", radix: 2),
           "volatile": false,
           "type": "bitmap",
+        },
+      ],
+    ),
+    //referenced in:
+    //HotbarShop.dart, DetailShop.dart: complete once user long press any purchase button with enough money
+    Secret(
+      id: 16,
+      exid: "0.2",
+      prerequisites: [],
+      title: "Buy until bankrupt",
+      description: "Long press any shop button to purcahse until you run out of money.",
+      theme: 0,
+      reward: 1.3,
+      progressComponent: [
+        {
+          "total": 1,
+          "volatile": true,
         },
       ],
     ),

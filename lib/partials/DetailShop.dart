@@ -71,6 +71,15 @@ class DetailShop extends StatelessWidget {
                           onPressed: () {
                             p.purchaseItem(sid);
                           },
+                          onLongPress: () {
+                            var levelsBought = 0;
+                            while (p.purchaseItem(sid)) {
+                              levelsBought += 1;
+                            }
+                            if (levelsBought > 0) {
+                              p.progressSecret(16, 0);
+                            }
+                          },
                         ),
                         Row(
                           children: [
@@ -91,11 +100,13 @@ class DetailShop extends StatelessWidget {
                           children: [
                             Icon(Icons.arrow_upward, color: Colors.black, size: 10),
                             const SizedBox(width: 5),
-                            Text("Level "+(p.getLevelById(sid)+1).toString(),style: TextStyle(fontSize: 10),),
+                            Text(
+                              "Level " + (p.getLevelById(sid) + 1).toString(),
+                              style: TextStyle(fontSize: 10),
+                            ),
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),
-                        
                       ]),
                     ),
                   ),

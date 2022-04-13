@@ -180,7 +180,7 @@ mixin Shops {
     level += 1;
     purchases.put(id, level);
     s.gain.callback(level);
-    updateAchievementLevel(4,shops.where((s) => s.type != "special").fold(0,(xs, x)=> xs + getLevelById(x.id)));
+    updateAchievementLevel(4, shops.where((s) => s.type != "special").fold(0, (xs, x) => xs + getLevelById(x.id)));
     return true;
   }
 

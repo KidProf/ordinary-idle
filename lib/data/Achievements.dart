@@ -118,7 +118,8 @@ mixin Achievements {
       descriptionI: (int i) {
         return "Tap " +
             _tapChildren[i]["threshold"].toString() +
-            " "+(_tapChildren[i]["threshold"] == 1 ? " time." : " times.")+" The reward is " +
+            (_tapChildren[i]["threshold"] == 1 ? " time." : " times.") +
+            " The reward is " +
             _tapChildren[i]["reward"].toString() +
             (_tapChildren[i]["reward"] == 1 ? " trophy." : " trophies.");
       },
@@ -131,7 +132,7 @@ mixin Achievements {
     //   descriptionI: (int i) {
     //     return "Prestige " +
     //         _prestigeChildren[i]["threshold"].toString() +
-    //         " "+(_prestigeChildren[i]["threshold"] == 1 ? " time." : " times.")+" The reward is " +
+    //         (_prestigeChildren[i]["threshold"] == 1 ? " time." : " times.")+" The reward is " +
     //         _prestigeChildren[i]["reward"].toString() +
     //         (_prestigeChildren[i]["reward"] == 1 ? " trophy." : " trophies.");
     //   },
@@ -144,7 +145,8 @@ mixin Achievements {
       descriptionI: (int i) {
         return "Purchase " +
             _buyChildren[i]["threshold"].toString() +
-            " "+(_buyChildren[i]["threshold"] == 1 ? " upgrades." : " times.")+" The reward is " +
+            (_buyChildren[i]["threshold"] == 1 ? " upgrade." : " upgrades.") +
+            " The reward is " +
             _buyChildren[i]["reward"].toString() +
             (_buyChildren[i]["reward"] == 1 ? " trophy." : " trophies.");
       },

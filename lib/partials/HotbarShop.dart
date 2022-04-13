@@ -67,6 +67,15 @@ class HotbarShop extends StatelessWidget {
                 onPressed: () {
                   p.purchaseItem(id);
                 },
+                onLongPress: () {
+                  var levelsBought = 0;
+                  while (p.purchaseItem(id)) {
+                    levelsBought += 1;
+                  }
+                  if (levelsBought > 0) {
+                    p.progressSecret(16, 0);
+                  }
+                },
               );
             }),
       ),
