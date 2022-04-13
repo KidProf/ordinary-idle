@@ -7,12 +7,13 @@ import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/data/Shops.dart';
 
 class Player with Money, Shops, Secrets, Achievements {
-  late FToast fToast;
+  final FToast fToast;
+  final Function addAlert;
 
-  Player(this.fToast) {
+  Player(this.fToast, this.addAlert) {
     initShops();
     initMoney();
-    initSecrets(fToast);
-    initAchievements(fToast);
+    initSecrets(fToast, addAlert);
+    initAchievements(fToast, addAlert);
   }
 }

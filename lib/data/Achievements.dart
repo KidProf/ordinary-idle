@@ -12,6 +12,7 @@ mixin Achievements {
   addTrophies(int t);
 
   late FToast fToast;
+  late Function addAlert;
 
   final Box player = Hive.box("player");
   final Box currentSecrets = Hive.box("currentSecretsV2");
@@ -20,8 +21,9 @@ mixin Achievements {
   late Map<dynamic, dynamic> achievementsParam = player.get("achievementsParam", defaultValue: <dynamic, dynamic>{});
   //ctor
   @protected
-  void initAchievements(fToast) {
+  void initAchievements(fToast, addAlert) {
     this.fToast = fToast;
+    this.addAlert = addAlert;
   }
 
   //the first one is level 0, if you have not unlocked the first one you will be in level -1
@@ -171,12 +173,14 @@ mixin Achievements {
     int currentLevel = getAchievementLevel(id);
     final aType = getAchievementTypeById(id);
     while (aType.children.length > currentLevel + 1 && param >= aType.children[currentLevel + 1]["threshold"]) {
+      //LEVEL UP
       currentLevel++;
       print("Achievement unlocked with id: " + id.toString() + ", level: " + currentLevel.toString());
       achievementsLevel[id] = currentLevel;
       player.put("achievementsLevel", achievementsLevel);
       addTrophies(int.parse(aType.children[currentLevel]["reward"].toString()));
       MyToast.showAchievementToast(fToast, "Secret Unlocked! ${aType.children[currentLevel]["title"]}");
+      addAlert(2);
     }
     return currentLevel;
   }

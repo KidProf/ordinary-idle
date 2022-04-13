@@ -13,6 +13,7 @@ mixin Secrets {
   double updateSecretsMultiplier();
 
   late FToast fToast;
+  late Function addAlert;
 
   final Box player = Hive.box("player");
   final Box currentSecrets = Hive.box("currentSecretsV2");
@@ -24,17 +25,18 @@ mixin Secrets {
 
   //ctor
   @protected
-  void initSecrets(fToast) {
+  void initSecrets(fToast, addAlert) {
     this.fToast = fToast;
+    this.addAlert = addAlert;
   }
 
   //TODO: Gen from CSV
   static final secrets = [
     //referenced in:
-    //main.dart: check if it is completed before opening secrets page
+    //MyApp.dart
     Secret(
       id: 1,
-      exid: "0.1",
+      exid: "0.2",
       prerequisites: [],
       title: "You are now a developer!",
       description: "Tapping the secret button 8 times.",
@@ -49,7 +51,7 @@ mixin Secrets {
     ),
 
     //referenced in:
-    // CookieBackground.dart, check if it taps outside the cookie
+    // CookieBackground.dart
     Secret(
       id: 2,
       exid: "3.1",
@@ -286,10 +288,27 @@ mixin Secrets {
     //HotbarShop.dart, DetailShop.dart: complete once user long press any purchase button with enough money
     Secret(
       id: 16,
-      exid: "0.2",
+      exid: "0.3",
       prerequisites: [],
       title: "Buy until bankrupt",
       description: "Long press any shop button to purcahse until you run out of money.",
+      theme: 0,
+      reward: 1.3,
+      progressComponent: [
+        {
+          "total": 1,
+          "volatile": true,
+        },
+      ],
+    ),
+    //referenced in:
+    //MyApp.dart
+    Secret(
+      id: 17,
+      exid: "0.1",
+      prerequisites: [],
+      title: "Stay here",
+      description: "Stayed in the secrets page for 5 seconds.",
       theme: 0,
       reward: 1.3,
       progressComponent: [
@@ -461,6 +480,7 @@ mixin Secrets {
     completedSecrets.add(id);
     player.put("completedSecrets", completedSecrets);
     MyToast.showSecretToast(fToast, "Secret Unlocked! ${s.title}");
+    addAlert(1);
     updateSecretsMultiplier();
   }
 

@@ -59,17 +59,19 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     Settings(p, _onItemTapped),
   ];
   int _selectedIndex = 0;
+  List<int> _alerts = [];
   int developerSecretProgress = 0;
   late FToast fToast;
   late Timer? idleTimer;
   Timer? developerSecretResetTimer;
+  Timer? stayHereSecretTimer;
 
   @override
   void initState() {
     super.initState();
     fToast = FToast();
     fToast.init(context);
-    p = Player(fToast);
+    p = Player(fToast, _addAlert);
     //initialize idle timer
     idleTimer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       p.addIdleCoins();
@@ -77,23 +79,42 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 
   void _onItemTapped(int index, BuildContext context) {
-    if (index == 1 && !p.secretCompleted(1)) {
-      developerSecretProgress+=1;
-      developerSecretResetTimer?.cancel();
-      developerSecretResetTimer = Timer(Duration(seconds: 15),(){
+    if (index == 1) {
+      if (!p.secretCompleted(1)) {
+        developerSecretProgress += 1;
+        developerSecretResetTimer?.cancel();
+        developerSecretResetTimer = Timer(Duration(seconds: 15), () {
           print("timer fired, reset progress of developer secret");
           developerSecretProgress = 0;
-      });
-      if(developerSecretProgress==8){
-        p.progressSecret(1, 0);
-      }else if(developerSecretProgress >=3){
-        fToast.removeCustomToast();
-        MyToast.showBottomToast(fToast, "You are now ${8 - developerSecretProgress} steps away from revealing a secret");
+        });
+        if (developerSecretProgress == 8) {
+          p.progressSecret(1, 0);
+        } else if (!p.secretCompleted(1) && developerSecretProgress >= 3) {
+          fToast.removeCustomToast();
+          MyToast.showBottomToast(
+              fToast, "You are now ${8 - developerSecretProgress} steps away from revealing a secret");
+        }
+      }
+      if (!p.secretCompleted(17)) {
+        if (stayHereSecretTimer == null || !stayHereSecretTimer!.isActive) {
+          developerSecretResetTimer = Timer(Duration(seconds: 5), () {
+            p.progressSecret(17, 0);
+          });
+        }
       }
     }
     setState(() {
       _selectedIndex = index;
+      _alerts = _alerts.where((x) => x!=index).toList();
     });
+  }
+
+  void _addAlert(int index) {
+    if (!_alerts.contains(index) && !(index == _selectedIndex)) {
+      setState(() {
+        _alerts = [..._alerts,index];
+      });
+    }
   }
 
   // child: ValueListenableBuilder<Box>(
@@ -129,23 +150,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, size: 30),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.lock, size: 25),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CustomIcons.trophy, size: 20),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings, size: 25),
-            label: "",
-          ),
+        items: <BottomNavigationBarItem>[
+          _BottomIcon(index: 0, iconData: Icons.home, size: 30),
+          _BottomIcon(index: 1, iconData: Icons.lock, size: 25),
+          _BottomIcon(index: 2, iconData: CustomIcons.trophy, size: 20),
+          _BottomIcon(index: 3, iconData: Icons.settings, size: 25),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
@@ -161,6 +170,34 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   void dispose() {
     idleTimer?.cancel();
     developerSecretResetTimer?.cancel();
+    stayHereSecretTimer?.cancel();
     super.dispose();
+  }
+
+  BottomNavigationBarItem _BottomIcon({required int index, required IconData iconData, required double size}) {
+    return BottomNavigationBarItem(
+      icon: Container(
+        height: 40,
+        width: 40,
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              child: Icon(iconData, size: size),
+              top: (40 - size) / 2,
+              left: (40 - size) / 2,
+            ),
+            _alerts.contains(index)
+                ? Positioned(
+                    // draw a red marble
+                    top: 0.0,
+                    right: 0.0,
+                    child: Icon(Icons.brightness_1, size: 12.0, color: Colors.redAccent),
+                  )
+                : SizedBox(),
+          ],
+        ),
+      ),
+      label: "",
+    );
   }
 }
