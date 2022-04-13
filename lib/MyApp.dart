@@ -72,10 +72,16 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     fToast = FToast();
     fToast.init(context);
     p = Player(fToast, _addAlert);
+
     //initialize idle timer
     idleTimer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       p.addIdleCoins();
     });
+    
+    //alert user to open secrets page if they haven't complete secret 0.1
+    if(!p.secretCompleted(17)){
+      _addAlert(1);
+    }
   }
 
   void _onItemTapped(int index, BuildContext context) {

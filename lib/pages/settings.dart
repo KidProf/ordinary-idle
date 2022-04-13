@@ -147,7 +147,7 @@ class Settings extends StatelessWidget {
                   }
                 },
                 onLongPress: () async {
-                  Fluttertoast.showToast(msg: "This is a temporary function for us to switch between themes easily.");
+                  Fluttertoast.showToast(msg: "This is a temporary function for testers to switch between themes easily.");
                   await _changeTheme(context);
                 },
                 child: Text("Change Theme"),
