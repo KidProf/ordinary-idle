@@ -6,10 +6,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 mixin Util {
   static String doubleRepresentation(double value) {
-    if (value < 100000) {
-      //10^5
+    if (value < 1000) {
+      //10^3
       final f = NumberFormat("##0.00", "en_GB");
       return f.format(_roundDouble(value, 2));
+    } else if (value < 100000) {
+      //10^5
+      final f = NumberFormat("##0", "en_GB");
+      return f.format(_roundDouble(value, 0));
     } else {
       return value
           .toStringAsExponential(3)

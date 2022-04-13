@@ -19,7 +19,6 @@ class ValueHeader extends StatelessWidget {
           width: double.infinity,
           child: Wrap(
             children: [
-              SizedBox(width: 50),
               Row(
                 children: [
                   const Image(image: AssetImage('assets/images/coin.png'), width: 30, height: 30),
