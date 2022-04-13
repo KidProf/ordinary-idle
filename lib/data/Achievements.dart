@@ -17,7 +17,8 @@ mixin Achievements {
   final Box currentSecrets = Hive.box("currentSecretsV2");
   late Map<dynamic, dynamic> achievementsLevel = player.get("achievementsLevel", defaultValue: <dynamic,
       dynamic>{}); //should be Map<int,int> but Hive can only store it in the form of <dynamic, dynamic>
-
+  late Map<dynamic, dynamic> achievementsParam = player.get("achievementsParam", defaultValue: <dynamic,
+      dynamic>{});
   //ctor
   @protected
   void initAchievements(fToast) {
@@ -92,7 +93,7 @@ mixin Achievements {
     },
     {
       "title": "Huge spender",
-      "threshold": 200,
+      "threshold": 300,
       "reward": 1,
     },
   ];
@@ -163,8 +164,11 @@ mixin Achievements {
     return achievementTypes.where((a) => a.exid == exid).first.id;
   }
 
-  int updateAchievementLevel(int id, num param) {
+  int updateAchievementParam(int id, num param) {
     //Money.dart interface
+    achievementsParam[id] = param;
+    player.put("achievementsParam", achievementsParam);
+
     int currentLevel = getAchievementLevel(id);
     final aType = getAchievementTypeById(id);
     while (aType.children.length > currentLevel + 1 && param >= aType.children[currentLevel + 1]["threshold"]) {
@@ -178,8 +182,23 @@ mixin Achievements {
     return currentLevel;
   }
 
+  int incrementAchievementParam(int id){
+    //Money.dart interface
+    num newParam = getAchievementParam(id)+1;
+    return updateAchievementParam(id, newParam);
+  }
+
   int getAchievementLevel(int id) {
     return achievementsLevel[id] ?? -1;
+  }
+
+  num getAchievementParam(int id) {
+    return achievementsParam[id] ?? 0;
+  }
+
+  double getAchievementProgress(int id, int level) {
+    final aType = getAchievementTypeById(id);
+    return getAchievementParam(id) / aType.children[level]["threshold"];
   }
 }
 

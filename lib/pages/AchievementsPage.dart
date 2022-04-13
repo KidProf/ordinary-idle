@@ -59,7 +59,8 @@ class AchievementsPage extends StatelessWidget {
       }
       for (var i = 0; i < aType.children.length; i++) {
         //cannot use map because the index of the element has to be known
-        widgetsType.add(_printAchievement(p, context, aType.children[i], aType.descriptionI(i), currentLevel >= i));
+        final formattedProgress = (p.getAchievementProgress(aType.id,i)*100).toInt().toString()+"%";
+        widgetsType.add(_printAchievement(p, context, aType.children[i], aType.descriptionI(i), currentLevel >= i, formattedProgress));
       }
       return widgetsType;
     });
@@ -67,7 +68,7 @@ class AchievementsPage extends StatelessWidget {
   }
 
   Widget _printAchievement(
-      Secrets pSecrets, BuildContext context, Map<String, dynamic> child, String description, bool completed) {
+      Secrets pSecrets, BuildContext context, Map<String, dynamic> child, String description, bool completed, String formattedProgress) {
     Color color = completed ? Colors.black : Colors.black38;
     return GestureDetector(
         child: Container(
@@ -90,14 +91,9 @@ class AchievementsPage extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               )),
               const SizedBox(width: 10),
-              Text(child["reward"].toString(), style: TextStyle(fontSize: 20, color: color)),
-              // const Image(
-              //   image: AssetImage('assets/images/trophy.png'),
-              //   width: 20,
-              //   height: 20,
-              // ),
+              Text(completed ? child["reward"].toString() : formattedProgress, style: TextStyle(fontSize: 20, color: color)),
               const SizedBox(width: 5),
-              Icon(CustomIcons.trophy, size: 20, color: Colors.amber[800]),
+              Icon(CustomIcons.trophy, size: 20, color: completed ? Colors.amber[800] :  Colors.grey),
               const SizedBox(width: 10),
             ],
             mainAxisAlignment: MainAxisAlignment.center,

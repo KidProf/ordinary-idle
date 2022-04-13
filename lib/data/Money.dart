@@ -12,23 +12,20 @@ mixin Money {
   double computeCoinsPerSecond();
   double computeCoinsPerTap();
   double getCostByShopId(int id, {int? level});
-  int updateAchievementLevel(int id, num param);
+  int updateAchievementParam(int id, num param);
+  int incrementAchievementParam(int id);
 
   //TODO: add functionality to store the log of the value
   late ValueNotifier<Map<String, dynamic>> vitals;
   final Box player = Hive.box("player");
   late double secretsMultiplier;
   late double otherMultiplier;
-  late int taps;
-  late int prestigeCount;
   final hotbarShopLimit = 3;
 
   //ctor
   @protected
   void initMoney() {
     otherMultiplier = player.get("otherMultiplierV2", defaultValue: 1.0);
-    taps = player.get("taps", defaultValue: 0);
-    prestigeCount = player.get("prestigeCount", defaultValue: 0);
 
     secretsMultiplier = _computeSecretsMultiplier();
 
@@ -68,15 +65,13 @@ mixin Money {
 
   double tap(double coins) {
     addCoins(vitals.value["coinsPerTap"] * coins);
-    taps += 1;
-    player.put("taps", taps);
-    updateAchievementLevel(Achievements.getIdByExid("tap"), taps);
+    incrementAchievementParam(Achievements.getIdByExid("tap"));
     return vitals.value["coins"];
   }
 
   double addCoins(double coins) {
     addCoinsWithoutMultiplier(coins * vitals.value["multiplier"]);
-    updateAchievementLevel(Achievements.getIdByExid("money"), vitals.value["coins"]);
+    updateAchievementParam(Achievements.getIdByExid("money"), vitals.value["coins"]);
     return vitals.value["coins"];
   }
 
