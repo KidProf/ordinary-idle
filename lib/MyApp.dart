@@ -59,8 +59,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     Settings(p, _onItemTapped),
   ];
   int _selectedIndex = 0;
+  int developerSecretProgress = 0;
   late FToast fToast;
   late Timer? idleTimer;
+  Timer? developerSecretResetTimer;
 
   @override
   void initState() {
@@ -76,20 +78,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   void _onItemTapped(int index, BuildContext context) {
     if (index == 1 && !p.secretCompleted(1)) {
-      p.progressSecret(1, 0);
-      final tuple = p.secretProgress(1);
-      final isFinished = tuple.item1;
-      final progress = tuple.item2;
-
-      fToast.removeCustomToast();
-      if (isFinished) {
-        setState(() {
-          _selectedIndex = index;
-        });
-      } else {
-        if (progress >= 3) {
-          MyToast.showBottomToast(fToast, "You are now ${8 - progress} steps away from revealing a secret");
-        }
+      developerSecretProgress+=1;
+      developerSecretResetTimer?.cancel();
+      developerSecretResetTimer = Timer(Duration(seconds: 15),(){
+          print("timer fired, reset progress of developer secret");
+          developerSecretProgress = 0;
+      });
+      if(developerSecretProgress==8){
+        p.progressSecret(1, 0);
+      }else if(developerSecretProgress >=3){
+        fToast.removeCustomToast();
+        MyToast.showBottomToast(fToast, "You are now ${8 - developerSecretProgress} steps away from revealing a secret");
       }
     }
     setState(() {
@@ -161,6 +160,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   void dispose() {
     idleTimer?.cancel();
+    developerSecretResetTimer?.cancel();
     super.dispose();
   }
 }

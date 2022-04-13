@@ -42,7 +42,7 @@ mixin Secrets {
       reward: 1.5,
       progressComponent: [
         {
-          "total": 8,
+          "total": 1,
           "volatile": true,
         },
       ],
