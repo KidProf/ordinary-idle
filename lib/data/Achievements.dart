@@ -179,7 +179,7 @@ mixin Achievements {
       achievementsLevel[id] = currentLevel;
       player.put("achievementsLevel", achievementsLevel);
       addTrophies(int.parse(aType.children[currentLevel]["reward"].toString()));
-      MyToast.showAchievementToast(fToast, "Secret Unlocked! ${aType.children[currentLevel]["title"]}");
+      MyToast.showAchievementToast(fToast, "Achievement Unlocked! ${aType.children[currentLevel]["title"]}");
       addAlert(2);
     }
     return currentLevel;
