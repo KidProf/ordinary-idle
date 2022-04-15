@@ -17,7 +17,7 @@ class AchievementsPage extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: ValueListenableBuilder<Box>(
-          valueListenable: Hive.box('player').listenable(keys: ["achievementsLevel"]),
+          valueListenable: Hive.box('player').listenable(keys: ["achievementsLevel", "achievementsParam"]),
           builder: (context, _, __) {
             return Util.WarpBody(
               context: context,

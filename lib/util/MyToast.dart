@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ordinary_idle/util/CustomIcons.dart';
 
 class MyToast {
   final BuildContext context;
@@ -65,7 +66,7 @@ class MyToast {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.lock_open_outlined),
+          Icon(CustomIcons.trophy),
           SizedBox(
             width: 12.0,
           ),
