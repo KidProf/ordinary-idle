@@ -41,7 +41,8 @@ class MyApp extends StatelessWidget {
       title: _title,
       home: MyStatefulWidget(),
       theme: ThemeData(
-        textTheme: GoogleFonts.varelaRoundTextTheme(
+        //varelaRoundTextTheme, latoTextTheme, nanumGothicTextTheme
+        textTheme: GoogleFonts.openSansTextTheme(
           Theme.of(context).textTheme,
         ),
       ),
