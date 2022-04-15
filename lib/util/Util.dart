@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 mixin Util {
   static String doubleRepresentation(double value) {
@@ -80,5 +81,16 @@ mixin Util {
 
   static void launchURL(String url) async {
     if (!await launch(url)) throw 'Could not launch $url';
+  }
+
+  static List<Widget> showWebWarning(){
+    if(kIsWeb){
+      return const [
+        Text("WARNING"),
+        SizedBox(height: 10),
+      ];
+    }else{
+      return [];
+    }
   }
 }

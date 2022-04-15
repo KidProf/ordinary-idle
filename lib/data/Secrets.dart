@@ -17,8 +17,8 @@ mixin Secrets {
 
   final Box player = Hive.box("player");
   final Box currentSecrets = Hive.box("currentSecretsV2");
-  late List<int> completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);
-  late List<int> visitedThemes = player.get("visitedThemes", defaultValue: <int>[1]); //used in SecretsPage.dart
+  late List<dynamic> completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);
+  late List<dynamic> visitedThemes = player.get("visitedThemes", defaultValue: <int>[1]); //used in SecretsPage.dart
   late int currentTheme = player.get("currentTheme", defaultValue: 1);
 
   Map<int, CurrentVolatileSecret> currentVolatileSecrets = {};
