@@ -25,6 +25,7 @@ class Settings extends StatelessWidget {
             'Settings',
             style: Util.titleStyle,
           ),
+          ...Util.showWebWarning(needPaddingBelow: false),
           const Text(
             'Danger Zone',
             style: TextStyle(fontSize: 25, color: Colors.red),
@@ -147,7 +148,8 @@ class Settings extends StatelessWidget {
                   }
                 },
                 onLongPress: () async {
-                  Fluttertoast.showToast(msg: "This is a temporary function for testers to switch between themes easily.");
+                  Fluttertoast.showToast(
+                      msg: "This is a temporary function for testers to switch between themes easily.");
                   await _changeTheme(context);
                 },
                 child: Text("Change Theme"),

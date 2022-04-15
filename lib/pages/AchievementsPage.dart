@@ -25,6 +25,7 @@ class AchievementsPage extends StatelessWidget {
                 const SizedBox(height: 10),
                 const Text("Achievements", style: titleStyle),
                 const SizedBox(height: 10),
+                ...Util.showWebWarning(),
                 const Text(
                     "These are obvious goals of the idle game, for example reaching certain amount in money. It is also here to tell you the secrets are not about doing these things below."),
                 const SizedBox(height: 10),

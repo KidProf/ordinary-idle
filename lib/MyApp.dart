@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -36,9 +37,14 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       // DeviceOrientation.portraitDown,
     ]);
-    return const MaterialApp(
+    return MaterialApp(
       title: _title,
       home: MyStatefulWidget(),
+      theme: ThemeData(
+        textTheme: GoogleFonts.varelaRoundTextTheme(
+          Theme.of(context).textTheme,
+        ),
+      ),
     );
   }
 }
@@ -77,9 +83,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     idleTimer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       p.addIdleCoins();
     });
-    
+
     //alert user to open secrets page if they haven't complete secret 0.1
-    if(!p.secretCompleted(17)){
+    if (!p.secretCompleted(17)) {
       _addAlert(1);
     }
   }
@@ -111,14 +117,14 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     }
     setState(() {
       _selectedIndex = index;
-      _alerts = _alerts.where((x) => x!=index).toList();
+      _alerts = _alerts.where((x) => x != index).toList();
     });
   }
 
   void _addAlert(int index) {
     if (!_alerts.contains(index) && !(index == _selectedIndex)) {
       setState(() {
-        _alerts = [..._alerts,index];
+        _alerts = [..._alerts, index];
       });
     }
   }

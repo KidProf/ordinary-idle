@@ -27,5 +27,8 @@ build-apk:
 
 build-apk-split:
 	flutter build apk --split-per-abi
+
+build-web:
+	flutter build web
 clean:
 	flutter clean

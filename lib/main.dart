@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -18,6 +19,14 @@ void main() async {
   await Hive.openBox('player');
   await Hive.openBox('currentSecretsV2');
   await Hive.openBox('purchases');
+
+  if (kIsWeb) {
+    //reset everytime to prevent weird bugs
+    await Hive.box('player').clear();
+    await Hive.box('currentSecretsV2').clear();
+    await Hive.box('purchases').clear();
+  }
+
   runApp(
     RestartWidget(
       child: MyApp(),

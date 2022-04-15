@@ -83,13 +83,26 @@ mixin Util {
     if (!await launch(url)) throw 'Could not launch $url';
   }
 
-  static List<Widget> showWebWarning(){
-    if(kIsWeb){
-      return const [
-        Text("WARNING"),
-        SizedBox(height: 10),
+  static List<Widget> showWebWarning({bool needPaddingBelow = true}) {
+    if (kIsWeb) {
+      return [
+        Text(
+            "WARNING: You are using the web version of OrdinaryIdle, download the app for the best experience, including the ability to discover secrets that require phone gestures and progress storage. (Now available on Google Play only)",
+            style: TextStyle(color: Colors.red)),
+        Row(
+          children: [
+            ElevatedButton(
+              onPressed: () async {
+                Util.launchURL("https://play.google.com/store/apps/details?id=com.kidprof.ordinaryidle");
+              },
+              child: Text("Google Play"),
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        ),
+        needPaddingBelow ? SizedBox(height: 10) : Util.divider(),
       ];
-    }else{
+    } else {
       return [];
     }
   }
