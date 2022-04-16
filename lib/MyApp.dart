@@ -110,11 +110,13 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       }
       if (!p.secretCompleted(17)) {
         if (stayHereSecretTimer == null || !stayHereSecretTimer!.isActive) {
-          developerSecretResetTimer = Timer(Duration(seconds: 5), () {
+          stayHereSecretTimer = Timer(Duration(seconds: 5), () {
             p.progressSecret(17, 0);
           });
         }
       }
+    }else{
+      stayHereSecretTimer?.cancel();
     }
     setState(() {
       _selectedIndex = index;
