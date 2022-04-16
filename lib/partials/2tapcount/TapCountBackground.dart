@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/data/Player.dart';
@@ -30,62 +31,66 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
       MediaQuery.of(context).size.width,
       MediaQuery.of(context).size.height,
     );
+    final child = ValueListenableBuilder<Box>(
+        valueListenable: Hive.box('currentSecretsV2').listenable(keys: [9999]), //listen to secret 9999 only
+        builder: (context, box, _) {
+          var taps = widget.p.secretProgress(9999).item2;
+          bool isOverflow = _isOverflow(taps.toString(), canvasSize.x);
+          WidgetsBinding.instance?.addPostFrameCallback((_) {
+            _checkSecrets(context);
+          });
 
-    return NativeDeviceOrientationReader(
-        useSensor: true,
-        builder: (context) {
-          return ValueListenableBuilder<Box>(
-              valueListenable: Hive.box('currentSecretsV2').listenable(keys: [9999]), //listen to secret 9999 only
-              builder: (context, box, _) {
-                var taps = widget.p.secretProgress(9999).item2;
-                bool isOverflow = _isOverflow(taps.toString(), canvasSize.x);
-                WidgetsBinding.instance?.addPostFrameCallback((_) {
-                  _checkSecrets(context);
-                });
-
-                return GestureDetector(
-                  onTapDown: onBackgroundTapDown,
-                  child: Container(
-                    color: Colors.Colors
-                        .green[100], //the color is necessary or else taps outside the cookie cannot be registered
-                    child: Column(
-                      children: [
-                        SizedBox(height: 0),
-                        Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            !_isLol(taps) ? taps.toString() : "LOL",
-                            style: tapStyle,
-                          ),
-                        ),
-                        ElevatedButton(
-                          child: Text("Reset Count"),
-                          onPressed: () {
-                            widget.p.resetSecretProgression(9999);
-                          },
-                        ),
-                        // ElevatedButton(
-                        //   child: Text("+99"), //CRACK: do not put this to release!!!
-                        //   onPressed: () {
-                        //     widget.p.progressSecret(9999, 0, amount: 99);
-                        //   },
-                        // ),
-                        // Text(
-                        //   "Text Width: " +
-                        //       _calcTextSize(
-                        //         taps.toString(),
-                        //         tapStyle,
-                        //       ).width.toString() +
-                        //       "     Canvas Width: " +
-                        //       canvasSize.x.toString(),
-                        // ),
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          return GestureDetector(
+            onTapDown: onBackgroundTapDown,
+            child: Container(
+              color: Colors
+                  .Colors.green[100], //the color is necessary or else taps outside the cookie cannot be registered
+              child: Column(
+                children: [
+                  SizedBox(height: 0),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      !_isLol(taps) ? taps.toString() : "LOL",
+                      style: tapStyle,
                     ),
                   ),
-                );
-              });
+                  ElevatedButton(
+                    child: Text("Reset Count"),
+                    onPressed: () {
+                      widget.p.resetSecretProgression(9999);
+                    },
+                  ),
+                  // ElevatedButton(
+                  //   child: Text("+99"), //CRACK: do not put this to release!!!
+                  //   onPressed: () {
+                  //     widget.p.progressSecret(9999, 0, amount: 99);
+                  //   },
+                  // ),
+                  // Text(
+                  //   "Text Width: " +
+                  //       _calcTextSize(
+                  //         taps.toString(),
+                  //         tapStyle,
+                  //       ).width.toString() +
+                  //       "     Canvas Width: " +
+                  //       canvasSize.x.toString(),
+                  // ),
+                ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ),
+            ),
+          );
         });
+    if (kIsWeb) {
+      return child;
+    } else {
+      return NativeDeviceOrientationReader(
+          useSensor: true,
+          builder: (context) {
+            return child;
+          });
+    }
   }
 
   @override
@@ -109,7 +114,7 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
     }
 
     //Secret 5,6
-    final orientation = NativeDeviceOrientationReader.orientation(context);
+    final orientation = kIsWeb ? NativeDeviceOrientation.portraitUp : NativeDeviceOrientationReader.orientation(context);
     print('Received new orientation: $orientation');
     if (orientation == NativeDeviceOrientation.portraitDown) {
       //inverted
@@ -152,7 +157,7 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
     //     size.width.toString() +
     //     ", canvas width: " +
     //     canvasX.toString());
-    return size.width > canvasX || canvasX > 400;
+    return size.width > canvasX || size.width > 400;
   }
 
   Size _calcTextSize(String text, TextStyle style) {

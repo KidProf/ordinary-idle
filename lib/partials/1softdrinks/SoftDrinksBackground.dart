@@ -22,7 +22,7 @@ class SoftDrinksBackground extends StatefulWidget {
   State<SoftDrinksBackground> createState() => _SoftDrinksBackgroundState();
 }
 
-class _SoftDrinksBackgroundState extends State<SoftDrinksBackground>  with ShakeHandler implements Background {
+class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> with ShakeHandler implements Background {
   late Vector2 canvasSize;
   Timer? longPressTimer;
   Timer? shakeAnimationTimer;
@@ -48,7 +48,7 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground>  with Shake
     startListeningShake(15); //20 is the default threshold value for the shake event
 
     // ShakeDetector.autoStart(onPhoneShake: () {
-      
+
     // });
   }
 
@@ -210,47 +210,46 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground>  with Shake
   shakeEventListener() {
     //DO ACTIONS HERE
     print("SHAKE");
-      timeSinceLastShake = 0;
-      if (!isSplashing && (shakeAnimationTimer == null || shakeAnimationTimer?.isActive == false)) {
-        print("start shake timer");
-        shakeAnimationTimer = Timer.periodic(const Duration(milliseconds: 33), (Timer t) {
-          //1/30 seconds per fire
-          if (!mounted) {
-            t.cancel();
-          }
-          setState(() {
-            timeSinceLastShake += 1;
-            timeSinceAnimationStart += 1;
-          });
-          if (timeSinceLastShake >= 60) {
-            timeSinceAnimationStart = 0;
-            t.cancel();
-            print("stop shake timer");
-          }
-
-          //if shake animation for more than 2.66 seconds (i.e. phone saked around 0.66 -> 1 sec (because it samples every 0.5 secs) seconds straight?)
-          print(timeSinceAnimationStart);
-          if (timeSinceAnimationStart > 80 &&
-              (splashAnimationTimer == null || splashAnimationTimer?.isActive == false)) {
-            widget.p.progressSecret(10, 0);
-            recordSoftDrinkShake();
-            setState(() {
-              isSplashing = true;
-            });
-            splashAnimationTimer = Timer(const Duration(seconds: 3), () {
-              if (!mounted) {
-                t.cancel();
-              }
-              setState(() {
-                isSplashing = false;
-              });
-            });
-            timeSinceAnimationStart = 0;
-            t.cancel();
-            print("stop shake timer due to splash");
-          }
+    timeSinceLastShake = 0;
+    if (!isSplashing && (shakeAnimationTimer == null || shakeAnimationTimer?.isActive == false)) {
+      print("start shake timer");
+      shakeAnimationTimer = Timer.periodic(const Duration(milliseconds: 33), (Timer t) {
+        //1/30 seconds per fire
+        if (!mounted) {
+          t.cancel();
+        }
+        setState(() {
+          timeSinceLastShake += 1;
+          timeSinceAnimationStart += 1;
         });
-      }
+        if (timeSinceLastShake >= 60) {
+          timeSinceAnimationStart = 0;
+          t.cancel();
+          print("stop shake timer");
+        }
+
+        //if shake animation for more than 2.66 seconds (i.e. phone saked around 0.66 -> 1 sec (because it samples every 0.5 secs) seconds straight?)
+        print(timeSinceAnimationStart);
+        if (timeSinceAnimationStart > 80 && (splashAnimationTimer == null || splashAnimationTimer?.isActive == false)) {
+          widget.p.progressSecret(10, 0);
+          recordSoftDrinkShake();
+          setState(() {
+            isSplashing = true;
+          });
+          splashAnimationTimer = Timer(const Duration(seconds: 3), () {
+            if (!mounted) {
+              t.cancel();
+            }
+            setState(() {
+              isSplashing = false;
+            });
+          });
+          timeSinceAnimationStart = 0;
+          t.cancel();
+          print("stop shake timer due to splash");
+        }
+      });
+    }
     return super.shakeEventListener();
   }
 

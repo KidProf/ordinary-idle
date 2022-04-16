@@ -16,15 +16,22 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(CurrentSecretV2Adapter());
 
+  if (kIsWeb) {
+    //reset everytime to prevent weird bugs
+    Hive.deleteFromDisk();
+  }
+
   await Hive.openBox('player');
   await Hive.openBox('currentSecretsV2');
   await Hive.openBox('purchases');
 
   if (kIsWeb) {
-    //reset everytime to prevent weird bugs
+    //set current theme to cookie for best experience on web
     await Hive.box('player').clear();
     await Hive.box('currentSecretsV2').clear();
     await Hive.box('purchases').clear();
+    Hive.box("player").put("visitedThemes", <int>[3]);
+    Hive.box("player").put("currentTheme", 3);
   }
 
   runApp(
