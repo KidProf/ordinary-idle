@@ -115,7 +115,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           });
         }
       }
-    }else{
+    } else {
       stayHereSecretTimer?.cancel();
     }
     setState(() {

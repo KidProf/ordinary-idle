@@ -110,7 +110,8 @@ mixin Secrets {
       type: "hidden",
       progressComponent: [
         {
-          "total": 10000, //now finite, because max value of it is now 1100 (cannot use infinity here because web breaks)
+          "total":
+              10000, //now finite, because max value of it is now 1100 (cannot use infinity here because web breaks)
           "volatile": false,
         },
       ],

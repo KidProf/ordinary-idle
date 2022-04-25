@@ -25,8 +25,10 @@ class SoftDrinksBackground extends StatefulWidget {
 class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> with ShakeHandler implements Background {
   late Vector2 canvasSize;
   Timer? longPressTimer;
+  Timer? waitLongPressTimer;
   Timer? shakeAnimationTimer;
   Timer? splashAnimationTimer;
+  int timeSincePressed = 0;
   int timeSinceLastShake = 0;
   int timeSinceAnimationStart = 0;
   bool isSplashing = false;
@@ -61,8 +63,9 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> with ShakeH
 
     return GestureDetector(
       onTapDown: onBackgroundTapDown,
-      onLongPress: onLongPress,
-      onLongPressUp: onLongPressUp,
+      onTapUp: onTapUp,
+      // onLongPress: onLongPress,
+      // onLongPressUp: onLongPressUp,
       child: ChangeColors(
         hue: hue,
         brightness: getBrightness(hue),
@@ -72,6 +75,16 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> with ShakeH
             color: Colors.Colors.red[900], //the color is necessary or else taps outside the cookie cannot be registered
             child: Stack(
               children: [
+                Positioned(
+                  child: timeSincePressed != 0
+                      ? LinearProgressIndicator(
+                          value: timeSincePressed / 30,
+                          color: Colors.Colors.green[800],
+                          backgroundColor: Colors.Colors.green[300],
+                          minHeight: 10,
+                        )
+                      : const SizedBox(),
+                ),
                 Positioned(
                   left: canvasSize.x / 2 - 100 / 2,
                   top: canvasSize.y / 2 -
@@ -127,7 +140,29 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> with ShakeH
 
   @override
   void onBackgroundTapDown(TapDownDetails details) {
+    print("tapDown");
     widget.p.tap(1.0);
+    timeSincePressed = 0;
+    waitLongPressTimer = Timer.periodic(const Duration(milliseconds: 50), (Timer t) {
+      setState(() {
+        timeSincePressed += 1;
+      });
+      if (timeSincePressed == 30) {
+        onLongPress();
+        t.cancel();
+      }
+    });
+  }
+
+  void onTapUp(TapUpDetails details) {
+    print("tapUp");
+    if (timeSincePressed >= 30) {
+      onLongPressUp();
+    }
+    setState((){
+      timeSincePressed = 0;
+    });
+    waitLongPressTimer?.cancel();
   }
 
   void _checkSecrets(BuildContext context) {}
@@ -256,6 +291,7 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> with ShakeH
   @override
   void dispose() {
     longPressTimer?.cancel();
+    waitLongPressTimer?.cancel();
     shakeAnimationTimer?.cancel();
     splashAnimationTimer?.cancel();
     resetShakeListeners();

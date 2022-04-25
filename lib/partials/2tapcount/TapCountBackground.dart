@@ -114,7 +114,8 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
     }
 
     //Secret 5,6
-    final orientation = kIsWeb ? NativeDeviceOrientation.portraitUp : NativeDeviceOrientationReader.orientation(context);
+    final orientation =
+        kIsWeb ? NativeDeviceOrientation.portraitUp : NativeDeviceOrientationReader.orientation(context);
     print('Received new orientation: $orientation');
     if (orientation == NativeDeviceOrientation.portraitDown) {
       //inverted
