@@ -7,7 +7,7 @@ import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/util/Background.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/util/SwipeDetector.dart';
-import 'package:vector_math/vector_math.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 import 'package:ordinary_idle/util/RotateDetector.dart';
 

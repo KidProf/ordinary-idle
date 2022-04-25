@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -8,8 +9,8 @@ import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/util/Background.dart';
 import 'package:flutter/src/material/colors.dart' as Colors;
 import 'package:tuple/tuple.dart';
-import 'package:vector_math/vector_math.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 class TapCountBackground extends StatefulWidget {
   final Player p;
@@ -22,7 +23,9 @@ class TapCountBackground extends StatefulWidget {
 
 class _TapCountBackgroundState extends State<TapCountBackground> implements Background {
   late Vector2 canvasSize;
-  late Timer? lolTimer = null;
+  Timer? lolTimer;
+  Timer? orientationTimer;
+  NativeDeviceOrientation orientation = NativeDeviceOrientation.portraitUp;
   final tapStyle = const TextStyle(fontSize: 130, fontWeight: FontWeight.bold);
 
   @override
@@ -47,7 +50,14 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
                   .Colors.green[100], //the color is necessary or else taps outside the cookie cannot be registered
               child: Column(
                 children: [
-                  SizedBox(height: 0),
+                  orientation == NativeDeviceOrientation.portraitDown
+                      ? RotatedBox(
+                            quarterTurns: 2,
+                            child: Text(
+                              "Analysing...",
+                            ),
+                          )
+                      : SizedBox(height: 14),
                   Container(
                     alignment: Alignment.center,
                     child: Text(
@@ -114,9 +124,16 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
     }
 
     //Secret 5,6
-    final orientation =
+    final newOrientation =
         kIsWeb ? NativeDeviceOrientation.portraitUp : NativeDeviceOrientationReader.orientation(context);
+    if (newOrientation != orientation) {
+      setState(() {
+        orientation = newOrientation;
+      });
+    }
+
     print('Received new orientation: $orientation');
+
     if (orientation == NativeDeviceOrientation.portraitDown) {
       //inverted
       if (_check69(taps)) {
@@ -210,6 +227,7 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
   @override
   void dispose() {
     lolTimer?.cancel();
+    orientationTimer?.cancel();
     print("timer cancelled in dispose");
     super.dispose();
   }

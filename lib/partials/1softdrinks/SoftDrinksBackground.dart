@@ -9,7 +9,7 @@ import 'package:flutter/src/material/colors.dart' as Colors;
 import 'package:ordinary_idle/util/ChangeColors.dart';
 import 'package:shake_event/shake_event.dart';
 import 'package:tuple/tuple.dart';
-import 'package:vector_math/vector_math.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 // import 'package:shake/shake.dart';
 
@@ -159,13 +159,11 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> with ShakeH
     if (timeSincePressed >= 30) {
       onLongPressUp();
     }
-    setState((){
+    setState(() {
       timeSincePressed = 0;
     });
     waitLongPressTimer?.cancel();
   }
-
-  void _checkSecrets(BuildContext context) {}
 
   void onLongPress() {
     print("onLongPress");
