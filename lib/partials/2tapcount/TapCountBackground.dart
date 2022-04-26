@@ -26,6 +26,9 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
   Timer? lolTimer;
   Timer? orientationTimer;
   NativeDeviceOrientation orientation = NativeDeviceOrientation.portraitUp;
+  late int taps = widget.p.secretProgress(9999).item2;
+  int analysingTaps = 0;
+  String analysingString = "";
   final tapStyle = const TextStyle(fontSize: 130, fontWeight: FontWeight.bold);
 
   @override
@@ -37,10 +40,10 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
     final child = ValueListenableBuilder<Box>(
         valueListenable: Hive.box('currentSecretsV2').listenable(keys: [9999]), //listen to secret 9999 only
         builder: (context, box, _) {
-          var taps = widget.p.secretProgress(9999).item2;
+          // var taps = widget.p.secretProgress(9999).item2;
           bool isOverflow = _isOverflow(taps.toString(), canvasSize.x);
           WidgetsBinding.instance?.addPostFrameCallback((_) {
-            _checkSecrets(context);
+            _checkOrientation(context);
           });
 
           return GestureDetector(
@@ -52,11 +55,11 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
                 children: [
                   orientation == NativeDeviceOrientation.portraitDown
                       ? RotatedBox(
-                            quarterTurns: 2,
-                            child: Text(
-                              "Analysing...",
-                            ),
-                          )
+                          quarterTurns: 2,
+                          child: Text(
+                            analysingString,
+                          ),
+                        )
                       : SizedBox(height: 14),
                   Container(
                     alignment: Alignment.center,
@@ -112,45 +115,23 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
     } else {
       widget.p.progressSecret(9999, 0);
     }
+    setState(() {
+      taps = widget.p.secretProgress(9999).item2;
+    });
+    _onTapsChanged();
   }
 
-  void _checkSecrets(BuildContext context) {
-    var taps = widget.p.secretProgress(9999).item2;
-
+  void _onTapsChanged() {
     //Secret 7
     bool isOverflow = _isOverflow(taps.toString(), canvasSize.x);
     if (isOverflow) {
       widget.p.progressSecret(7, 0);
     }
 
-    //Secret 5,6
-    final newOrientation =
-        kIsWeb ? NativeDeviceOrientation.portraitUp : NativeDeviceOrientationReader.orientation(context);
-    if (newOrientation != orientation) {
-      setState(() {
-        orientation = newOrientation;
-      });
-    }
-
-    print('Received new orientation: $orientation');
-
-    if (orientation == NativeDeviceOrientation.portraitDown) {
-      //inverted
-      if (_check69(taps)) {
-        // wont check if overflow
-        widget.p.progressSecret(5, 0);
-      }
-      var inverted = _invert(taps);
-      print(inverted);
-      if (inverted.item1 == true && inverted.item2 >= taps + 700) {
-        widget.p.progressSecret(6, 0);
-      }
-    }
-
     //Secret 8
     if (_isLol(taps)) {
       //activate timer
-      print("timer fired");
+      print("lol timer fired");
       lolTimer = Timer(const Duration(seconds: 5), () {
         if (_isLol(widget.p.secretProgress(9999).item2)) {
           //check if it is still a lol number
@@ -160,6 +141,60 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
         }
       });
     }
+
+    if (orientation == NativeDeviceOrientation.portraitDown) {
+      orientationTimer?.cancel();
+      _setUpOrientationTimer();
+    }
+  }
+
+  void _checkInvertedSecrets() {
+    var inverted = _invert(taps);
+
+    //secrets 5,6
+    if (_check69(taps)) {
+      widget.p.progressSecret(5, 0);
+      setState(() {
+        analysingString = "Success! (69)";
+      });
+    } else if (inverted.item1 && inverted.item2 >= taps + 700) {
+      widget.p.progressSecret(6, 0);
+      setState(() {
+        analysingString = "Success! (Change in perspective makes you feel better)";
+      });
+    } else {
+      setState(() {
+        analysingString = "Failed!";
+      });
+    }
+  }
+
+  void _checkOrientation(BuildContext context) {
+    final newOrientation =
+        kIsWeb ? NativeDeviceOrientation.portraitUp : NativeDeviceOrientationReader.orientation(context);
+    if (newOrientation != orientation) {
+      print('Received new orientation: $orientation');
+      orientationTimer?.cancel();
+      if (newOrientation == NativeDeviceOrientation.portraitDown) {
+        _setUpOrientationTimer();
+      }
+      setState(() {
+        orientation = newOrientation;
+      });
+    }
+  }
+
+  void _setUpOrientationTimer(){
+    setState(() {
+          analysingString = "Analysing...";
+          analysingTaps = taps;
+        });
+        orientationTimer = Timer(const Duration(seconds: 2), () {
+          print("orientationTimer fired taps: $taps, analysingTaps: $analysingTaps");
+          if (taps == analysingTaps) {
+            _checkInvertedSecrets();
+          }
+        });
   }
 
   bool _isLol(int taps) {

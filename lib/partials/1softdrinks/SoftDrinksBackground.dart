@@ -63,7 +63,12 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> with ShakeH
 
     return GestureDetector(
       onTapDown: onBackgroundTapDown,
-      onTapUp: onTapUp,
+      onPanEnd: (DragEndDetails _) {
+        onTapUp();
+      }, //when u dragged before releasing your finger
+      onTapUp: (TapUpDetails _) {
+        onTapUp();
+      }, //when u did not drag
       // onLongPress: onLongPress,
       // onLongPressUp: onLongPressUp,
       child: ChangeColors(
@@ -142,20 +147,24 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> with ShakeH
   void onBackgroundTapDown(TapDownDetails details) {
     print("tapDown");
     widget.p.tap(1.0);
-    timeSincePressed = 0;
-    waitLongPressTimer = Timer.periodic(const Duration(milliseconds: 50), (Timer t) {
-      setState(() {
-        timeSincePressed += 1;
+
+    if ((waitLongPressTimer == null || !waitLongPressTimer!.isActive) &&
+        (longPressTimer == null || !longPressTimer!.isActive)) {
+      timeSincePressed = 0;
+      waitLongPressTimer = Timer.periodic(const Duration(milliseconds: 50), (Timer t) {
+        setState(() {
+          timeSincePressed += 1;
+        });
+        if (timeSincePressed == 30) {
+          onLongPress();
+          t.cancel();
+        }
       });
-      if (timeSincePressed == 30) {
-        onLongPress();
-        t.cancel();
-      }
-    });
+    }
   }
 
-  void onTapUp(TapUpDetails details) {
-    print("tapUp");
+  void onTapUp() {
+    print("onTapUp");
     if (timeSincePressed >= 30) {
       onLongPressUp();
     }
