@@ -19,6 +19,7 @@ mixin Money {
   late ValueNotifier<Map<String, dynamic>> vitals;
   final Box player = Hive.box("player");
   late double secretsMultiplier;
+  late double prestigeMultiplier;
   late double otherMultiplier;
   final hotbarShopLimit = 3;
 
@@ -26,6 +27,7 @@ mixin Money {
   @protected
   void initMoney() {
     otherMultiplier = player.get("otherMultiplierV2", defaultValue: 1.0);
+    prestigeMultiplier = player.get("prestigeMultiplier", defaultValue: 1.0);
 
     secretsMultiplier = _computeSecretsMultiplier();
 
@@ -71,7 +73,6 @@ mixin Money {
 
   double addCoins(double coins) {
     addCoinsWithoutMultiplier(coins * vitals.value["multiplier"]);
-    updateAchievementParam(Achievements.getIdByExid("money"), vitals.value["coins"]);
     return vitals.value["coins"];
   }
 
@@ -87,6 +88,8 @@ mixin Money {
     netWorth += coins;
     player.put("coins", vitals.value["coins"]);
     player.put("netWorth", netWorth);
+
+    updateAchievementParam(Achievements.getIdByExid("money"), vitals.value["coins"]);
     // print("VITALS COINS: "+vitals.value["coins"].toString()+" HIVE COINS: " + player.get("coins").toString());
     return vitals.value["coins"];
   }
@@ -137,7 +140,15 @@ mixin Money {
   }
 
   double _computeMultiplier() {
-    return secretsMultiplier * otherMultiplier;
+    return secretsMultiplier * prestigeMultiplier * otherMultiplier;
+  }
+
+  Map<String, double> getMulitpliers() {
+    return <String, double>{
+      "Secrets": secretsMultiplier,
+      "Prestige": prestigeMultiplier,
+      "Others": otherMultiplier,
+    };
   }
 
   @protected //Shops.dart interface

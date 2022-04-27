@@ -129,33 +129,30 @@ class Settings extends StatelessWidget {
             'Change Theme',
             style: Util.subtitleStyle,
           ),
-          Text(
-              "Changing themes unlock the possibility of finding different secrets. Reach 1e6 coins net worth to unlock the option of changing themes. Although there will only be a few during development stage, expect to see more as we are approaching release."),
+          Text("These functions will be shortly removed after the prestige mechanism is stable."),
           Row(
             children: [
               ElevatedButton(
                 style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(p.getNetWorth() >= 1000000 ? Colors.green : Util.disabled),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
                 ),
                 onPressed: () async {
-                  //! CRACK: do not put this to release!!!
-                  if (p.getNetWorth() >= 1000000) {
-                    //1e6
-                    await _changeTheme(context);
-                  } else {
-                    Fluttertoast.showToast(msg: "Reach 1e6 coins net worth to unlock the option of changing themes. ");
-                  }
-                },
-                onLongPress: () async {
                   Fluttertoast.showToast(
                       msg: "This is a temporary function for testers to switch between themes easily.");
-                  await _changeTheme(context);
+                  await Util.changeTheme(context, onItemTapped);
                 },
                 child: Text("Change Theme"),
               ),
+              ElevatedButton(
+                onPressed: () async {
+                  Fluttertoast.showToast(
+                      msg: "This is a temporary function for testers to switch between themes easily.");
+                  p.addCoinsWithoutMultiplier(10000000);
+                },
+                child: Text("Add 1e7 coins"),
+              ),
             ],
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
           Util.divider(),
           const Text(
@@ -223,22 +220,5 @@ class Settings extends StatelessWidget {
     //Initialize deleted boxes
     await Hive.openBox('currentSecretsV2');
     RestartWidget.restartApp(context);
-  }
-
-  Future<void> _changeTheme(BuildContext context) async {
-    var player = Hive.box('player');
-    var visitedThemes = player.get("visitedThemes", defaultValue: <int>[1]);
-    final availableThemes = [1, 2, 3]; //TODO: change when number of themes increases
-    final currentTheme = player.get("currentTheme", defaultValue: 1);
-    var newTheme =
-        availableThemes[(availableThemes.indexOf(currentTheme) + 1) % availableThemes.length]; //cycle to the next theme
-
-    if (!visitedThemes.contains(newTheme)) {
-      player.put("visitedThemes", <int>[...visitedThemes, newTheme]);
-    }
-    print(visitedThemes);
-    player.put('currentTheme', newTheme);
-    RestartWidget.restartApp(context);
-    onItemTapped(0, context); //switch to home page
   }
 }

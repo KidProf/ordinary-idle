@@ -184,17 +184,17 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
     }
   }
 
-  void _setUpOrientationTimer(){
+  void _setUpOrientationTimer() {
     setState(() {
-          analysingString = "Analysing...";
-          analysingTaps = taps;
-        });
-        orientationTimer = Timer(const Duration(seconds: 2), () {
-          print("orientationTimer fired taps: $taps, analysingTaps: $analysingTaps");
-          if (taps == analysingTaps) {
-            _checkInvertedSecrets();
-          }
-        });
+      analysingString = "Analysing...";
+      analysingTaps = taps;
+    });
+    orientationTimer = Timer(const Duration(seconds: 2), () {
+      print("orientationTimer fired taps: $taps, analysingTaps: $analysingTaps");
+      if (taps == analysingTaps) {
+        _checkInvertedSecrets();
+      }
+    });
   }
 
   bool _isLol(int taps) {

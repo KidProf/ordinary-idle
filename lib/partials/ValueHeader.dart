@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:ordinary_idle/data/Money.dart';
+import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/util/CustomIcons.dart';
 import 'package:ordinary_idle/util/Util.dart';
 
 //! Please change CookieBackground to match the height of the header (specified in MyApp.dart)
 class ValueHeader extends StatelessWidget {
-  final Map<String, dynamic> vitals;
+  final Player p;
   final int selectedIndex;
+  late Map<String, dynamic> vitals = p.vitals.value;
 
-  const ValueHeader(this.vitals, this.selectedIndex, {Key? key}) : super(key: key);
+  ValueHeader(this.p, this.selectedIndex, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +35,22 @@ class ValueHeader extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
               ),
-              Text(
-                Util.doubleRepresentation(vitals["multiplier"]) + "x",
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
+              GestureDetector(
+                onTap: () async {
+                  Util.showMultiplierDialog(
+                      p.getMulitpliers(),
+                      <String, double>{},
+                      [
+                        {"text": "Close"}
+                      ],
+                      context);
+                },
+                child: Text(
+                  Util.doubleRepresentation(vitals["multiplier"]) + "x",
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],

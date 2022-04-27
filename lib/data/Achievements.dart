@@ -19,6 +19,8 @@ mixin Achievements {
   late Map<dynamic, dynamic> achievementsLevel = player.get("achievementsLevel", defaultValue: <dynamic,
       dynamic>{}); //should be Map<int,int> but Hive can only store it in the form of <dynamic, dynamic>
   late Map<dynamic, dynamic> achievementsParam = player.get("achievementsParam", defaultValue: <dynamic, dynamic>{});
+  late Map<dynamic, dynamic> achievementsParamMax =
+      player.get("achievementsParamMax", defaultValue: <dynamic, dynamic>{});
   //ctor
   @protected
   void initAchievements(fToast, addAlert) {
@@ -170,6 +172,11 @@ mixin Achievements {
     achievementsParam[id] = param;
     player.put("achievementsParam", achievementsParam);
 
+    if (achievementsParamMax[id] == null || achievementsParam[id] > achievementsParamMax[id]) {
+      achievementsParamMax[id] = achievementsParam[id];
+      player.put("achievementsParamMax", achievementsParamMax);
+    }
+
     int currentLevel = getAchievementLevel(id);
     final aType = getAchievementTypeById(id);
     while (aType.children.length > currentLevel + 1 && param >= aType.children[currentLevel + 1]["threshold"]) {
@@ -199,9 +206,13 @@ mixin Achievements {
     return achievementsParam[id] ?? 0;
   }
 
+  num getAchievementParamMax(int id) {
+    return achievementsParamMax[id] ?? 0;
+  }
+
   double getAchievementProgress(int id, int level) {
     final aType = getAchievementTypeById(id);
-    return getAchievementParam(id) / aType.children[level]["threshold"];
+    return getAchievementParamMax(id) / aType.children[level]["threshold"];
   }
 }
 

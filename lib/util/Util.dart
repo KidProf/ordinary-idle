@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:ordinary_idle/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -105,5 +107,86 @@ mixin Util {
     } else {
       return [];
     }
+  }
+
+  static Future<void> changeTheme(BuildContext context, Function(int, BuildContext) onItemTapped) async {
+    var player = Hive.box('player');
+    var visitedThemes = player.get("visitedThemes", defaultValue: <int>[1]);
+    final availableThemes = [1, 2, 3]; //!: change when number of themes increases
+    final currentTheme = player.get("currentTheme", defaultValue: 1);
+    var newTheme =
+        availableThemes[(availableThemes.indexOf(currentTheme) + 1) % availableThemes.length]; //cycle to the next theme
+
+    if (!visitedThemes.contains(newTheme)) {
+      player.put("visitedThemes", <int>[...visitedThemes, newTheme]);
+    }
+    print(visitedThemes);
+    player.put('currentTheme', newTheme);
+    RestartWidget.restartApp(context);
+    onItemTapped(0, context); //switch to home page
+  }
+
+  static Future<void> showMultiplierDialog(
+    Map<String, double> multipliers,
+    Map<String, double> newMultipliers,
+    List<Map<String, dynamic>> actions,
+    BuildContext context,
+  ) async {
+    List<Widget> children = [];
+    if (newMultipliers.isEmpty) {
+      double totalMultiplier = multipliers.keys.map((String key)=> multipliers[key]).fold(1.0,(xs, x) => xs * x!);
+      children = [...multipliers.keys
+          .map((String key) => Row(
+                children: [
+                  Text(key+":"),
+                  Text(doubleRepresentation(multipliers[key]!)),
+                ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ))
+          .toList(),
+          divider(),
+          Row(
+                children: [
+                  Text("Total:"),
+                  Text(doubleRepresentation(totalMultiplier)),
+                ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          ];
+    } else {}
+
+    showDialog(
+      context: context,
+      // barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Multipliers'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: children,
+            ),
+          ),
+          actions: [
+            Row(
+              children: actions
+                  .map(
+                    (a) => ElevatedButton(
+                      child: Text(a["text"] ?? "Close"),
+                      onPressed: a["action"] ??
+                          () {
+                            Navigator.of(context).pop();
+                          },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(a["color"] ?? Colors.blue),
+                      ),
+                    ),
+                  )
+                  .toList(),
+              mainAxisAlignment: actions.length == 1 ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
+            )
+          ],
+        );
+      },
+    );
   }
 }

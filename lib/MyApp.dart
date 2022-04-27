@@ -62,7 +62,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   late final List<Widget> _widgetOptions = <Widget>[
     Home(p),
     SecretsPage(p),
-    AchievementsPage(p),
+    AchievementsPage(p, _onItemTapped),
     Settings(p, _onItemTapped),
   ];
   int _selectedIndex = 0;
@@ -149,11 +149,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   80), //! Please change CookieBackground to match the height of the header (specified in MyApp.dart)
               child: ValueListenableBuilder<Map<String, dynamic>>(
                   valueListenable: p.getVitalsListener,
-                  builder: (ctx, vitals, _) {
+                  builder: (ctx, _, __) {
                     // print("update");
                     return AppBar(
                       title: ValueHeader(
-                        vitals,
+                        p,
                         _selectedIndex,
                       ),
                       toolbarHeight:

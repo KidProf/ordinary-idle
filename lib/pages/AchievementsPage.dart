@@ -3,14 +3,16 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/data/Achievements.dart';
 import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
+import 'package:ordinary_idle/main.dart';
 import 'package:ordinary_idle/util/CustomIcons.dart';
+import 'package:ordinary_idle/util/MyToast.dart';
 import 'package:ordinary_idle/util/Util.dart';
 
 class AchievementsPage extends StatelessWidget {
   final Player p;
-  const AchievementsPage(this.p, {Key? key}) : super(key: key);
+  final Function(int, BuildContext) onItemTapped;
 
-  static const TextStyle titleStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  const AchievementsPage(this.p, this.onItemTapped, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +25,42 @@ class AchievementsPage extends StatelessWidget {
               context: context,
               children: [
                 const SizedBox(height: 10),
-                const Text("Achievements", style: titleStyle),
-                const SizedBox(height: 10),
                 ...Util.showWebWarning(),
+                const Text("Prestige", style: Util.subtitleStyle),
+                const SizedBox(height: 10),
+                const Text(
+                    "Reset all the coins and purchases in the main shop for faster progression in the long run. It will also bring you to another theme which unlocks the possibility of finding different secrets."),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            p.getNetWorth() >= 1000000 ? Color(0xFFD4AF37) : Util.disabled),
+                      ),
+                      onPressed: () async {
+                        //! CRACK: do not put this to release!!!
+                        if (p.getNetWorth() >= 10000000) {
+                          //1e7
+                          await Util.changeTheme(context, onItemTapped);
+                        } else {
+                          MyToast.showBottomToast(
+                              p.fToast, "Reach 1e7 coins net worth to unlock the option of changing themes.");
+                        }
+                      },
+                      onLongPress: () async {
+                        MyToast.showBottomToast(
+                            p.fToast, "This is a temporary function for testers to switch between themes easily.");
+                        await Util.changeTheme(context, onItemTapped);
+                      },
+                      child: Text("Prestige"),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ),
+                Util.divider(),
+                const Text("Achievements", style: Util.titleStyle),
+                const SizedBox(height: 10),
                 const Text(
                     "These are obvious goals of the idle game, for example reaching certain amount in money. It is also here to tell you the secrets are not about doing these things below."),
                 const SizedBox(height: 10),
