@@ -5,8 +5,10 @@ import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/main.dart';
 import 'package:ordinary_idle/util/CustomIcons.dart';
+import 'package:ordinary_idle/util/Functions.dart';
+import 'package:ordinary_idle/util/Modules.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
-import 'package:ordinary_idle/util/Util.dart';
+import 'package:ordinary_idle/util/Styles.dart';
 
 class AchievementsPage extends StatelessWidget {
   final Player p;
@@ -21,12 +23,12 @@ class AchievementsPage extends StatelessWidget {
       child: ValueListenableBuilder<Box>(
           valueListenable: Hive.box('player').listenable(keys: ["achievementsLevel", "achievementsParam"]),
           builder: (context, _, __) {
-            return Util.WarpBody(
+            return Modules.WarpBody(
               context: context,
               children: [
                 const SizedBox(height: 10),
-                ...Util.showWebWarning(),
-                const Text("Prestige", style: Util.subtitleStyle),
+                ...Modules.webWarning(),
+                const Text("Prestige", style: Styles.subtitleStyle),
                 const SizedBox(height: 10),
                 const Text(
                     "Reset all the coins and purchases in the main shop for faster progression in the long run. It will also bring you to another theme which unlocks the possibility of finding different secrets."),
@@ -36,13 +38,21 @@ class AchievementsPage extends StatelessWidget {
                     ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            p.getNetWorth() >= 1000000 ? Color(0xFFD4AF37) : Util.disabled),
+                            p.getNetWorth() >= 1000000 ? Color(0xFFD4AF37) : Styles.disabled),
                       ),
                       onPressed: () async {
                         //! CRACK: do not put this to release!!!
                         if (p.getNetWorth() >= 10000000) {
                           //1e7
-                          await Util.changeTheme(context, onItemTapped);
+                          Functions.showMultiplierDialog(p.getMulitpliers(),{"Prestige": 100.0},[{
+                            "text": "Cancel",
+                            "color": Colors.red,
+                          },{
+                            "text": "Confirm",
+                            "color": Color(0xFFD4AF37),
+                            "action": () async {await Functions.changeTheme(context, onItemTapped);}
+                          }],context, extraMessage: "All your coins and purchases in the main shop will be reset, achievements and secrets will not.");
+                          
                         } else {
                           MyToast.showBottomToast(
                               p.fToast, "Reach 1e7 coins net worth to unlock the option of changing themes.");
@@ -51,15 +61,15 @@ class AchievementsPage extends StatelessWidget {
                       onLongPress: () async {
                         MyToast.showBottomToast(
                             p.fToast, "This is a temporary function for testers to switch between themes easily.");
-                        await Util.changeTheme(context, onItemTapped);
+                        await Functions.changeTheme(context, onItemTapped);
                       },
                       child: Text("Prestige"),
                     ),
                   ],
                   mainAxisAlignment: MainAxisAlignment.center,
                 ),
-                Util.divider(),
-                const Text("Achievements", style: Util.titleStyle),
+                Modules.divider(),
+                const Text("Achievements", style: Styles.titleStyle),
                 const SizedBox(height: 10),
                 const Text(
                     "These are obvious goals of the idle game, for example reaching certain amount in money. It is also here to tell you the secrets are not about doing these things below."),
@@ -84,13 +94,13 @@ class AchievementsPage extends StatelessWidget {
       if (aType.id == 1) {
         //just without the divider and spacing above generally
         widgetsType = [
-          Text(aType.title, style: Util.subtitleStyle),
+          Text(aType.title, style: Styles.subtitleStyle),
         ];
       } else {
         widgetsType = [
-          Util.divider(),
+          Modules.divider(),
           const SizedBox(height: 10),
-          Text(aType.title, style: Util.subtitleStyle),
+          Text(aType.title, style: Styles.subtitleStyle),
         ];
       }
       for (var i = 0; i < aType.children.length; i++) {
@@ -142,7 +152,7 @@ class AchievementsPage extends StatelessWidget {
             isScrollControlled: true,
             context: context,
             builder: (BuildContext context) {
-              return Util.WarpBody(
+              return Modules.WarpBody(
                 context: context,
                 children: [
                   const SizedBox(height: 0),

@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:ordinary_idle/main.dart';
+import 'package:ordinary_idle/util/Modules.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-mixin Util {
+mixin Functions {
   static String doubleRepresentation(double value) {
     if (value < 1000) {
       //10^3
@@ -33,80 +34,8 @@ mixin Util {
     return (value * mod).round().toDouble() / mod;
   }
 
-  static final ButtonStyle greenRounded = ButtonStyle(
-    backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-      RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50.0),
-        side: BorderSide(color: Colors.green),
-      ),
-    ),
-  );
-
-  static final ButtonStyle disabledRounded = ButtonStyle(
-    backgroundColor: MaterialStateProperty.all<Color>(disabled),
-    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-      RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50.0),
-        side: BorderSide(color: disabled),
-      ),
-    ),
-  );
-
-  static const Color disabled = Colors.black54;
-
-  static const TextStyle titleStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const TextStyle subtitleStyle = TextStyle(fontSize: 25);
-
-  //normally used to build body of pages
-  //if you want to center something, warp it with a Row and use flex center
-  //for text: textAlign: TextAlign.center,
-  static Widget WarpBody({required BuildContext context, required List<Widget> children, double? spacing}) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-      child: Wrap(
-        direction: Axis.vertical,
-        alignment: WrapAlignment.start,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: spacing ?? 15,
-        children: children
-            .map((Widget w) => SizedBox(
-                  width: MediaQuery.of(context).size.width - 20,
-                  child: w,
-                ))
-            .toList(),
-      ),
-    );
-  }
-
-  static Widget divider() => const Divider(color: Colors.black45);
-
   static void launchURL(String url) async {
     if (!await launch(url)) throw 'Could not launch $url';
-  }
-
-  static List<Widget> showWebWarning({bool needPaddingBelow = true}) {
-    if (kIsWeb) {
-      return [
-        Text(
-            "WARNING: You are using the web version of OrdinaryIdle, download the app for the best experience, including the ability to discover secrets that require phone gestures and progress storage. (Now available on Google Play only)",
-            style: TextStyle(color: Colors.red)),
-        Row(
-          children: [
-            ElevatedButton(
-              onPressed: () async {
-                Util.launchURL("https://play.google.com/store/apps/details?id=com.kidprof.ordinaryidle");
-              },
-              child: Text("Google Play"),
-            ),
-          ],
-          mainAxisAlignment: MainAxisAlignment.center,
-        ),
-        needPaddingBelow ? SizedBox(height: 10) : Util.divider(),
-      ];
-    } else {
-      return [];
-    }
   }
 
   static Future<void> changeTheme(BuildContext context, Function(int, BuildContext) onItemTapped) async {
@@ -129,8 +58,9 @@ mixin Util {
   static Future<void> showMultiplierDialog(
     Map<String, double> multipliers,
     Map<String, double> newMultipliers,
-    List<Map<String, dynamic>> actions,
+    List<Map<String, dynamic>> actions, //String "text", Function "action", Color "color"
     BuildContext context,
+    {String? extraMessage}
   ) async {
     List<Widget> children = [];
     if (newMultipliers.isEmpty) {
@@ -139,22 +69,52 @@ mixin Util {
           .map((String key) => Row(
                 children: [
                   Text(key+":"),
-                  Text(doubleRepresentation(multipliers[key]!)),
+                  Text("x"+doubleRepresentation(multipliers[key]!)),
                 ],
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
               ))
           .toList(),
-          divider(),
+          Modules.divider(),
           Row(
                 children: [
-                  Text("Total:"),
-                  Text(doubleRepresentation(totalMultiplier)),
+                  Text("Total:",style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text("x"+doubleRepresentation(totalMultiplier),style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
           ];
-    } else {}
+    } else {
+      double totalMultiplier = multipliers.keys.map((String key)=> multipliers[key]).fold(1.0,(xs, x) => xs * x!);
+      double multiplier1 = multipliers.keys.where((String key)=> !newMultipliers.containsKey(key)).map((String key)=> multipliers[key]).fold(1.0,(xs, x) => xs * x!);
+      double multiplier2 = newMultipliers.keys.map((String key)=> newMultipliers[key]).fold(1.0,(xs, x) => xs * x!);
+      double newTotalMultiplier = multiplier1*multiplier2;
+      
+      children = [...multipliers.keys
+          .map((String key) => Row(
+                children: [
+                  Text(key+":"),
+                  Text("x"+doubleRepresentation(multipliers[key]!)),
+                  Text("x"+doubleRepresentation(newMultipliers.containsKey(key) ? newMultipliers[key]! : multipliers[key]!)),
+                ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ))
+          .toList(),
+          Modules.divider(),
+          Row(
+                children: [
+                  Text("Total:",style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text("x"+doubleRepresentation(totalMultiplier),style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text("x"+doubleRepresentation(newTotalMultiplier),style: TextStyle(fontWeight: FontWeight.bold)),
+                ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          ];
+    }
 
+    if(extraMessage != null){
+      children.add(SizedBox(height: 10));
+      children.add(Text(extraMessage));
+    }
     showDialog(
       context: context,
       // barrierDismissible: false, // user must tap button!

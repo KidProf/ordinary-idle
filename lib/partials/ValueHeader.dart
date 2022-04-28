@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ordinary_idle/data/Money.dart';
 import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/util/CustomIcons.dart';
-import 'package:ordinary_idle/util/Util.dart';
+import 'package:ordinary_idle/util/Functions.dart';
 
 //! Please change CookieBackground to match the height of the header (specified in MyApp.dart)
 class ValueHeader extends StatelessWidget {
@@ -37,7 +37,7 @@ class ValueHeader extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () async {
-                  Util.showMultiplierDialog(
+                  Functions.showMultiplierDialog(
                       p.getMulitpliers(),
                       <String, double>{},
                       [
@@ -46,7 +46,7 @@ class ValueHeader extends StatelessWidget {
                       context);
                 },
                 child: Text(
-                  Util.doubleRepresentation(vitals["multiplier"]) + "x",
+                  Functions.doubleRepresentation(vitals["multiplier"]) + "x",
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -64,8 +64,8 @@ class ValueHeader extends StatelessWidget {
           child: Wrap(
             children: selectedIndex != 2
                 ? [
-                    Text("CPS:" + Util.doubleRepresentation(vitals["coinsPerSecond"] * vitals["multiplier"])),
-                    Text("CPT:" + Util.doubleRepresentation(vitals["coinsPerTap"] * vitals["multiplier"])),
+                    Text("CPS:" + Functions.doubleRepresentation(vitals["coinsPerSecond"] * vitals["multiplier"])),
+                    Text("CPT:" + Functions.doubleRepresentation(vitals["coinsPerTap"] * vitals["multiplier"])),
                   ]
                 : [
                     Row(

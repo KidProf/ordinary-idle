@@ -4,7 +4,9 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/main.dart';
-import 'package:ordinary_idle/util/Util.dart';
+import 'package:ordinary_idle/util/Functions.dart';
+import 'package:ordinary_idle/util/Modules.dart';
+import 'package:ordinary_idle/util/Styles.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tuple/tuple.dart';
 
@@ -17,15 +19,15 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      child: Util.WarpBody(
+      child: Modules.WarpBody(
         context: context,
         children: [
           const SizedBox(height: 30),
           const Text(
             'Settings',
-            style: Util.titleStyle,
+            style: Styles.titleStyle,
           ),
-          ...Util.showWebWarning(needPaddingBelow: false),
+          ...Modules.webWarning(needPaddingBelow: false),
           const Text(
             'Danger Zone',
             style: TextStyle(fontSize: 25, color: Colors.red),
@@ -124,10 +126,10 @@ class Settings extends StatelessWidget {
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
-          Util.divider(),
+          Modules.divider(),
           const Text(
             'Change Theme',
-            style: Util.subtitleStyle,
+            style: Styles.subtitleStyle,
           ),
           Text("These functions will be shortly removed after the prestige mechanism is stable."),
           Row(
@@ -139,7 +141,7 @@ class Settings extends StatelessWidget {
                 onPressed: () async {
                   Fluttertoast.showToast(
                       msg: "This is a temporary function for testers to switch between themes easily.");
-                  await Util.changeTheme(context, onItemTapped);
+                  await Functions.changeTheme(context, onItemTapped);
                 },
                 child: Text("Change Theme"),
               ),
@@ -154,10 +156,10 @@ class Settings extends StatelessWidget {
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
-          Util.divider(),
+          Modules.divider(),
           const Text(
             'Abouts',
-            style: Util.subtitleStyle,
+            style: Styles.subtitleStyle,
           ),
           Text(
               "Thank you for joining the beta test. This game is to test out the idea of fusing an idle game with some puzzle-solving components.\n\nDon't be too stressed not being able to find the secrets, as they are supposed to be difficult. You will eventually find some as you progress more and earn more money. The in-game hints system which would be introduced in the future would also definitely help. For now, if you desperately get stuck, you could join our Discord server and discuss.\n\nI am well aware that the number of secrets it has right now is not enough for players to engage long-term, but it will slowly be increasing as time goes by, especially with the support and feedback from players. \n\nOrdinaryIdle is currently in its very early stage of development, there would possibly be bugs or something that is not done very well. If there is something you would like to voice out, you could join our Discord server."),
@@ -168,7 +170,7 @@ class Settings extends StatelessWidget {
                   backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 88, 101, 242)),
                 ),
                 onPressed: () async {
-                  Util.launchURL("https://discord.gg/G3MsQFzSFe");
+                  Functions.launchURL("https://discord.gg/G3MsQFzSFe");
                 },
                 child: Text("Discord Invite Link"),
               ),

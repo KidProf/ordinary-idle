@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
-import 'package:ordinary_idle/util/Util.dart';
+import 'package:ordinary_idle/util/Modules.dart';
+import 'package:ordinary_idle/util/Styles.dart';
 
 class SecretsPage extends StatelessWidget {
   final Secrets p;
@@ -17,13 +18,13 @@ class SecretsPage extends StatelessWidget {
       child: ValueListenableBuilder<Box>(
           valueListenable: Hive.box('player').listenable(keys: ["completedSecrets"]),
           builder: (context, _, __) {
-            return Util.WarpBody(
+            return Modules.WarpBody(
               context: context,
               children: [
                 const SizedBox(height: 10),
                 const Text("Secrets", style: titleStyle),
                 const SizedBox(height: 10),
-                ...Util.showWebWarning(),
+                ...Modules.webWarning(),
                 const Text(
                     "Of course this is NOT just an idle game. There are numerous easter eggs hidden in the app. You will gain multipliers to your income as a reward for finding them. Good luck!"),
                 const SizedBox(height: 10),
@@ -42,7 +43,7 @@ class SecretsPage extends StatelessWidget {
     var widgets = ssh.keys.map((int key) {
       if (key == 0) {
         return [
-          Text(ssh[key]!["title"]!, style: Util.subtitleStyle),
+          Text(ssh[key]!["title"]!, style: Styles.subtitleStyle),
           Text(ssh[key]!["description"]!),
           ...Secrets.getSecretsByTheme(key)
               .map((int id) => Secrets.getSecretById(id))
@@ -51,9 +52,9 @@ class SecretsPage extends StatelessWidget {
         ];
       } else if (p.visitedThemes.contains(key)) {
         return [
-          Util.divider(),
+          Modules.divider(),
           const SizedBox(height: 10),
-          Text(ssh[key]!["title"]!, style: Util.subtitleStyle),
+          Text(ssh[key]!["title"]!, style: Styles.subtitleStyle),
           Text(ssh[key]!["description"]!),
           ...Secrets.getSecretsByTheme(key)
               .map((int id) => Secrets.getSecretById(id))
@@ -62,9 +63,9 @@ class SecretsPage extends StatelessWidget {
         ];
       } else {
         return [
-          Util.divider(),
+          Modules.divider(),
           const SizedBox(height: 10),
-          Text("???", style: Util.subtitleStyle),
+          Text("???", style: Styles.subtitleStyle),
           Text("You have not unlocked this theme yet."),
           ...Secrets.getSecretsByTheme(key)
               .map((int id) => Secrets.getSecretById(id))
@@ -175,7 +176,7 @@ class SecretsPage extends StatelessWidget {
                   ),
                 ];
               }
-              return Util.WarpBody(context: context, children: children);
+              return Modules.WarpBody(context: context, children: children);
             },
           );
         });

@@ -3,8 +3,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:ordinary_idle/model/CurrentSecretV2.dart';
 import 'package:ordinary_idle/util/CurrentVolatileSecret.dart';
+import 'package:ordinary_idle/util/Functions.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
-import 'package:ordinary_idle/util/Util.dart';
 import 'package:tuple/tuple.dart';
 
 mixin Achievements {
@@ -108,7 +108,7 @@ mixin Achievements {
       title: "Money",
       descriptionI: (int i) {
         return "Reach " +
-            Util.doubleRepresentation(_moneyChildren[i]["threshold"]! as double) +
+            Functions.doubleRepresentation(_moneyChildren[i]["threshold"]! as double) +
             " coins. The reward is " +
             _moneyChildren[i]["reward"].toString() +
             (_moneyChildren[i]["reward"] == 1 ? " trophy." : " trophies.");

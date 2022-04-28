@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/data/Shops.dart';
-import 'package:ordinary_idle/util/Util.dart';
+import 'package:ordinary_idle/util/Functions.dart';
+import 'package:ordinary_idle/util/Styles.dart';
 
 class HotbarShop extends StatelessWidget {
   final Player p;
@@ -23,7 +24,7 @@ class HotbarShop extends StatelessWidget {
             valueListenable: Hive.box('purchases').listenable(keys: [id]),
             builder: (context, box, _) {
               return ElevatedButton(
-                style: p.possibleByShopId(id) ? Util.greenRounded : Util.disabledRounded,
+                style: p.possibleByShopId(id) ? Styles.greenRounded : Styles.disabledRounded,
                 child: Stack(
                   children: [
                     Positioned(
@@ -50,7 +51,7 @@ class HotbarShop extends StatelessWidget {
                       child: Row(
                         children: [
                           Text(
-                            Util.doubleRepresentation(p.getCostByShopId(id, level: box.get(id))),
+                            Functions.doubleRepresentation(p.getCostByShopId(id, level: box.get(id))),
                             style: TextStyle(fontSize: 10),
                           ),
                           const Image(

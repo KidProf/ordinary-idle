@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:ordinary_idle/data/Achievements.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/data/Shops.dart';
-import 'package:ordinary_idle/util/Util.dart';
+import 'package:ordinary_idle/util/Functions.dart';
 
 mixin Money {
   //INTERFACE
@@ -46,7 +46,7 @@ mixin Money {
   }
 
   static String vitalsRepresentation(Map<String, dynamic> vitals) {
-    return Util.doubleRepresentation(vitals["coins"]);
+    return Functions.doubleRepresentation(vitals["coins"]);
   }
 
   ValueNotifier<Map<String, dynamic>> get getVitalsListener {

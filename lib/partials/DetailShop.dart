@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/data/Shops.dart';
-import 'package:ordinary_idle/util/Util.dart';
+import 'package:ordinary_idle/util/Functions.dart';
+import 'package:ordinary_idle/util/Styles.dart';
 
 class DetailShop extends StatelessWidget {
   final Player p;
@@ -66,7 +67,7 @@ class DetailShop extends StatelessWidget {
                       width: 80,
                       child: Column(children: [
                         ElevatedButton(
-                          style: p.possibleByShopId(sid) ? Util.greenRounded : Util.disabledRounded,
+                          style: p.possibleByShopId(sid) ? Styles.greenRounded : Styles.disabledRounded,
                           child: Text("BUY"),
                           onPressed: () {
                             p.purchaseItem(sid);
@@ -84,7 +85,7 @@ class DetailShop extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              Util.doubleRepresentation(p.getCostByShopId(sid, level: box.get(sid))),
+                              Functions.doubleRepresentation(p.getCostByShopId(sid, level: box.get(sid))),
                               style: TextStyle(fontSize: 10),
                             ),
                             const SizedBox(width: 5),

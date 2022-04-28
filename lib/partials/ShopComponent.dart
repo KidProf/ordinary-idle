@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/partials/DetailShop.dart';
 import 'package:ordinary_idle/partials/HotbarShop.dart';
-import 'package:ordinary_idle/util/Util.dart';
+import 'package:ordinary_idle/util/Modules.dart';
 
 class ShopComponent extends StatelessWidget {
   final Player p;
@@ -36,7 +36,7 @@ class ShopComponent extends StatelessWidget {
                           height: 500,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.vertical,
-                            child: Util.WarpBody(
+                            child: Modules.WarpBody(
                               context: context,
                               children: [
                                 ..._printShops("tap", vitals),

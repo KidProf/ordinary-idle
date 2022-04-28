@@ -7,8 +7,8 @@ import 'package:ordinary_idle/model/CurrentSecretV2.dart';
 import 'package:ordinary_idle/model/PurchaseV1.dart';
 import 'package:ordinary_idle/util/CurrentVolatileSecret.dart';
 import 'package:ordinary_idle/data/Money.dart';
+import 'package:ordinary_idle/util/Functions.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
-import 'package:ordinary_idle/util/Util.dart';
 import 'package:tuple/tuple.dart';
 
 mixin Shops {
@@ -29,7 +29,7 @@ mixin Shops {
       title: "Tap",
       description: "Increase coins per tap",
       descriptionI: (int i) =>
-          "Increase coins per tap from ${Util.doubleRepresentation(_gain0(i))} to ${Util.doubleRepresentation(_gain0(i + 1))}",
+          "Increase coins per tap from ${Functions.doubleRepresentation(_gain0(i))} to ${Functions.doubleRepresentation(_gain0(i + 1))}",
       type: "tap",
       gain: Resource(
         type: "tap",
@@ -55,7 +55,7 @@ mixin Shops {
       title: "Auto Clicker",
       description: "Increase coins per second",
       descriptionI: (int i) =>
-          "Increase coins per second by ${Util.doubleRepresentation(_gain1(i))} -> ${Util.doubleRepresentation(_gain1(i + 1))}",
+          "Increase coins per second by ${Functions.doubleRepresentation(_gain1(i))} -> ${Functions.doubleRepresentation(_gain1(i + 1))}",
       type: "idle",
       gain: Resource(
         type: "idle",
@@ -81,7 +81,7 @@ mixin Shops {
       title: "Family Business",
       description: "Increase coins per second",
       descriptionI: (int i) =>
-          "Increase coins per second by ${Util.doubleRepresentation(_gain2(i))} -> ${Util.doubleRepresentation(_gain2(i + 1))}",
+          "Increase coins per second by ${Functions.doubleRepresentation(_gain2(i))} -> ${Functions.doubleRepresentation(_gain2(i + 1))}",
       type: "idle",
       gain: Resource(
         type: "idle",
@@ -107,7 +107,7 @@ mixin Shops {
       title: "Village Help",
       description: "Increase coins per second",
       descriptionI: (int i) =>
-          "Increase coins per second by ${Util.doubleRepresentation(_gain3(i))} -> ${Util.doubleRepresentation(_gain3(i + 1))}",
+          "Increase coins per second by ${Functions.doubleRepresentation(_gain3(i))} -> ${Functions.doubleRepresentation(_gain3(i + 1))}",
       type: "idle",
       gain: Resource(
         type: "idle",
