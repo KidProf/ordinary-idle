@@ -1,0 +1,5 @@
+prevMMax|double|0.0
+completedSecrets|List<int>|<int>[]
+currentTheme|int|1
+visitedThemes|List<int>|[1]
+prestigeMultiplier|double|1.0
