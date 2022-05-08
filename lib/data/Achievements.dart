@@ -177,7 +177,7 @@ mixin Achievements {
     return achievementTypes.where((a) => a.id == id).first.exid;
   }
 
-  int updateAchievementParam(String exid, num param){
+  int updateAchievementParam(String exid, num param) {
     //Money.dart interface
     final id = getIdByExid(exid);
     achievementsParam[id] = param;

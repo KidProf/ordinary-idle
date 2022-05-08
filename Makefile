@@ -17,6 +17,7 @@ gen-model:
 	python3 gen/genModel.py gen/PlayerT1.csv > gen/outputs/PlayerT1.txt
 	python3 gen/genModel.py gen/PlayerT2.csv > gen/outputs/PlayerT2.txt
 	python3 gen/genModel.py gen/PlayerT3.csv > gen/outputs/PlayerT3.txt
+	python3 gen/genModel.py gen/config.csv > gen/outputs/config.txt
 
 icon:
 	flutter pub run flutter_launcher_icons:main

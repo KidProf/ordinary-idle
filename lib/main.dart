@@ -5,9 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/MyApp.dart';
+import 'package:ordinary_idle/model/Config.dart';
 
 import 'package:ordinary_idle/model/CurrentSecretV2.dart';
 import 'package:ordinary_idle/model/PlayerT2.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 void main() async {
   WidgetsFlutterBinding
@@ -22,8 +24,7 @@ void main() async {
     Hive.deleteFromDisk();
   }
 
-  // await Hive.openBox("player");
-
+  await Hive.openBox("config");
   await Hive.openBox("playerT1");
   await Hive.openBox("playerT2");
   await Hive.openBox("playerT3");
@@ -32,6 +33,7 @@ void main() async {
 
   if (kIsWeb) {
     //clear all data to prevent it from crashing
+    await Hive.box("config").clear();
     await Hive.box("playerT1").clear();
     await Hive.box("playerT2").clear();
     await Hive.box("playerT3").clear();

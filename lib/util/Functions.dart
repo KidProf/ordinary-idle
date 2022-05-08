@@ -109,7 +109,11 @@ mixin Functions {
                                     "x" +
                                         doubleRepresentation(
                                             newMultipliers.containsKey(key) ? newMultipliers[key]! : multipliers[key]!),
-                                    style: newMultipliers.containsKey(key) ? (newMultipliers[key]! > multipliers[key]! ? TextStyle(color: Colors.green) : TextStyle(color: Colors.red)) : null,
+                                    style: newMultipliers.containsKey(key)
+                                        ? (newMultipliers[key]! > multipliers[key]!
+                                            ? TextStyle(color: Colors.green)
+                                            : TextStyle(color: Colors.red))
+                                        : null,
                                   ),
                                 ],
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

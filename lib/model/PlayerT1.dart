@@ -1,4 +1,4 @@
-// player model: (note the box name is still player)
+// playerT1 model
 // all things here will be reset after prestige
 
 import 'package:hive_flutter/hive_flutter.dart';

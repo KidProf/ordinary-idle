@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -9,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/data/Player.dart';
+import 'package:ordinary_idle/model/Config.dart';
 
 import 'package:ordinary_idle/util/CustomIcons.dart';
 
@@ -23,6 +25,7 @@ import 'package:ordinary_idle/data/Money.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
 import 'package:ordinary_idle/data/Shops.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 // import 'partials/1cookie.dart';
 
@@ -88,6 +91,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     //alert user to open secrets page if they haven't complete secret 0.1
     if (!p.secretCompleted(17)) {
       _addAlert(1);
+    }
+
+    if (!kIsWeb) {
+      showNotificationAndUpdateConfig();
     }
   }
 
@@ -206,5 +213,60 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
       label: "",
     );
+  }
+
+  Future<void> showNotificationAndUpdateConfig() async {
+    //display notification if necessary
+      String lastOpenedVersion = Config.lastOpenedVersion();
+
+      //update info in config
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String buildNumber = packageInfo.buildNumber;
+
+      var timeDiff = Config.lastLogonTime()!=null ? DateTime.now().difference(Config.lastLogonTime()!) : Duration(days: 0);
+      MyToast.showBottomToast(fToast,"timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
+      print("timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
+
+      if (lastOpenedVersion == "") {
+        //first logon / from versions <=20
+        if (buildNumber == "21") {
+          //for internal testers, with prestige functionality
+          showDialog(
+            context: context,
+            // barrierDismissible: false, // user must tap button!
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Progress Reset'),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: const <Widget>[
+                      Text(
+                          'Thank you for trying the game! Unfortunately the progress for all players are reset in this version, as the data structure has changed a lot because the implementation of prestige. To compensate for this, there is a temporary button in settings page that adds 1e7 coins to your progress so that you could try out the new prestige function (in Achievements page) immediately.'),
+                    ],
+                  ),
+                ),
+                actions: [
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        child: const Text('OK'),
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  )
+                ],
+              );
+            },
+          );
+        }
+      }
+
+      Config.updateLastOpenedVersion(buildNumber);
+      Config.updateLastLogonTime(DateTime.now());
+      
+      
   }
 }

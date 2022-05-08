@@ -83,10 +83,10 @@ mixin Money {
     vitals.value = {...vitals.value, "coins": vitals.value["coins"] + coins};
     PlayerT1.updateCoins(vitals.value["coins"]);
 
-    if(vitals.value["coins"] > PlayerT1.mMax()){
+    if (vitals.value["coins"] > PlayerT1.mMax()) {
       PlayerT1.updateMMax(vitals.value["coins"]);
     }
-    
+
     updateAchievementParam("money", vitals.value["coins"]);
 
     return vitals.value["coins"];

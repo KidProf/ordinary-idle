@@ -46,7 +46,7 @@ class AchievementsPage extends StatelessWidget {
                       ),
                       onPressed: () async {
                         //! CRACK: do not put this to release!!!
-                        if (prestigeCriteria || p.getAchievementParam("prestige")>=1) {
+                        if (prestigeCriteria || p.getAchievementParam("prestige") >= 1) {
                           Functions.showMultiplierDialog(
                               p: p,
                               newPrestigeMultiplier: true,
@@ -59,12 +59,12 @@ class AchievementsPage extends StatelessWidget {
                                   "text": "Confirm",
                                   "color": prestigeCriteria ? Color(0xFFD4AF37) : Styles.disabled,
                                   "action": () async {
-                                    if(prestigeCriteria){
+                                    if (prestigeCriteria) {
                                       await Functions.prestige(p, context, onItemTapped);
-                                    }else{
-                                      MyToast.showBottomToast(p.fToast, "The maximum coins you have must be larger than your previous runs for prestige.");
+                                    } else {
+                                      MyToast.showBottomToast(p.fToast,
+                                          "The maximum coins you have must be larger than your previous runs for prestige.");
                                     }
-                                    
                                   }
                                 }
                               ],
