@@ -1,5 +1,5 @@
 achievementsLevel|Map<dynamic,dynamic>|<dynamic,dynamic>{}
 achievementsParam|Map<dynamic,dynamic>|<dynamic,dynamic>{}
 achievementsParamMax|Map<dynamic,dynamic>|<dynamic,dynamic>{}
-otherMultiplier|double|1.0
+otherMultiplier|double|1.0|otherMultiplierV2
 trophies|int|0

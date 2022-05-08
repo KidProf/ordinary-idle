@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
+import 'package:ordinary_idle/model/PlayerT2.dart';
 import 'package:ordinary_idle/util/Modules.dart';
 import 'package:ordinary_idle/util/Styles.dart';
 
@@ -16,7 +17,7 @@ class SecretsPage extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: ValueListenableBuilder<Box>(
-          valueListenable: Hive.box('player').listenable(keys: ["completedSecrets"]),
+          valueListenable: PlayerT2.getBox().listenable(keys: ["completedSecrets"]),
           builder: (context, _, __) {
             return Modules.WarpBody(
               context: context,

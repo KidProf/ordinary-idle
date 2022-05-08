@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:ordinary_idle/model/CurrentSecretV2.dart';
+import 'package:ordinary_idle/model/PlayerT3.dart';
 import 'package:ordinary_idle/util/CurrentVolatileSecret.dart';
 import 'package:ordinary_idle/util/Functions.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
@@ -14,13 +15,11 @@ mixin Achievements {
   late FToast fToast;
   late Function addAlert;
 
-  final Box player = Hive.box("player");
   final Box currentSecrets = Hive.box("currentSecretsV2");
-  late Map<dynamic, dynamic> achievementsLevel = player.get("achievementsLevel", defaultValue: <dynamic,
-      dynamic>{}); //should be Map<int,int> but Hive can only store it in the form of <dynamic, dynamic>
-  late Map<dynamic, dynamic> achievementsParam = player.get("achievementsParam", defaultValue: <dynamic, dynamic>{});
-  late Map<dynamic, dynamic> achievementsParamMax =
-      player.get("achievementsParamMax", defaultValue: <dynamic, dynamic>{});
+  late Map<dynamic, dynamic> achievementsLevel = PlayerT3
+      .achievementsLevel(); //should be Map<int,int> but Hive can only store it in the form of <dynamic, dynamic>
+  late Map<dynamic, dynamic> achievementsParam = PlayerT3.achievementsParam();
+  late Map<dynamic, dynamic> achievementsParamMax = PlayerT3.achievementsParamMax();
   //ctor
   @protected
   void initAchievements(fToast, addAlert) {
@@ -40,16 +39,16 @@ mixin Achievements {
       "threshold": 100000.0, //1e5
       "reward": 1,
     },
-    {
-      "title": "Change Theme Unlocked", //TEMP
-      "threshold": 1000000.0, //1e6
-      "reward": 1,
-    },
     // {
-    //   "title": "Prestige Unlocked",
-    //   "threshold": 10000000.0, //1e7
+    //   "title": "Change Theme Unlocked", //TEMP
+    //   "threshold": 1000000.0, //1e6
     //   "reward": 1,
     // },
+    {
+      "title": "Prestige Unlocked",
+      "threshold": 10000000.0, //1e7
+      "reward": 1,
+    },
     {
       "title": "Endgame",
       "threshold": 1000000000000.0, //1e12
@@ -129,19 +128,20 @@ mixin Achievements {
       },
       children: _tapChildren,
     ),
-    // AchievementType(
-    //   id: 3,
-    //   exid: "prestige",
-    //   title: "Prestige",
-    //   descriptionI: (int i) {
-    //     return "Prestige " +
-    //         _prestigeChildren[i]["threshold"].toString() +
-    //         (_prestigeChildren[i]["threshold"] == 1 ? " time." : " times.")+" The reward is " +
-    //         _prestigeChildren[i]["reward"].toString() +
-    //         (_prestigeChildren[i]["reward"] == 1 ? " trophy." : " trophies.");
-    //   },
-    //   children: _prestigeChildren,
-    // ),
+    AchievementType(
+      id: 5,
+      exid: "prestige",
+      title: "Prestige",
+      descriptionI: (int i) {
+        return "Prestige " +
+            _prestigeChildren[i]["threshold"].toString() +
+            (_prestigeChildren[i]["threshold"] == 1 ? " time." : " times.") +
+            " The reward is " +
+            _prestigeChildren[i]["reward"].toString() +
+            (_prestigeChildren[i]["reward"] == 1 ? " trophy." : " trophies.");
+      },
+      children: _prestigeChildren,
+    ),
     AchievementType(
       id: 4,
       exid: "buy",
@@ -156,6 +156,7 @@ mixin Achievements {
       },
       children: _buyChildren,
     ),
+    //next id = 6
   ];
 
   static AchievementType getAchievementTypeById(int id) {
@@ -170,11 +171,11 @@ mixin Achievements {
   int updateAchievementParam(int id, num param) {
     //Money.dart interface
     achievementsParam[id] = param;
-    player.put("achievementsParam", achievementsParam);
+    PlayerT3.updateAchievementsParam(achievementsParam);
 
     if (achievementsParamMax[id] == null || achievementsParam[id] > achievementsParamMax[id]) {
       achievementsParamMax[id] = achievementsParam[id];
-      player.put("achievementsParamMax", achievementsParamMax);
+      PlayerT3.updateAchievementsParam(achievementsParamMax);
     }
 
     int currentLevel = getAchievementLevel(id);
@@ -184,7 +185,7 @@ mixin Achievements {
       currentLevel++;
       print("Achievement unlocked with id: " + id.toString() + ", level: " + currentLevel.toString());
       achievementsLevel[id] = currentLevel;
-      player.put("achievementsLevel", achievementsLevel);
+      PlayerT3.updateAchievementsLevel(achievementsLevel);
       addTrophies(int.parse(aType.children[currentLevel]["reward"].toString()));
       MyToast.showAchievementToast(fToast, "Achievement Unlocked! ${aType.children[currentLevel]["title"]}");
       addAlert(2);

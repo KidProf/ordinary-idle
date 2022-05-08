@@ -8,7 +8,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 mixin Styles {
-
   static final ButtonStyle greenRounded = ButtonStyle(
     backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -33,6 +32,4 @@ mixin Styles {
 
   static const TextStyle titleStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const TextStyle subtitleStyle = TextStyle(fontSize: 25);
-
-
 }

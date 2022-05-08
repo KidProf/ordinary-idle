@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/MyApp.dart';
 
 import 'package:ordinary_idle/model/CurrentSecretV2.dart';
+import 'package:ordinary_idle/model/PlayerT2.dart';
 
 void main() async {
   WidgetsFlutterBinding
@@ -21,17 +22,25 @@ void main() async {
     Hive.deleteFromDisk();
   }
 
-  await Hive.openBox('player');
+  // await Hive.openBox("player");
+
+  await Hive.openBox("playerT1");
+  await Hive.openBox("playerT2");
+  await Hive.openBox("playerT3");
   await Hive.openBox('currentSecretsV2');
   await Hive.openBox('purchases');
 
   if (kIsWeb) {
-    //set current theme to cookie for best experience on web
-    await Hive.box('player').clear();
+    //clear all data to prevent it from crashing
+    await Hive.box("playerT1").clear();
+    await Hive.box("playerT2").clear();
+    await Hive.box("playerT3").clear();
     await Hive.box('currentSecretsV2').clear();
     await Hive.box('purchases').clear();
-    Hive.box("player").put("visitedThemes", <int>[3]);
-    Hive.box("player").put("currentTheme", 3);
+
+    //set current theme to cookie for best experience on web
+    PlayerT2.updateVisitedThemes([3]);
+    PlayerT2.updateCurrentTheme(3);
   }
 
   runApp(

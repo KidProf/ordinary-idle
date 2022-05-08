@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:ordinary_idle/data/Achievements.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/data/Shops.dart';
+import 'package:ordinary_idle/model/PlayerT1.dart';
+import 'package:ordinary_idle/model/PlayerT2.dart';
+import 'package:ordinary_idle/model/PlayerT3.dart';
 import 'package:ordinary_idle/util/Functions.dart';
 
 mixin Money {
@@ -17,7 +21,6 @@ mixin Money {
 
   //TODO: add functionality to store the log of the value
   late ValueNotifier<Map<String, dynamic>> vitals;
-  final Box player = Hive.box("player");
   late double secretsMultiplier;
   late double prestigeMultiplier;
   late double otherMultiplier;
@@ -26,18 +29,18 @@ mixin Money {
   //ctor
   @protected
   void initMoney() {
-    otherMultiplier = player.get("otherMultiplierV2", defaultValue: 1.0);
-    prestigeMultiplier = player.get("prestigeMultiplier", defaultValue: 1.0);
+    otherMultiplier = PlayerT3.otherMultiplier();
+    prestigeMultiplier = PlayerT2.prestigeMultiplier();
 
     secretsMultiplier = _computeSecretsMultiplier();
 
     vitals = ValueNotifier<Map<String, dynamic>>({
-      "coins": player.get("coins", defaultValue: 1.0),
+      "coins": PlayerT1.coins(),
       "multiplier": _computeMultiplier(),
       "coinsPerSecond": computeCoinsPerSecond(), //from shops: need call initShops first
       "coinsPerTap": computeCoinsPerTap(), //from shops: need call initShops first
-      "hotbarShop": player.get("hotbarShop", defaultValue: <int>[0, 1]),
-      "trophies": player.get("trophies", defaultValue: 0),
+      "hotbarShop": PlayerT1.hotbarShop(),
+      "trophies": PlayerT3.trophies(),
     });
   }
 
@@ -76,21 +79,12 @@ mixin Money {
     return vitals.value["coins"];
   }
 
-  // double addMultiplier(double multiplier) {
-  //   vitals.value = {...vitals.value, "multiplier" : vitals.value["multiplier"]+multiplier};
-  //   player.put("multiplier", vitals.value["multiplier"]);
-  //   return vitals.value["multiplier"];
-  // }
-
   double addCoinsWithoutMultiplier(double coins) {
     vitals.value = {...vitals.value, "coins": vitals.value["coins"] + coins};
-    double netWorth = player.get("netWorth", defaultValue: 1.0);
-    netWorth += coins;
-    player.put("coins", vitals.value["coins"]);
-    player.put("netWorth", netWorth);
+    PlayerT1.updateCoins(vitals.value["coins"]);
 
     updateAchievementParam(Achievements.getIdByExid("money"), vitals.value["coins"]);
-    // print("VITALS COINS: "+vitals.value["coins"].toString()+" HIVE COINS: " + player.get("coins").toString());
+
     return vitals.value["coins"];
   }
 
@@ -98,21 +92,15 @@ mixin Money {
   bool subtractCoins(double coins) {
     if (vitals.value["coins"] - coins < 0) return false;
     vitals.value = {...vitals.value, "coins": vitals.value["coins"] - coins};
-    player.put("coins", vitals.value["coins"]);
+    PlayerT1.updateCoins(vitals.value["coins"]);
     return true;
   }
 
   void setCoins(double coins) {
     vitals.value = {...vitals.value, "coins": coins};
-    player.put("coins", vitals.value["coins"]);
+    PlayerT1.updateCoins(vitals.value["coins"]);
     return;
   }
-
-  // void setMultiplier(double multiplier) {
-  //   vitals.value = {...vitals.value, "multiplier" : multiplier};
-  //   player.put("multiplier", vitals.value["multiplier"]);
-  //   return;
-  // }
 
   //recompute and update secretsMultiplier and hence multiplier, return new secretsMultiplier
   @protected //Secrets.dart interface
@@ -131,7 +119,7 @@ mixin Money {
 
   double _computeSecretsMultiplier() {
     double product = 1;
-    final completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);
+    final completedSecrets = PlayerT2.completedSecrets();
     completedSecrets.forEach((id) {
       var s = Secrets.getSecretById(id);
       product *= s.reward;
@@ -180,7 +168,7 @@ mixin Money {
         var newHotbar = <int>[...vitals.value["hotbarShop"], id];
         newHotbar.sort();
         vitals.value = {...vitals.value, "hotbarShop": newHotbar};
-        player.put("hotbarShop", newHotbar);
+        PlayerT1.updateHotbarShop(newHotbar);
       } else {
         Fluttertoast.showToast(msg: "You can have at most " + hotbarShopLimit.toString() + " items in the hotbar");
       }
@@ -190,7 +178,7 @@ mixin Money {
       if (vitals.value["hotbarShop"].length > 1) {
         var newHotbar = vitals.value["hotbarShop"].where((int x) => x != id).toList();
         vitals.value = {...vitals.value, "hotbarShop": newHotbar};
-        player.put("hotbarShop", newHotbar);
+        PlayerT1.updateHotbarShop(newHotbar);
       } else {
         Fluttertoast.showToast(msg: "You need at least 1 item in the hotbar");
       }
@@ -198,16 +186,25 @@ mixin Money {
   }
 
   int getCurrentTheme() {
-    return player.get("currentTheme", defaultValue: 1);
-  }
-
-  double getNetWorth() {
-    return player.get("netWorth", defaultValue: 1.0);
+    return PlayerT2.currentTheme();
   }
 
   void addTrophies(int t) {
     //Achievements.dart interface
     vitals.value = {...vitals.value, "trophies": vitals.value["trophies"] + t};
-    player.put("trophies", vitals.value["trophies"]);
+    PlayerT3.updateTrophies(vitals.value["trophies"]);
+  }
+
+  double getMMax() {
+    return PlayerT1.mMax();
+  }
+
+  double getPrevMMax() {
+    return PlayerT2.prevMMax();
+  }
+
+  double computePrestigeMultiplier() {
+    final m = getMMax();
+    return pow(10, (log(m) / log(10) - 4) * 1 / 6).toDouble();
   }
 }

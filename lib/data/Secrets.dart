@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:ordinary_idle/model/CurrentSecretV2.dart';
+import 'package:ordinary_idle/model/PlayerT2.dart';
 import 'package:ordinary_idle/util/CurrentVolatileSecret.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
 import 'package:tuple/tuple.dart';
@@ -15,11 +16,10 @@ mixin Secrets {
   late FToast fToast;
   late Function addAlert;
 
-  final Box player = Hive.box("player");
   final Box currentSecrets = Hive.box("currentSecretsV2");
-  late List<dynamic> completedSecrets = player.get("completedSecrets", defaultValue: <int>[]);
-  late List<dynamic> visitedThemes = player.get("visitedThemes", defaultValue: <int>[1]); //used in SecretsPage.dart
-  late int currentTheme = player.get("currentTheme", defaultValue: 1);
+  late List<int> completedSecrets = PlayerT2.completedSecrets();
+  late List<int> visitedThemes = PlayerT2.visitedThemes(); //used in SecretsPage.dart
+  late int currentTheme = PlayerT2.currentTheme();
 
   Map<int, CurrentVolatileSecret> currentVolatileSecrets = {};
 
@@ -479,7 +479,7 @@ mixin Secrets {
     //TODO: better side effects
     final s = getSecretById(id);
     completedSecrets.add(id);
-    player.put("completedSecrets", completedSecrets);
+    PlayerT2.updateCompletedSecrets(completedSecrets);
     MyToast.showSecretToast(fToast, "Secret Unlocked! ${s.title}");
     addAlert(1);
     updateSecretsMultiplier();

@@ -5,7 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 mixin PlayerT1 {
   static Box getBox() {
-    return Hive.box("player");
+    return Hive.box("playerT1");
   }
 
   static double coins() {
@@ -20,7 +20,7 @@ mixin PlayerT1 {
     return getBox().get("hotbarShop", defaultValue: <int>[0, 1]);
   }
 
-  static void updateHotbarshop(List<int> hotbarShop) {
+  static void updateHotbarShop(List<int> hotbarShop) {
     getBox().put("hotbarShop", hotbarShop);
   }
 
@@ -28,7 +28,7 @@ mixin PlayerT1 {
     return getBox().get("mMax", defaultValue: 0.0);
   }
 
-  static void updateMmax(double mMax) {
+  static void updateMMax(double mMax) {
     getBox().put("mMax", mMax);
   }
 }

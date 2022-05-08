@@ -4,6 +4,7 @@ import 'package:ordinary_idle/data/Achievements.dart';
 import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/main.dart';
+import 'package:ordinary_idle/model/PlayerT3.dart';
 import 'package:ordinary_idle/util/CustomIcons.dart';
 import 'package:ordinary_idle/util/Functions.dart';
 import 'package:ordinary_idle/util/Modules.dart';
@@ -21,8 +22,11 @@ class AchievementsPage extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: ValueListenableBuilder<Box>(
-          valueListenable: Hive.box('player').listenable(keys: ["achievementsLevel", "achievementsParam"]),
+          valueListenable: PlayerT3.getBox().listenable(keys: ["achievementsLevel", "achievementsParam"]),
           builder: (context, _, __) {
+            final prestigeCriteria = Functions.prestigeCriteria(p.getMMax(), p.getPrevMMax());
+            //1e7 and higher than last prestige
+
             return Modules.WarpBody(
               context: context,
               children: [
@@ -37,31 +41,34 @@ class AchievementsPage extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            p.getNetWorth() >= 1000000 ? Color(0xFFD4AF37) : Styles.disabled),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(prestigeCriteria ? Color(0xFFD4AF37) : Styles.disabled),
                       ),
                       onPressed: () async {
                         //! CRACK: do not put this to release!!!
-                        if (p.getNetWorth() >= 10000000) {
-                          //1e7
-                          Functions.showMultiplierDialog(p.getMulitpliers(),{"Prestige": 100.0},[{
-                            "text": "Cancel",
-                            "color": Colors.red,
-                          },{
-                            "text": "Confirm",
-                            "color": Color(0xFFD4AF37),
-                            "action": () async {await Functions.changeTheme(context, onItemTapped);}
-                          }],context, extraMessage: "All your coins and purchases in the main shop will be reset, achievements and secrets will not.");
-                          
+                        if (prestigeCriteria) {
+                          Functions.showMultiplierDialog(
+                              p: p,
+                              newPrestigeMultiplier: true,
+                              actions: [
+                                {
+                                  "text": "Cancel",
+                                  "color": Colors.red,
+                                },
+                                {
+                                  "text": "Confirm",
+                                  "color": Color(0xFFD4AF37),
+                                  "action": () async {
+                                    Functions.prestige(p, context, onItemTapped);
+                                  }
+                                }
+                              ],
+                              context: context,
+                              extraMessage:
+                                  "All your coins and purchases in the main shop will be reset, achievements and secrets will not.");
                         } else {
-                          MyToast.showBottomToast(
-                              p.fToast, "Reach 1e7 coins net worth to unlock the option of changing themes.");
+                          MyToast.showBottomToast(p.fToast, "Reach 1e7 coins to unlock prestige.");
                         }
-                      },
-                      onLongPress: () async {
-                        MyToast.showBottomToast(
-                            p.fToast, "This is a temporary function for testers to switch between themes easily.");
-                        await Functions.changeTheme(context, onItemTapped);
                       },
                       child: Text("Prestige"),
                     ),
@@ -87,6 +94,7 @@ class AchievementsPage extends StatelessWidget {
 
   List<Widget> _printSecrets(Player p, BuildContext context) {
     var aTypes = Achievements.achievementTypes;
+    aTypes.sort((a, b) => a.id - b.id); //asc id
 
     var widgets = aTypes.map((AchievementType aType) {
       final int currentLevel = p.getAchievementLevel(aType.id);

@@ -83,12 +83,3 @@ class HotbarShop extends StatelessWidget {
     );
   }
 }
-
-// child: ValueListenableBuilder<Box>(
-//               valueListenable: Hive.box('player').listenable(),
-//               builder: (ctx, box, _) {
-//                 return AppBar(
-//                   title: ValueHeader(pCoins: box.get("pCoins")),
-//                 );
-//               },
-//             )

@@ -1,21 +1,18 @@
 // playerT3 model:
 // all things here will never be reset except when pressing the reset button
-// double netWorth = 1.0
-// double otherMultiplier = 1.0
-// int trophies = 0
 
 import 'package:hive_flutter/hive_flutter.dart';
 
-mixin PlayerT1 {
+mixin PlayerT3 {
   static Box getBox() {
-    return Hive.box("player");
+    return Hive.box("playerT3");
   }
 
   static Map<dynamic, dynamic> achievementsLevel() {
     return getBox().get("achievementsLevel", defaultValue: <dynamic, dynamic>{});
   }
 
-  static void updateAchievementslevel(Map<dynamic, dynamic> achievementsLevel) {
+  static void updateAchievementsLevel(Map<dynamic, dynamic> achievementsLevel) {
     getBox().put("achievementsLevel", achievementsLevel);
   }
 
@@ -23,7 +20,7 @@ mixin PlayerT1 {
     return getBox().get("achievementsParam", defaultValue: <dynamic, dynamic>{});
   }
 
-  static void updateAchievementsparam(Map<dynamic, dynamic> achievementsParam) {
+  static void updateAchievementsParam(Map<dynamic, dynamic> achievementsParam) {
     getBox().put("achievementsParam", achievementsParam);
   }
 
@@ -31,16 +28,16 @@ mixin PlayerT1 {
     return getBox().get("achievementsParamMax", defaultValue: <dynamic, dynamic>{});
   }
 
-  static void updateAchievementsparammax(Map<dynamic, dynamic> achievementsParamMax) {
+  static void updateAchievementsParamMax(Map<dynamic, dynamic> achievementsParamMax) {
     getBox().put("achievementsParamMax", achievementsParamMax);
   }
 
   static double otherMultiplier() {
-    return getBox().get("otherMultiplier", defaultValue: 1.0);
+    return getBox().get("otherMultiplierV2", defaultValue: 1.0);
   }
 
-  static void updateOthermultiplier(double otherMultiplier) {
-    getBox().put("otherMultiplier", otherMultiplier);
+  static void updateOtherMultiplier(double otherMultiplier) {
+    getBox().put("otherMultiplierV2", otherMultiplier);
   }
 
   static int trophies() {

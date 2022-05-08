@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/main.dart';
+import 'package:ordinary_idle/model/PlayerT2.dart';
 import 'package:ordinary_idle/util/Functions.dart';
 import 'package:ordinary_idle/util/Modules.dart';
 import 'package:ordinary_idle/util/Styles.dart';
@@ -141,7 +142,7 @@ class Settings extends StatelessWidget {
                 onPressed: () async {
                   Fluttertoast.showToast(
                       msg: "This is a temporary function for testers to switch between themes easily.");
-                  await Functions.changeTheme(context, onItemTapped);
+                  Functions.changeTheme(context, onItemTapped);
                 },
                 child: Text("Change Theme"),
               ),
@@ -202,11 +203,15 @@ class Settings extends StatelessWidget {
 
   Future<void> _resetAll(BuildContext context) async {
     //Delete Hive
-    await Hive.box('player').clear();
+    await Hive.box("playerT1").clear();
+    await Hive.box("playerT2").clear();
+    await Hive.box("playerT3").clear();
     await Hive.box('currentSecretsV2').clear();
     await Hive.box('purchases').clear();
     //Initialize Hive
-    await Hive.openBox('player');
+    await Hive.openBox("playerT1");
+    await Hive.openBox("playerT2");
+    await Hive.openBox("playerT3");
     await Hive.openBox('currentSecretsV2');
     await Hive.openBox('purchases');
     RestartWidget.restartApp(context);
@@ -214,9 +219,9 @@ class Settings extends StatelessWidget {
 
   Future<void> _resetSecretsOnly(BuildContext context) async {
     //Delete Hive storage related to secrets
-    await Hive.box('player').put("completedSecrets", <int>[]);
-    await Hive.box('player').put("currentTheme", 1);
-    await Hive.box('player').put("visitedThemes", <int>[1]);
+    PlayerT2.updateCompletedSecrets([]);
+    PlayerT2.updateCurrentTheme(1);
+    PlayerT2.updateVisitedThemes([1]);
     await Hive.box('currentSecretsV2').clear();
 
     //Initialize deleted boxes

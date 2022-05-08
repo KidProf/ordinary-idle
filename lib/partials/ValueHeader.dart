@@ -38,12 +38,12 @@ class ValueHeader extends StatelessWidget {
               GestureDetector(
                 onTap: () async {
                   Functions.showMultiplierDialog(
-                      p.getMulitpliers(),
-                      <String, double>{},
-                      [
-                        {"text": "Close"}
-                      ],
-                      context);
+                    p: p,
+                    actions: [
+                      {"text": "Close"}
+                    ],
+                    context: context,
+                  );
                 },
                 child: Text(
                   Functions.doubleRepresentation(vitals["multiplier"]) + "x",

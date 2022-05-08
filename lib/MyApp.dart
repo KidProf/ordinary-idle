@@ -132,14 +132,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     }
   }
 
-  // child: ValueListenableBuilder<Box>(
-  //               valueListenable: Hive.box('player').listenable(),
-  //               builder: (ctx, box, _) {
-  //                 return AppBar(
-  //                   title: ValueHeader(pCoins: box.get("pCoins")),
-  //                 );
-  //               },
-  //             )
   @override
   Widget build(BuildContext context) {
     return Scaffold(

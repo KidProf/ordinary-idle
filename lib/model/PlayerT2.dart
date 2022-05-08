@@ -1,9 +1,5 @@
 // playerT2 model:
 // all things here will be reset after a second layer of prestige
-// double prestigeMultipluer = 1.0;
-// List<int> completedSecrets = [];
-// int currentTheme = 1;
-// List<int> visitedThemes = [1];
 
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -16,7 +12,7 @@ mixin PlayerT2 {
     return getBox().get("prevMMax", defaultValue: 0.0);
   }
 
-  static void updatePrevmmax(double prevMMax) {
+  static void updatePrevMMax(double prevMMax) {
     getBox().put("prevMMax", prevMMax);
   }
 
@@ -24,7 +20,7 @@ mixin PlayerT2 {
     return getBox().get("completedSecrets", defaultValue: <int>[]);
   }
 
-  static void updateCompletedsecrets(List<int> completedSecrets) {
+  static void updateCompletedSecrets(List<int> completedSecrets) {
     getBox().put("completedSecrets", completedSecrets);
   }
 
@@ -32,7 +28,7 @@ mixin PlayerT2 {
     return getBox().get("currentTheme", defaultValue: 1);
   }
 
-  static void updateCurrenttheme(int currentTheme) {
+  static void updateCurrentTheme(int currentTheme) {
     getBox().put("currentTheme", currentTheme);
   }
 
@@ -40,7 +36,7 @@ mixin PlayerT2 {
     return getBox().get("visitedThemes", defaultValue: [1]);
   }
 
-  static void updateVisitedthemes(List<int> visitedThemes) {
+  static void updateVisitedThemes(List<int> visitedThemes) {
     getBox().put("visitedThemes", visitedThemes);
   }
 
@@ -48,7 +44,7 @@ mixin PlayerT2 {
     return getBox().get("prestigeMultiplier", defaultValue: 1.0);
   }
 
-  static void updatePrestigemultiplier(double prestigeMultiplier) {
+  static void updatePrestigeMultiplier(double prestigeMultiplier) {
     getBox().put("prestigeMultiplier", prestigeMultiplier);
   }
 }
