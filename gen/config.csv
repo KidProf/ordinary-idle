@@ -1,0 +1,3 @@
+lastOpenedVersion|String|""
+lastLogoffTime|DateTime?|null
+lastLogonTime|DateTime?|null

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/MyApp.dart';
+import 'package:ordinary_idle/model/Config.dart';
 
 import 'package:ordinary_idle/model/CurrentSecretV2.dart';
 
@@ -21,15 +22,22 @@ void main() async {
     Hive.deleteFromDisk();
   }
 
+
   await Hive.openBox('player');
+
+  await Hive.openBox("config");
+
   await Hive.openBox('currentSecretsV2');
   await Hive.openBox('purchases');
 
   if (kIsWeb) {
-    //set current theme to cookie for best experience on web
+    //clear all data to prevent it from crashing
     await Hive.box('player').clear();
+    await Hive.box("config").clear();
     await Hive.box('currentSecretsV2').clear();
     await Hive.box('purchases').clear();
+
+    //set current theme to cookie for best experience on web
     Hive.box("player").put("visitedThemes", <int>[3]);
     Hive.box("player").put("currentTheme", 3);
   }

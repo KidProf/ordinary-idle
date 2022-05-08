@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -9,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ordinary_idle/data/Player.dart';
+import 'package:ordinary_idle/model/Config.dart';
 
 import 'package:ordinary_idle/util/CustomIcons.dart';
 
@@ -23,6 +25,7 @@ import 'package:ordinary_idle/data/Money.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
 import 'package:ordinary_idle/data/Shops.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 // import 'partials/1cookie.dart';
 
@@ -88,6 +91,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     //alert user to open secrets page if they haven't complete secret 0.1
     if (!p.secretCompleted(17)) {
       _addAlert(1);
+    }
+
+    if (!kIsWeb) {
+      showNotificationAndUpdateConfig();
     }
   }
 
@@ -214,5 +221,58 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
       label: "",
     );
+  }
+
+  Future<void> showNotificationAndUpdateConfig() async {
+    //display notification if necessary
+      String lastOpenedVersion = Config.lastOpenedVersion();
+
+      //update info in config
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String buildNumber = packageInfo.buildNumber;
+
+      var timeDiff = Config.lastLogonTime()!=null ? DateTime.now().difference(Config.lastLogonTime()!) : Duration(days: 0);
+      // MyToast.showBottomToast(fToast,"timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
+      print("timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
+
+        //lastOpenedVersion == "" ==> first logon / from versions <=20
+        if (lastOpenedVersion != buildNumber && buildNumber == "22") {
+          //for internal testers, with prestige functionality
+          showDialog(
+            context: context,
+            barrierDismissible: false, // user must tap button!
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Progress Reset Next Update'),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: const <Widget>[
+                      Text(
+                          'Thank you for trying the game! I am currently working on some big changes to the game including prestige and offline income. Unfortunately, it also means the data storage mechanism got completely revamped and your exisiting progress will be lost once the new update is live (possibly in late June). Sorry for any inconvenience caused and thank you for your understanding, as the game is still in its testing phase. You could join the Discord server for more information.'),
+                    ],
+                  ),
+                ),
+                actions: [
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        child: const Text('OK'),
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  )
+                ],
+              );
+            },
+          );
+        }
+
+      Config.updateLastOpenedVersion(buildNumber);
+      Config.updateLastLogonTime(DateTime.now());
+      
+      
   }
 }
