@@ -4,8 +4,10 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 mixin PlayerT1 {
+  static const boxString = "playerT1";
+
   static Box getBox() {
-    return Hive.box("playerT1");
+    return Hive.box(boxString);
   }
 
   static double coins() {

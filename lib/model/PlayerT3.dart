@@ -4,8 +4,10 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 mixin PlayerT3 {
+  static const boxString = "playerT3";
+
   static Box getBox() {
-    return Hive.box("playerT3");
+    return Hive.box(boxString);
   }
 
   static Map<dynamic, dynamic> achievementsLevel() {

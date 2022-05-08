@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:ordinary_idle/data/Achievements.dart';
 import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/main.dart';
+import 'package:ordinary_idle/model/PlayerT1.dart';
+import 'package:ordinary_idle/model/PlayerT2.dart';
 import 'package:ordinary_idle/util/Modules.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -39,26 +41,6 @@ mixin Functions {
 
   static void launchURL(String url) async {
     if (!await launch(url)) throw 'Could not launch $url';
-  }
-
-  //TODO
-  static void changeTheme(BuildContext context, Function(int, BuildContext) onItemTapped) {
-    var player = Hive.box("player");
-    var visitedThemes = player.get("visitedThemes", defaultValue: <int>[1]);
-    final availableThemes = [1, 2, 3]; //!: change when number of themes increases
-    final currentTheme = player.get("currentTheme", defaultValue: 1);
-    var newTheme =
-        availableThemes[(availableThemes.indexOf(currentTheme) + 1) % availableThemes.length]; //cycle to the next theme
-
-    if (!visitedThemes.contains(newTheme)) {
-      player.put("visitedThemes", <int>[...visitedThemes, newTheme]);
-    }
-    print(visitedThemes);
-    player.put('currentTheme', newTheme);
-
-    //restarting of the whole app, so what we just save everything to hive then its fine
-    RestartWidget.restartApp(context);
-    onItemTapped(0, context); //switch to home page
   }
 
   static Future<void> showMultiplierDialog({
@@ -181,29 +163,52 @@ mixin Functions {
   }
 
   static bool prestigeCriteria(double mMax, double prevMMax) {
+    // print("mMax: $mMax, prevMMax: $prevMMax");
     return mMax >= 10000000 && mMax >= prevMMax;
     //1e7 and higher than last prestige
   }
 
   //TODO
-  static void prestige(Player p, BuildContext context, Function(int, BuildContext) onItemTapped) {
+  static void changeTheme(BuildContext context, Function(int, BuildContext) onItemTapped) {
+    var visitedThemes = PlayerT2.visitedThemes();
+    final availableThemes = [1, 2, 3]; //!: change when number of themes increases
+    final currentTheme = PlayerT2.currentTheme();
+    var newTheme =
+        availableThemes[(availableThemes.indexOf(currentTheme) + 1) % availableThemes.length]; //cycle to the next theme
+
+    if (!visitedThemes.contains(newTheme)) {
+      PlayerT2.updateVisitedThemes(<int>[...visitedThemes, newTheme]);
+    }
+    print(visitedThemes);
+    PlayerT2.updateCurrentTheme(newTheme);
+
+    //restarting of the whole app, so what we just save everything to hive then its fine
+    RestartWidget.restartApp(context);
+    onItemTapped(0, context); //switch to home page
+  }
+
+  //TODO
+  static Future<void> prestige(Player p, BuildContext context, Function(int, BuildContext) onItemTapped) async {
     //assertion on criteria before continuing
     if (!prestigeCriteria(p.getMMax(), p.getPrevMMax())) {
       Fluttertoast.showToast(msg: "Not prestiged: Criteria not met");
       return;
     }
 
-    //save multiplier
-    var player = Hive.box("player");
-    player.put("prestigeMultiplier", p.computePrestigeMultiplier());
+    //update multiplier
+    PlayerT2.updatePrestigeMultiplier(p.computePrestigeMultiplier());
 
     //save mmax when prestige
-    player.put("prevMMax", p.getMMax());
+    PlayerT2.updatePrevMMax(p.getMMax());
 
     //increase 1 for prestige achievement
-    p.incrementAchievementParam(Achievements.getIdByExid("prestige"));
+    p.incrementAchievementParamByExid("prestige");
 
-    //reset money count
+    //reset everything in tier 1 player box
+    await PlayerT1.getBox().clear();
+
+    //Initialize deleted boxes
+    await Hive.openBox(PlayerT1.boxString);
 
     //reset purchases
     Hive.box('purchases').clear();

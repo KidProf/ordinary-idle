@@ -59,7 +59,7 @@ class AchievementsPage extends StatelessWidget {
                                   "text": "Confirm",
                                   "color": Color(0xFFD4AF37),
                                   "action": () async {
-                                    Functions.prestige(p, context, onItemTapped);
+                                    await Functions.prestige(p, context, onItemTapped);
                                   }
                                 }
                               ],

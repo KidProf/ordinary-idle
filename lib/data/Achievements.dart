@@ -168,6 +168,10 @@ mixin Achievements {
     return achievementTypes.where((a) => a.exid == exid).first.id;
   }
 
+  int updateAchievementParamByExid(String exid, num param){
+    return updateAchievementParam(getIdByExid(exid), param);
+  }
+
   int updateAchievementParam(int id, num param) {
     //Money.dart interface
     achievementsParam[id] = param;
@@ -191,6 +195,10 @@ mixin Achievements {
       addAlert(2);
     }
     return currentLevel;
+  }
+
+  int incrementAchievementParamByExid(String exid){
+    return incrementAchievementParam(getIdByExid(exid));
   }
 
   int incrementAchievementParam(int id) {

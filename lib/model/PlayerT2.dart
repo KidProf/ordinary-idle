@@ -4,8 +4,10 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 mixin PlayerT2 {
+  static const boxString = "playerT2";
+
   static Box getBox() {
-    return Hive.box("playerT2");
+    return Hive.box(boxString);
   }
 
   static double prevMMax() {
