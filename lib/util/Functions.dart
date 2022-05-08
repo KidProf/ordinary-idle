@@ -109,7 +109,7 @@ mixin Functions {
                                     "x" +
                                         doubleRepresentation(
                                             newMultipliers.containsKey(key) ? newMultipliers[key]! : multipliers[key]!),
-                                    style: newMultipliers.containsKey(key) ? TextStyle(color: Colors.green) : null,
+                                    style: newMultipliers.containsKey(key) ? (newMultipliers[key]! > multipliers[key]! ? TextStyle(color: Colors.green) : TextStyle(color: Colors.red)) : null,
                                   ),
                                 ],
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -202,7 +202,7 @@ mixin Functions {
     PlayerT2.updatePrevMMax(p.getMMax());
 
     //increase 1 for prestige achievement
-    p.incrementAchievementParamByExid("prestige");
+    p.incrementAchievementParam("prestige");
 
     //reset everything in tier 1 player box
     await PlayerT1.getBox().clear();

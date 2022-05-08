@@ -46,7 +46,7 @@ class AchievementsPage extends StatelessWidget {
                       ),
                       onPressed: () async {
                         //! CRACK: do not put this to release!!!
-                        if (prestigeCriteria) {
+                        if (prestigeCriteria || p.getAchievementParam("prestige")>=1) {
                           Functions.showMultiplierDialog(
                               p: p,
                               newPrestigeMultiplier: true,
@@ -57,9 +57,14 @@ class AchievementsPage extends StatelessWidget {
                                 },
                                 {
                                   "text": "Confirm",
-                                  "color": Color(0xFFD4AF37),
+                                  "color": prestigeCriteria ? Color(0xFFD4AF37) : Styles.disabled,
                                   "action": () async {
-                                    await Functions.prestige(p, context, onItemTapped);
+                                    if(prestigeCriteria){
+                                      await Functions.prestige(p, context, onItemTapped);
+                                    }else{
+                                      MyToast.showBottomToast(p.fToast, "The maximum coins you have must be larger than your previous runs for prestige.");
+                                    }
+                                    
                                   }
                                 }
                               ],
@@ -97,7 +102,7 @@ class AchievementsPage extends StatelessWidget {
     aTypes.sort((a, b) => a.id - b.id); //asc id
 
     var widgets = aTypes.map((AchievementType aType) {
-      final int currentLevel = p.getAchievementLevel(aType.id);
+      final int currentLevel = p.getAchievementLevel(aType.exid);
       List<Widget> widgetsType;
       if (aType.id == 1) {
         //just without the divider and spacing above generally

@@ -16,8 +16,8 @@ mixin Money {
   double computeCoinsPerSecond();
   double computeCoinsPerTap();
   double getCostByShopId(int id, {int? level});
-  int updateAchievementParam(int id, num param);
-  int incrementAchievementParam(int id);
+  int updateAchievementParam(String exid, num param);
+  int incrementAchievementParam(String exid);
 
   //TODO: add functionality to store the log of the value
   late ValueNotifier<Map<String, dynamic>> vitals;
@@ -70,7 +70,7 @@ mixin Money {
 
   double tap(double coins) {
     addCoins(vitals.value["coinsPerTap"] * coins);
-    incrementAchievementParam(Achievements.getIdByExid("tap"));
+    incrementAchievementParam("tap");
     return vitals.value["coins"];
   }
 
@@ -87,7 +87,7 @@ mixin Money {
       PlayerT1.updateMMax(vitals.value["coins"]);
     }
     
-    updateAchievementParam(Achievements.getIdByExid("money"), vitals.value["coins"]);
+    updateAchievementParam("money", vitals.value["coins"]);
 
     return vitals.value["coins"];
   }

@@ -163,17 +163,23 @@ mixin Achievements {
     return achievementTypes.where((a) => a.id == id).first;
   }
 
+  static AchievementType getAchievementTypeByExid(String exid) {
+    return achievementTypes.where((a) => a.exid == exid).first;
+  }
+
   static int getIdByExid(String exid) {
     //Money.dart interface
     return achievementTypes.where((a) => a.exid == exid).first.id;
   }
 
-  int updateAchievementParamByExid(String exid, num param){
-    return updateAchievementParam(getIdByExid(exid), param);
+  static String getExidById(int id) {
+    //Money.dart interface
+    return achievementTypes.where((a) => a.id == id).first.exid;
   }
 
-  int updateAchievementParam(int id, num param) {
+  int updateAchievementParam(String exid, num param){
     //Money.dart interface
+    final id = getIdByExid(exid);
     achievementsParam[id] = param;
     PlayerT3.updateAchievementsParam(achievementsParam);
 
@@ -182,7 +188,7 @@ mixin Achievements {
       PlayerT3.updateAchievementsParam(achievementsParamMax);
     }
 
-    int currentLevel = getAchievementLevel(id);
+    int currentLevel = getAchievementLevel(exid);
     final aType = getAchievementTypeById(id);
     while (aType.children.length > currentLevel + 1 && param >= aType.children[currentLevel + 1]["threshold"]) {
       //LEVEL UP
@@ -197,31 +203,27 @@ mixin Achievements {
     return currentLevel;
   }
 
-  int incrementAchievementParamByExid(String exid){
-    return incrementAchievementParam(getIdByExid(exid));
-  }
-
-  int incrementAchievementParam(int id) {
+  int incrementAchievementParam(String exid) {
     //Money.dart interface
-    num newParam = getAchievementParam(id) + 1;
-    return updateAchievementParam(id, newParam);
+    num newParam = getAchievementParam(exid) + 1;
+    return updateAchievementParam(exid, newParam);
   }
 
-  int getAchievementLevel(int id) {
-    return achievementsLevel[id] ?? -1;
+  int getAchievementLevel(String exid) {
+    return achievementsLevel[getIdByExid(exid)] ?? -1;
   }
 
-  num getAchievementParam(int id) {
-    return achievementsParam[id] ?? 0;
+  num getAchievementParam(String exid) {
+    return achievementsParam[getIdByExid(exid)] ?? 0;
   }
 
-  num getAchievementParamMax(int id) {
-    return achievementsParamMax[id] ?? 0;
+  num getAchievementParamMax(String exid) {
+    return achievementsParamMax[getIdByExid(exid)] ?? 0;
   }
 
   double getAchievementProgress(int id, int level) {
     final aType = getAchievementTypeById(id);
-    return getAchievementParamMax(id) / aType.children[level]["threshold"];
+    return getAchievementParamMax(getExidById(id)) / aType.children[level]["threshold"];
   }
 }
 
