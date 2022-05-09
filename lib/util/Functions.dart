@@ -43,6 +43,19 @@ mixin Functions {
     if (!await launch(url)) throw 'Could not launch $url';
   }
 
+  static Future<void> showMyDialog({
+    required AlertDialog child,
+    required BuildContext context,
+    bool barrierDismissible = true, // false: user must tap button!
+  }) async {
+    showDialog(
+        context: context,
+        barrierDismissible: barrierDismissible,
+        builder: (BuildContext context) {
+          return child;
+        });
+  }
+
   static Future<void> showMultiplierDialog({
     required Player p,
     bool newPrestigeMultiplier = false,
@@ -50,119 +63,116 @@ mixin Functions {
     required BuildContext context,
     String? extraMessage,
   }) async {
-    showDialog(
+    showMyDialog(
       context: context,
-      // barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Multipliers'),
-          content: SingleChildScrollView(
-            child: ValueListenableBuilder<Map<String, dynamic>>(
-                valueListenable: p.getVitalsListener,
-                builder: (ctx, _, __) {
-                  List<Widget> children = [];
+      child: AlertDialog(
+        title: const Text('Multipliers'),
+        content: SingleChildScrollView(
+          child: ValueListenableBuilder<Map<String, dynamic>>(
+              valueListenable: p.getVitalsListener,
+              builder: (ctx, _, __) {
+                List<Widget> children = [];
 
-                  var multipliers = p.getMulitpliers();
+                var multipliers = p.getMulitpliers();
 
-                  if (!newPrestigeMultiplier) {
-                    double totalMultiplier =
-                        multipliers.keys.map((String key) => multipliers[key]).fold(1.0, (xs, x) => xs * x!);
-                    children = [
-                      ...multipliers.keys
-                          .map((String key) => Row(
-                                children: [
-                                  Text(key + ":"),
-                                  Text("x" + doubleRepresentation(multipliers[key]!)),
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              ))
-                          .toList(),
-                      Modules.divider(),
-                      Row(
-                        children: [
-                          Text("Total:", style: TextStyle(fontWeight: FontWeight.bold)),
-                          Text("x" + doubleRepresentation(totalMultiplier),
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      ),
-                    ];
-                  } else {
-                    final newMultipliers = {"Prestige": p.computePrestigeMultiplier()};
-                    double totalMultiplier =
-                        multipliers.keys.map((String key) => multipliers[key]).fold(1.0, (xs, x) => xs * x!);
-                    double multiplier1 = multipliers.keys
-                        .where((String key) => !newMultipliers.containsKey(key))
-                        .map((String key) => multipliers[key])
-                        .fold(1.0, (xs, x) => xs * x!);
-                    double multiplier2 =
-                        newMultipliers.keys.map((String key) => newMultipliers[key]).fold(1.0, (xs, x) => xs * x!);
-                    double newTotalMultiplier = multiplier1 * multiplier2;
-
-                    children = [
-                      ...multipliers.keys
-                          .map((String key) => Row(
-                                children: [
-                                  Text(key + ":"),
-                                  Text("x" + doubleRepresentation(multipliers[key]!)),
-                                  Text(
-                                    "x" +
-                                        doubleRepresentation(
-                                            newMultipliers.containsKey(key) ? newMultipliers[key]! : multipliers[key]!),
-                                    style: newMultipliers.containsKey(key)
-                                        ? (newMultipliers[key]! > multipliers[key]!
-                                            ? TextStyle(color: Colors.green)
-                                            : TextStyle(color: Colors.red))
-                                        : null,
-                                  ),
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              ))
-                          .toList(),
-                      Modules.divider(),
-                      Row(
-                        children: [
-                          Text("Total:", style: TextStyle(fontWeight: FontWeight.bold)),
-                          Text("x" + doubleRepresentation(totalMultiplier),
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          Text("x" + doubleRepresentation(newTotalMultiplier),
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      ),
-                    ];
-                  }
-
-                  if (extraMessage != null) {
-                    children.add(SizedBox(height: 30));
-                    children.add(Text(extraMessage));
-                  }
-                  return ListBody(
-                    children: children,
-                  );
-                }),
-          ),
-          actions: [
-            Row(
-              children: actions
-                  .map(
-                    (a) => ElevatedButton(
-                      child: Text(a["text"] ?? "Close"),
-                      onPressed: a["action"] ??
-                          () {
-                            Navigator.of(context).pop();
-                          },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(a["color"] ?? Colors.blue),
-                      ),
+                if (!newPrestigeMultiplier) {
+                  double totalMultiplier =
+                      multipliers.keys.map((String key) => multipliers[key]).fold(1.0, (xs, x) => xs * x!);
+                  children = [
+                    ...multipliers.keys
+                        .map((String key) => Row(
+                              children: [
+                                Text(key + ":"),
+                                Text("x" + doubleRepresentation(multipliers[key]!)),
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            ))
+                        .toList(),
+                    Modules.divider(),
+                    Row(
+                      children: [
+                        Text("Total:", style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text("x" + doubleRepresentation(totalMultiplier),
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
-                  )
-                  .toList(),
-              mainAxisAlignment: actions.length == 1 ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
-            )
-          ],
-        );
-      },
+                  ];
+                } else {
+                  final newMultipliers = {"Prestige": p.computePrestigeMultiplier()};
+                  double totalMultiplier =
+                      multipliers.keys.map((String key) => multipliers[key]).fold(1.0, (xs, x) => xs * x!);
+                  double multiplier1 = multipliers.keys
+                      .where((String key) => !newMultipliers.containsKey(key))
+                      .map((String key) => multipliers[key])
+                      .fold(1.0, (xs, x) => xs * x!);
+                  double multiplier2 =
+                      newMultipliers.keys.map((String key) => newMultipliers[key]).fold(1.0, (xs, x) => xs * x!);
+                  double newTotalMultiplier = multiplier1 * multiplier2;
+
+                  children = [
+                    ...multipliers.keys
+                        .map((String key) => Row(
+                              children: [
+                                Text(key + ":"),
+                                Text("x" + doubleRepresentation(multipliers[key]!)),
+                                Text(
+                                  "x" +
+                                      doubleRepresentation(
+                                          newMultipliers.containsKey(key) ? newMultipliers[key]! : multipliers[key]!),
+                                  style: newMultipliers.containsKey(key)
+                                      ? (newMultipliers[key]! > multipliers[key]!
+                                          ? TextStyle(color: Colors.green)
+                                          : TextStyle(color: Colors.red))
+                                      : null,
+                                ),
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            ))
+                        .toList(),
+                    Modules.divider(),
+                    Row(
+                      children: [
+                        Text("Total:", style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text("x" + doubleRepresentation(totalMultiplier),
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text("x" + doubleRepresentation(newTotalMultiplier),
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                  ];
+                }
+
+                if (extraMessage != null) {
+                  children.add(SizedBox(height: 30));
+                  children.add(Text(extraMessage));
+                }
+                return ListBody(
+                  children: children,
+                );
+              }),
+        ),
+        actions: [
+          Row(
+            children: actions
+                .map(
+                  (a) => ElevatedButton(
+                    child: Text(a["text"] ?? "Close"),
+                    onPressed: a["action"] ??
+                        () {
+                          Navigator.of(context).pop();
+                        },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(a["color"] ?? Colors.blue),
+                    ),
+                  ),
+                )
+                .toList(),
+            mainAxisAlignment: actions.length == 1 ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
+          )
+        ],
+      ),
     );
   }
 
@@ -186,7 +196,7 @@ mixin Functions {
     print(visitedThemes);
     PlayerT2.updateCurrentTheme(newTheme);
 
-    //restarting of the whole app, so what we just save everything to hive then its fine
+    //restarting of the whole app, so what we just save everything to hive then its fine (so that the variables e.g. money you have, will be reset)
     RestartWidget.restartApp(context);
     onItemTapped(0, context); //switch to home page
   }
@@ -205,6 +215,7 @@ mixin Functions {
     //save mmax when prestige
     PlayerT2.updatePrevMMax(p.getMMax());
 
+    //TODO: Toast not seen because of app restart (maybe put the information that we need to show the toast to Hive)
     //increase 1 for prestige achievement
     p.incrementAchievementParam("prestige");
 
@@ -215,7 +226,7 @@ mixin Functions {
     await Hive.openBox(PlayerT1.boxString);
 
     //reset purchases
-    Hive.box('purchases').clear();
+    await Hive.box('purchases').clear();
 
     //change theme
     //it will also invoke restarting of the whole app, so what we just save everything to hive then its fine

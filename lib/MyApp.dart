@@ -23,6 +23,7 @@ import 'package:ordinary_idle/partials/ValueHeader.dart';
 
 import 'package:ordinary_idle/data/Money.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
+import 'package:ordinary_idle/util/Functions.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
 import 'package:ordinary_idle/data/Shops.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -217,56 +218,53 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   Future<void> showNotificationAndUpdateConfig() async {
     //display notification if necessary
-      String lastOpenedVersion = Config.lastOpenedVersion();
+    String lastOpenedVersion = Config.lastOpenedVersion();
 
-      //update info in config
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      String buildNumber = packageInfo.buildNumber;
+    //update info in config
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String buildNumber = packageInfo.buildNumber;
 
-      var timeDiff = Config.lastLogonTime()!=null ? DateTime.now().difference(Config.lastLogonTime()!) : Duration(days: 0);
-      MyToast.showBottomToast(fToast,"timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
-      print("timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
+    var timeDiff =
+        Config.lastLogonTime() != null ? DateTime.now().difference(Config.lastLogonTime()!) : Duration(days: 0);
+    // MyToast.showBottomToast(fToast,"timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
+    print("timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
 
-      if (lastOpenedVersion == "") {
-        //first logon / from versions <=20
-        if (buildNumber == "21") {
-          //for internal testers, with prestige functionality
-          showDialog(
-            context: context,
-            // barrierDismissible: false, // user must tap button!
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Progress Reset'),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: const <Widget>[
-                      Text(
-                          'Thank you for trying the game! Unfortunately the progress for all players are reset in this version, as the data structure has changed a lot because the implementation of prestige. To compensate for this, there is a temporary button in settings page that adds 1e7 coins to your progress so that you could try out the new prestige function (in Achievements page) immediately.'),
-                    ],
-                  ),
-                ),
-                actions: [
-                  Row(
-                    children: [
-                      ElevatedButton(
-                        child: const Text('OK'),
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
-                  )
+    if (lastOpenedVersion == "") {
+      //first logon / from versions <=20
+      if (buildNumber == "21") {
+        //for internal testers, with prestige functionality
+        Functions.showMyDialog(
+          context: context,
+          barrierDismissible: false, // user must tap button!
+          child: AlertDialog(
+            title: const Text('Progress Reset'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Text(
+                      'Thank you for trying the game! Unfortunately the progress for all players are reset in this version, as the data structure has changed a lot because the implementation of prestige. To compensate for this, there is a temporary button in settings page that adds 1e7 coins to your progress so that you could try out the new prestige function (in Achievements page) immediately.'),
                 ],
-              );
-            },
-          );
-        }
+              ),
+            ),
+            actions: [
+              Row(
+                children: [
+                  ElevatedButton(
+                    child: const Text('OK'),
+                    onPressed: () async {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+              )
+            ],
+          ),
+        );
       }
+    }
 
-      Config.updateLastOpenedVersion(buildNumber);
-      Config.updateLastLogonTime(DateTime.now());
-      
-      
+    Config.updateLastOpenedVersion(buildNumber);
+    Config.updateLastLogonTime(DateTime.now());
   }
 }

@@ -42,84 +42,78 @@ class Settings extends StatelessWidget {
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
                 ),
                 onPressed: () async {
-                  showDialog(
+                  Functions.showMyDialog(
                     context: context,
-                    // barrierDismissible: false, // user must tap button!
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Reset All'),
-                        content: SingleChildScrollView(
-                          child: ListBody(
-                            children: const <Widget>[
-                              Text('Would you like reset all your progress? This process cannot be undone.'),
-                            ],
-                          ),
+                    child: AlertDialog(
+                      title: const Text('Reset All'),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: const <Widget>[
+                            Text('Would you like reset all your progress? This process cannot be undone.'),
+                          ],
                         ),
-                        actions: [
-                          Row(
-                            children: [
-                              ElevatedButton(
-                                  child: const Text('Yes'),
-                                  onPressed: () async {
-                                    await _resetAll(context);
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all<Color>(
-                                      Colors.red,
-                                    ),
-                                  )),
-                              ElevatedButton(
-                                child: const Text('No'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
+                      ),
+                      actions: [
+                        Row(
+                          children: [
+                            ElevatedButton(
+                                child: const Text('Yes'),
+                                onPressed: () async {
+                                  await _resetAll(context);
                                 },
-                              ),
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          )
-                        ],
-                      );
-                    },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<Color>(
+                                    Colors.red,
+                                  ),
+                                )),
+                            ElevatedButton(
+                              child: const Text('No'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        )
+                      ],
+                    ),
                   );
                 },
                 child: Text("Reset All"),
               ),
               ElevatedButton(
                 onPressed: () async {
-                  showDialog(
+                  Functions.showMyDialog(
                     context: context,
-                    // barrierDismissible: false, // user must tap button!
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Reset Secrets Only'),
-                        content: SingleChildScrollView(
-                          child: ListBody(
-                            children: const <Widget>[
-                              Text('Would you like reset your secrets? This process cannot be undone.'),
-                            ],
-                          ),
+                    child: AlertDialog(
+                      title: const Text('Reset Secrets Only'),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: const <Widget>[
+                            Text('Would you like reset your secrets? This process cannot be undone.'),
+                          ],
                         ),
-                        actions: [
-                          Row(
-                            children: [
-                              ElevatedButton(
-                                child: const Text('Yes'),
-                                onPressed: () async {
-                                  await _resetSecretsOnly(context);
-                                },
-                              ),
-                              ElevatedButton(
-                                child: const Text('No'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          )
-                        ],
-                      );
-                    },
+                      ),
+                      actions: [
+                        Row(
+                          children: [
+                            ElevatedButton(
+                              child: const Text('Yes'),
+                              onPressed: () async {
+                                await _resetSecretsOnly(context);
+                              },
+                            ),
+                            ElevatedButton(
+                              child: const Text('No'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        )
+                      ],
+                    ),
                   );
                 },
                 child: Text("Reset Secrets Only"),
