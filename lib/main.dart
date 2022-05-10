@@ -22,7 +22,6 @@ void main() async {
     Hive.deleteFromDisk();
   }
 
-
   await Hive.openBox('player');
 
   await Hive.openBox("config");

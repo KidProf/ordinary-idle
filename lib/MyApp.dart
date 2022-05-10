@@ -25,6 +25,7 @@ import 'package:ordinary_idle/data/Money.dart';
 import 'package:ordinary_idle/data/Secrets.dart';
 import 'package:ordinary_idle/util/MyToast.dart';
 import 'package:ordinary_idle/data/Shops.dart';
+import 'package:ordinary_idle/util/Util.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 // import 'partials/1cookie.dart';
@@ -225,54 +226,62 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   Future<void> showNotificationAndUpdateConfig() async {
     //display notification if necessary
-      String lastOpenedVersion = Config.lastOpenedVersion();
+    String lastOpenedVersion = Config.lastOpenedVersion();
 
-      //update info in config
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      String buildNumber = packageInfo.buildNumber;
+    //update info in config
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String buildNumber = packageInfo.buildNumber;
 
-      var timeDiff = Config.lastLogonTime()!=null ? DateTime.now().difference(Config.lastLogonTime()!) : Duration(days: 0);
-      // MyToast.showBottomToast(fToast,"timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
-      print("timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
+    var timeDiff =
+        Config.lastLogonTime() != null ? DateTime.now().difference(Config.lastLogonTime()!) : Duration(days: 0);
+    // MyToast.showBottomToast(fToast,"timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
+    print("timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
 
-        //lastOpenedVersion == "" ==> first logon / from versions <=20
-        if (lastOpenedVersion != buildNumber && buildNumber == "22") {
-          //for internal testers, with prestige functionality
-          showDialog(
-            context: context,
-            barrierDismissible: false, // user must tap button!
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Progress Reset Next Update'),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: const <Widget>[
-                      Text(
-                          'Thank you for trying the game! I am currently working on some big changes to the game including prestige and offline income. Unfortunately, it also means the data storage mechanism got completely revamped and your exisiting progress will be lost once the new update is live (possibly in late June). Sorry for any inconvenience caused and thank you for your understanding, as the game is still in its testing phase. You could join the Discord server for more information.'),
-                    ],
-                  ),
-                ),
-                actions: [
-                  Row(
-                    children: [
-                      ElevatedButton(
-                        child: const Text('OK'),
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.center,
-                  )
+    //lastOpenedVersion == "" ==> first logon / from versions <=20
+    if (lastOpenedVersion != buildNumber && buildNumber == "22") {
+      //for internal testers, with prestige functionality
+      showDialog(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Progress Reset Warning'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Text(
+                      'Thank you for trying the game! I am currently working on prestige and offline income mechanics. As a lot has changed, the progress of all players will have to be reset once the new update is live possibly in late June. This is a warning in advance. You could join my Discord server for more information. Sorry for any inconvenience caused and thank you for your understanding, as the game is still in its testing phase.'),
                 ],
-              );
-            },
+              ),
+            ),
+            actions: [
+              Row(
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 88, 101, 242)),
+                    ),
+                    onPressed: () async {
+                      Util.launchURL("https://discord.gg/G3MsQFzSFe");
+                    },
+                    child: Text("Discord Link"),
+                  ),
+                  ElevatedButton(
+                    child: const Text('Close'),
+                    onPressed: () async {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              )
+            ],
           );
-        }
+        },
+      );
+    }
 
-      Config.updateLastOpenedVersion(buildNumber);
-      Config.updateLastLogonTime(DateTime.now());
-      
-      
+    Config.updateLastOpenedVersion(buildNumber);
+    Config.updateLastLogonTime(DateTime.now());
   }
 }
