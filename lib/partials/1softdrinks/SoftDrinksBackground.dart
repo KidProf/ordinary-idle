@@ -260,6 +260,11 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> with ShakeH
         if (!mounted) {
           t.cancel();
         }
+
+        //disable long press while shaking, to prevent people accidentally leaving the current can while shaking.
+        waitLongPressTimer?.cancel();
+        longPressTimer?.cancel();
+
         setState(() {
           timeSinceLastShake += 1;
           timeSinceAnimationStart += 1;
@@ -270,9 +275,9 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> with ShakeH
           print("stop shake timer");
         }
 
-        //if shake animation for more than 2.66 seconds (i.e. phone saked around 0.66 -> 1 sec (because it samples every 0.5 secs) seconds straight?)
+        //if shake animation for more than 2 seconds (i.e. phone shaked once, no duration requirement now (because it samples every 0.5 secs))
         print(timeSinceAnimationStart);
-        if (timeSinceAnimationStart > 80 && (splashAnimationTimer == null || splashAnimationTimer?.isActive == false)) {
+        if (timeSinceAnimationStart >= 60 && (splashAnimationTimer == null || splashAnimationTimer?.isActive == false)) {
           widget.p.progressSecret(10, 0);
           recordSoftDrinkShake();
           setState(() {
