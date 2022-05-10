@@ -22,7 +22,7 @@ class TapCountBackground extends StatefulWidget {
 }
 
 class _TapCountBackgroundState extends State<TapCountBackground> implements Background {
-  Vector2 canvasSize = Vector2(10000,10000);
+  Vector2 canvasSize = Vector2(10000, 10000);
   Timer? lolTimer;
   Timer? orientationTimer;
   NativeDeviceOrientation orientation = NativeDeviceOrientation.portraitUp;
@@ -108,7 +108,7 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _onTapsChanged();
   }
@@ -129,7 +129,7 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
     setState(() {
       taps = widget.p.secretProgress(9999).item2;
     });
-    
+
     //Secret 7
     bool isOverflow = _isOverflow(taps.toString(), canvasSize.x);
     if (isOverflow) {

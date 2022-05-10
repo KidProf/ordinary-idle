@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:vibration/vibration.dart';
 
 mixin Util {
   static String doubleRepresentation(double value) {
@@ -104,6 +105,13 @@ mixin Util {
       ];
     } else {
       return [];
+    }
+  }
+
+  static Future<void> vibrate() async {
+    bool hasVibrator = await Vibration.hasVibrator() ?? false;
+    if (hasVibrator) {
+      Vibration.vibrate();
     }
   }
 }

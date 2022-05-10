@@ -7,6 +7,7 @@ import 'package:ordinary_idle/data/Player.dart';
 import 'package:ordinary_idle/util/Background.dart';
 import 'package:flutter/src/material/colors.dart' as Colors;
 import 'package:ordinary_idle/util/ChangeColors.dart';
+import 'package:ordinary_idle/util/Util.dart';
 import 'package:shake_event/shake_event.dart';
 import 'package:tuple/tuple.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -252,50 +253,57 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> with ShakeH
   shakeEventListener() {
     //DO ACTIONS HERE
     print("SHAKE");
-    timeSinceLastShake = 0;
-    if (!isSplashing && (shakeAnimationTimer == null || shakeAnimationTimer?.isActive == false)) {
-      print("start shake timer");
-      shakeAnimationTimer = Timer.periodic(const Duration(milliseconds: 33), (Timer t) {
-        //1/30 seconds per fire
-        if (!mounted) {
-          t.cancel();
-        }
+    //prerequisite: not long pressing
+    if ((waitLongPressTimer == null || !waitLongPressTimer!.isActive) &&
+        (longPressTimer == null || !longPressTimer!.isActive)) {
+      
+      timeSinceLastShake = 0;
+      if (!isSplashing && (shakeAnimationTimer == null || shakeAnimationTimer?.isActive == false)) {
+        print("start shake timer");
+        Util.vibrate();
+        shakeAnimationTimer = Timer.periodic(const Duration(milliseconds: 33), (Timer t) {
+          //1/30 seconds per fire
+          if (!mounted) {
+            t.cancel();
+          }
 
-        //disable long press while shaking, to prevent people accidentally leaving the current can while shaking.
-        waitLongPressTimer?.cancel();
-        longPressTimer?.cancel();
+          //disable long press while shaking, to prevent people accidentally leaving the current can while shaking.
+          waitLongPressTimer?.cancel();
+          longPressTimer?.cancel();
 
-        setState(() {
-          timeSinceLastShake += 1;
-          timeSinceAnimationStart += 1;
-        });
-        if (timeSinceLastShake >= 60) {
-          timeSinceAnimationStart = 0;
-          t.cancel();
-          print("stop shake timer");
-        }
-
-        //if shake animation for more than 2 seconds (i.e. phone shaked once, no duration requirement now (because it samples every 0.5 secs))
-        print(timeSinceAnimationStart);
-        if (timeSinceAnimationStart >= 60 && (splashAnimationTimer == null || splashAnimationTimer?.isActive == false)) {
-          widget.p.progressSecret(10, 0);
-          recordSoftDrinkShake();
           setState(() {
-            isSplashing = true;
+            timeSinceLastShake += 1;
+            timeSinceAnimationStart += 1;
           });
-          splashAnimationTimer = Timer(const Duration(seconds: 3), () {
-            if (!mounted) {
-              t.cancel();
-            }
+          if (timeSinceLastShake >= 60) {
+            timeSinceAnimationStart = 0;
+            t.cancel();
+            print("stop shake timer");
+          }
+
+          //if shake animation for more than 2 seconds (i.e. phone shaked once, no duration requirement now (because it samples every 0.5 secs))
+          print(timeSinceAnimationStart);
+          if (timeSinceAnimationStart >= 59 &&
+              (splashAnimationTimer == null || splashAnimationTimer?.isActive == false)) {
+            widget.p.progressSecret(10, 0);
+            recordSoftDrinkShake();
             setState(() {
-              isSplashing = false;
+              isSplashing = true;
             });
-          });
-          timeSinceAnimationStart = 0;
-          t.cancel();
-          print("stop shake timer due to splash");
-        }
-      });
+            splashAnimationTimer = Timer(const Duration(seconds: 3), () {
+              if (!mounted) {
+                t.cancel();
+              }
+              setState(() {
+                isSplashing = false;
+              });
+            });
+            timeSinceAnimationStart = 0;
+            t.cancel();
+            print("stop shake timer due to splash");
+          }
+        });
+      }
     }
     return super.shakeEventListener();
   }
