@@ -49,11 +49,12 @@ mixin Functions {
     bool barrierDismissible = true, // false: user must tap button!
   }) async {
     showDialog(
-        context: context,
-        barrierDismissible: barrierDismissible,
-        builder: (BuildContext context) {
-          return child;
-        });
+      context: context,
+      barrierDismissible: barrierDismissible,
+      builder: (BuildContext context) {
+        return child;
+      },
+    );
   }
 
   static Future<void> showMultiplierDialog({

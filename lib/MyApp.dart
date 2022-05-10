@@ -229,39 +229,37 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     // MyToast.showBottomToast(fToast,"timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
     print("timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
 
-    if (lastOpenedVersion == "") {
-      //first logon / from versions <=20
-      if (buildNumber == "21") {
-        //for internal testers, with prestige functionality
-        Functions.showMyDialog(
-          context: context,
-          barrierDismissible: false, // user must tap button!
-          child: AlertDialog(
-            title: const Text('Progress Reset'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: const <Widget>[
-                  Text(
-                      'Thank you for trying the game! Unfortunately the progress for all players are reset in this version, as the data structure has changed a lot because the implementation of prestige. To compensate for this, there is a temporary button in settings page that adds 1e7 coins to your progress so that you could try out the new prestige function (in Achievements page) immediately.'),
-                ],
-              ),
+    //lastOpenedVersion == "" ==> first logon / from versions <=20
+    if (lastOpenedVersion == buildNumber && buildNumber == "21") {
+      //for internal testers, with prestige functionality
+      Functions.showMyDialog(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        child: AlertDialog(
+          title: const Text('Progress Reset'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text(
+                    'Thank you for trying the game! Unfortunately the progress for all players are reset in this version, as the data structure has changed a lot because the implementation of prestige. To compensate for this, there is a temporary button in settings page that adds 1e7 coins to your progress so that you could try out the new prestige function (in Achievements page) immediately.'),
+              ],
             ),
-            actions: [
-              Row(
-                children: [
-                  ElevatedButton(
-                    child: const Text('OK'),
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
-              )
-            ],
           ),
-        );
-      }
+          actions: [
+            Row(
+              children: [
+                ElevatedButton(
+                  child: const Text('OK'),
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+              mainAxisAlignment: MainAxisAlignment.center,
+            )
+          ],
+        ),
+      );
     }
 
     Config.updateLastOpenedVersion(buildNumber);
