@@ -148,10 +148,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with WidgetsBinding
       final incomeTimeDiff =
           Config.lastIncomeTime() != null ? DateTime.now().difference(Config.lastIncomeTime()!) : Duration(days: 0);
 
-      if (incomeTimeDiff.compareTo(const Duration(seconds: 5)) > 0) {
-        //10 seconds of cooldown in case for immediate restart/ immediate return to the app
+      if (incomeTimeDiff.compareTo(const Duration(seconds: 5)) > 0 && p.computeCoinsPerSecond() != 0) {
+        //5 seconds of cooldown in case for immediate restart/ immediate return to the app
 
-        final offlineCoins = p.computeCoinsPerSecond()*min(7200,incomeTimeDiff.inSeconds);
+        final offlineCoins =
+            p.computeCoinsPerSecond() * min(7200, incomeTimeDiff.inSeconds); //max offline income 2 hours
         p.addCoins(offlineCoins);
         Functions.showMyDialog(
           context: context,
@@ -161,7 +162,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with WidgetsBinding
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  Text('You are offline for ${Functions.printDuration(incomeTimeDiff)} and you earned $offlineCoins coins!'),
+                  Text(
+                      'You are offline for ${Functions.printDuration(incomeTimeDiff)} and you earned $offlineCoins coins! (max offline income 2 hours)'),
                 ],
               ),
             ),
