@@ -12,6 +12,7 @@ import 'package:ordinary_idle/model/PlayerT2.dart';
 import 'package:ordinary_idle/util/Modules.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:vibration/vibration.dart';
 
 mixin Functions {
   static String doubleRepresentation(double value) {
@@ -232,5 +233,12 @@ mixin Functions {
     //change theme
     //it will also invoke restarting of the whole app, so what we just save everything to hive then its fine
     changeTheme(context, onItemTapped);
+  }
+
+  static Future<void> vibrate() async {
+    bool hasVibrator = await Vibration.hasVibrator() ?? false;
+    if (hasVibrator) {
+      Vibration.vibrate();
+    }
   }
 }

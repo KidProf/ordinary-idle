@@ -33,4 +33,6 @@
     </application>
     <!-- For loading google fonts -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- For vibration -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
 </manifest>
