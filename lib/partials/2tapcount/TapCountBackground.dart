@@ -22,7 +22,7 @@ class TapCountBackground extends StatefulWidget {
 }
 
 class _TapCountBackgroundState extends State<TapCountBackground> implements Background {
-  late Vector2 canvasSize;
+  Vector2 canvasSize = Vector2(10000,10000);
   Timer? lolTimer;
   Timer? orientationTimer;
   NativeDeviceOrientation orientation = NativeDeviceOrientation.portraitUp;
@@ -72,6 +72,7 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
                     child: Text("Reset Count"),
                     onPressed: () {
                       widget.p.resetSecretProgression(9999);
+                      _onTapsChanged();
                     },
                   ),
                   // ElevatedButton(
@@ -107,6 +108,12 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
   }
 
   @override
+  void initState(){
+    super.initState();
+    _onTapsChanged();
+  }
+
+  @override
   void onBackgroundTapDown(TapDownDetails details) {
     widget.p.tap(1.0);
     if (widget.p.secretProgress(9999).item2 >= 1100) {
@@ -115,13 +122,14 @@ class _TapCountBackgroundState extends State<TapCountBackground> implements Back
     } else {
       widget.p.progressSecret(9999, 0);
     }
-    setState(() {
-      taps = widget.p.secretProgress(9999).item2;
-    });
     _onTapsChanged();
   }
 
   void _onTapsChanged() {
+    setState(() {
+      taps = widget.p.secretProgress(9999).item2;
+    });
+    
     //Secret 7
     bool isOverflow = _isOverflow(taps.toString(), canvasSize.x);
     if (isOverflow) {

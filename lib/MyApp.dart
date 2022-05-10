@@ -230,7 +230,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     print("timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
 
     //lastOpenedVersion == "" ==> first logon / from versions <=20
-    if (lastOpenedVersion == buildNumber && buildNumber == "21") {
+    if (lastOpenedVersion != buildNumber && buildNumber == "21") {
       //for internal testers, with prestige functionality
       Functions.showMyDialog(
         context: context,
