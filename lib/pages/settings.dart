@@ -159,6 +159,12 @@ class Settings extends StatelessWidget {
           ),
           Util.divider(),
           const Text(
+            'Progress Reset Warning',
+            style: Util.subtitleStyle,
+          ),
+          Text("I am currently working on prestige and offline income mechanics. As a lot has changed, the progress of all players will have to be reset once the new update is live possibly in late June. This is a warning in advance. You could join my Discord server for more information. Sorry for any inconvenience caused and thank you for your understanding, as the game is still in its testing phase."),
+          Util.divider(),
+          const Text(
             'Abouts',
             style: Util.subtitleStyle,
           ),
