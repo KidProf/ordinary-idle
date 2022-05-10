@@ -143,10 +143,13 @@ class Settings extends StatelessWidget {
               ElevatedButton(
                 onPressed: () async {
                   Fluttertoast.showToast(
-                      msg: "This is a temporary function for testers to switch between themes easily.");
-                  p.addCoinsWithoutMultiplier(10000000);
+                      msg: "This is a temporary function for testers only.");
+                  if(p.getCoins<10000000){
+                    p.setCoins(10000000);
+                  }
+                  
                 },
-                child: Text("Add 1e7 coins"),
+                child: Text("Set to 1e7 coins"),
               ),
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

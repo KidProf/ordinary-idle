@@ -256,7 +256,6 @@ class _SoftDrinksBackgroundState extends State<SoftDrinksBackground> with ShakeH
     //prerequisite: not long pressing
     if ((waitLongPressTimer == null || !waitLongPressTimer!.isActive) &&
         (longPressTimer == null || !longPressTimer!.isActive)) {
-      
       timeSinceLastShake = 0;
       if (!isSplashing && (shakeAnimationTimer == null || shakeAnimationTimer?.isActive == false)) {
         print("start shake timer");

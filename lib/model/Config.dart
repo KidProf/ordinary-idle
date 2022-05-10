@@ -18,12 +18,12 @@ mixin Config {
     getBox().put("lastOpenedVersion", lastOpenedVersion);
   }
 
-  static DateTime? lastLogoffTime() {
-    return getBox().get("lastLogoffTime", defaultValue: null);
+  static DateTime? lastIncomeTime() {
+    return getBox().get("lastIncomeTime", defaultValue: null);
   }
 
-  static void updateLastLogoffTime(DateTime? lastLogoffTime) {
-    getBox().put("lastLogoffTime", lastLogoffTime);
+  static void updateLastIncomeTime(DateTime? lastIncomeTime) {
+    getBox().put("lastIncomeTime", lastIncomeTime);
   }
 
   static DateTime? lastLogonTime() {

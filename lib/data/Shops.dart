@@ -190,9 +190,8 @@ mixin Shops {
     return shops.where((s) => s.type == "tap").fold(0, (xs, x) => xs + x.gain.value!(getLevelById(x.id)));
   }
 
-  @protected
   double computeCoinsPerSecond() {
-    //Money.dart interface
+    //Money.dart interface, also used in MyApp.dart in calculating offline income
     return shops.where((s) => s.type == "idle").fold(0, (xs, x) => xs + x.gain.value!(getLevelById(x.id)));
   }
 

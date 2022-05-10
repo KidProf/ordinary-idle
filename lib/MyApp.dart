@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,7 @@ class MyStatefulWidget extends StatefulWidget {
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
 }
 
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+class _MyStatefulWidgetState extends State<MyStatefulWidget> with WidgetsBindingObserver {
   late Player p;
   late final List<Widget> _widgetOptions = <Widget>[
     Home(p),
@@ -69,6 +70,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     AchievementsPage(p, _onItemTapped),
     Settings(p, _onItemTapped),
   ];
+  AppLifecycleState? _appState; //
+
   int _selectedIndex = 0;
   List<int> _alerts = [];
   int developerSecretProgress = 0;
@@ -80,23 +83,114 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   void initState() {
     super.initState();
+
+    //check if app running in foreground
+    WidgetsBinding.instance?.addObserver(this);
+
+    //initialize ftoast
     fToast = FToast();
     fToast.init(context);
-    p = Player(fToast, _addAlert);
 
-    //initialize idle timer
-    idleTimer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
-      p.addIdleCoins();
-    });
+    //initialize player
+    p = Player(fToast, _addAlert);
 
     //alert user to open secrets page if they haven't complete secret 0.1
     if (!p.secretCompleted(17)) {
       _addAlert(1);
     }
 
+    //show notification, update data in config model
     if (!kIsWeb) {
-      showNotificationAndUpdateConfig();
+      _updateConfig();
     }
+
+    //enable idle timer, calculate offline income
+    _resumeApp();
+  }
+
+  @override
+  void dispose() {
+    _pauseApp();
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print("app in resumed");
+        _resumeApp();
+        break;
+      case AppLifecycleState.inactive:
+        print("app in inactive");
+        _pauseApp();
+        break;
+      case AppLifecycleState.paused:
+        print("app in paused");
+        _pauseApp();
+        break;
+      case AppLifecycleState.detached:
+        print("app in detached");
+        _pauseApp();
+        break;
+    }
+  }
+
+  void _resumeApp() {
+    //initialize idle timer
+    idleTimer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      p.addIdleCoins();
+    });
+
+    //calculate offline income
+    if (!kIsWeb) {
+      final incomeTimeDiff =
+          Config.lastIncomeTime() != null ? DateTime.now().difference(Config.lastIncomeTime()!) : Duration(days: 0);
+
+      if (incomeTimeDiff.compareTo(const Duration(seconds: 5)) > 0) {
+        //10 seconds of cooldown in case for immediate restart/ immediate return to the app
+
+        final offlineCoins = p.computeCoinsPerSecond()*min(7200,incomeTimeDiff.inSeconds);
+        p.addCoins(offlineCoins);
+        Functions.showMyDialog(
+          context: context,
+          barrierDismissible: false, // user must tap button!
+          child: AlertDialog(
+            title: const Text('While you are away...'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('You are offline for ${Functions.printDuration(incomeTimeDiff)} and you earned $offlineCoins coins!'),
+                ],
+              ),
+            ),
+            actions: [
+              Row(
+                children: [
+                  ElevatedButton(
+                    child: const Text('Great!'),
+                    onPressed: () async {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+              )
+            ],
+          ),
+        );
+      }
+      Config.updateLastIncomeTime(DateTime
+          .now()); //setting last income to a more recent time, as a precaution so that income won't get double counted
+    }
+  }
+
+  void _pauseApp() {
+    idleTimer?.cancel();
+    developerSecretResetTimer?.cancel();
+    stayHereSecretTimer?.cancel();
+    Config.updateLastIncomeTime(DateTime.now());
   }
 
   void _onItemTapped(int index, BuildContext context) {
@@ -181,14 +275,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     );
   }
 
-  @override
-  void dispose() {
-    idleTimer?.cancel();
-    developerSecretResetTimer?.cancel();
-    stayHereSecretTimer?.cancel();
-    super.dispose();
-  }
-
   BottomNavigationBarItem _BottomIcon({required int index, required IconData iconData, required double size}) {
     return BottomNavigationBarItem(
       icon: Container(
@@ -216,7 +302,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     );
   }
 
-  Future<void> showNotificationAndUpdateConfig() async {
+  Future<void> _updateConfig() async {
     //display notification if necessary
     String lastOpenedVersion = Config.lastOpenedVersion();
 
@@ -224,13 +310,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String buildNumber = packageInfo.buildNumber;
 
-    var timeDiff =
+    final logonTimeDiff =
         Config.lastLogonTime() != null ? DateTime.now().difference(Config.lastLogonTime()!) : Duration(days: 0);
-    // MyToast.showBottomToast(fToast,"timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
-    print("timeSinceLastLogon: ${timeDiff}, lastOpenedVersion: $lastOpenedVersion");
+
+    final incomeTimeDiff =
+        Config.lastIncomeTime() != null ? DateTime.now().difference(Config.lastIncomeTime()!) : Duration(days: 0);
+
+    print(
+        "timeSinceLastLogon: $logonTimeDiff, timeSinceLastIncome: $incomeTimeDiff, lastOpenedVersion: $lastOpenedVersion");
 
     //lastOpenedVersion == "" ==> first logon / from versions <=20
-    if (lastOpenedVersion != buildNumber && buildNumber == "21") {
+    if (lastOpenedVersion != buildNumber && buildNumber == "23") {
       //for internal testers, with prestige functionality
       Functions.showMyDialog(
         context: context,
@@ -241,7 +331,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             child: ListBody(
               children: const <Widget>[
                 Text(
-                    'Thank you for trying the game! Unfortunately the progress for all players are reset in this version, as the data structure has changed a lot because the implementation of prestige. To compensate for this, there is a temporary button in settings page that adds 1e7 coins to your progress so that you could try out the new prestige function (in Achievements page) immediately.'),
+                    'Thank you for trying the game! Unfortunately the progress for all players are reset in this version, as the data structure has changed a lot during the implementation of prestige and offline income. To compensate for this, there is a temporary button that adds 1e7 coins to your progress (in Settings page) so that you could try out the new prestige function (in Achievements page) immediately.'),
               ],
             ),
           ),

@@ -40,6 +40,14 @@ mixin Functions {
     return (value * mod).round().toDouble() / mod;
   }
 
+  static String twoDigits(int n) => n.toString().padLeft(2, "0");
+
+  static String printDuration(Duration duration) {
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}h${twoDigitMinutes}m${twoDigitSeconds}s";
+  }
+
   static void launchURL(String url) async {
     if (!await launch(url)) throw 'Could not launch $url';
   }
