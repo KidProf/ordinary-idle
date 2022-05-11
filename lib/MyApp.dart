@@ -122,11 +122,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with WidgetsBinding
         print("app in resumed");
         _resumeApp();
         break;
-      case AppLifecycleState.inactive:
+      case AppLifecycleState.inactive: //iOS devices will be in inactive state before going back to active when woken up
         print("app in inactive");
-        _pauseApp();
+        // _pauseApp();
         break;
-      case AppLifecycleState.paused:
+      case AppLifecycleState.paused: 
         print("app in paused");
         _pauseApp();
         break;
@@ -147,7 +147,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with WidgetsBinding
     if (!kIsWeb) {
       final incomeTimeDiff =
           Config.lastIncomeTime() != null ? DateTime.now().difference(Config.lastIncomeTime()!) : Duration(days: 0);
-
+      print("${Config.lastIncomeTime()} ${DateTime.now()}");
+      print(incomeTimeDiff);
+      print(incomeTimeDiff.compareTo(const Duration(seconds: 5)));
       if (incomeTimeDiff.compareTo(const Duration(seconds: 5)) > 0 && p.computeCoinsPerSecond() != 0) {
         //5 seconds of cooldown in case for immediate restart/ immediate return to the app
 
@@ -163,7 +165,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with WidgetsBinding
               child: ListBody(
                 children: <Widget>[
                   Text(
-                      'You are offline for ${Functions.printDuration(incomeTimeDiff)} and you earned $offlineCoins coins! (max offline income 2 hours)'),
+                      'You are offline for ${Functions.printDuration(incomeTimeDiff)} and you earned ${Functions.doubleRepresentation(offlineCoins)} coins! (max offline income 2 hours)'),
                 ],
               ),
             ),
@@ -183,8 +185,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with WidgetsBinding
           ),
         );
       }
-      Config.updateLastIncomeTime(DateTime
-          .now()); //setting last income to a more recent time, as a precaution so that income won't get double counted
+      //setting last income to a more recent time, as a precaution so that income won't get double counted
+      Config.updateLastIncomeTime(DateTime.now()); 
     }
   }
 
