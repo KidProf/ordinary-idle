@@ -76,7 +76,7 @@ mixin Functions {
     showMyDialog(
       context: context,
       child: AlertDialog(
-        title: const Text('Multipliers'),
+        title: Text(newPrestigeMultiplier ? 'Prestige' : 'Multipliers'),
         content: SingleChildScrollView(
           child: ValueListenableBuilder<Map<String, dynamic>>(
               valueListenable: p.getVitalsListener,
@@ -89,24 +89,27 @@ mixin Functions {
                   double totalMultiplier =
                       multipliers.keys.map((String key) => multipliers[key]).fold(1.0, (xs, x) => xs * x!);
                   children = [
-                    ...multipliers.keys
-                        .map((String key) => Row(
-                              children: [
-                                Text(key + ":"),
-                                Text("x" + doubleRepresentation(multipliers[key]!)),
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            ))
-                        .toList(),
+                    Container(
+                      child: Table(
+                        children: multipliers.keys.where((String key)=>multipliers[key]!=1.0)
+                          .map((String key) => TableRow(
+                                children: [
+                                  Text(key + ":"),
+                                  Text("x" + doubleRepresentation(multipliers[key]!),textAlign:TextAlign.end),
+                                ],
+                              ))
+                          .toList(),
+                      ),
+                    ),
+                    
                     Modules.divider(),
-                    Row(
-                      children: [
+                    Table(children: [
+                      TableRow(children: [
                         Text("Total:", style: TextStyle(fontWeight: FontWeight.bold)),
                         Text("x" + doubleRepresentation(totalMultiplier),
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    ),
+                            style: TextStyle(fontWeight: FontWeight.bold),textAlign:TextAlign.end,),
+                      ],),
+                    ],),
                   ];
                 } else {
                   final newMultipliers = {"Prestige": p.computePrestigeMultiplier()};
@@ -121,11 +124,11 @@ mixin Functions {
                   double newTotalMultiplier = multiplier1 * multiplier2;
 
                   children = [
-                    ...multipliers.keys
-                        .map((String key) => Row(
+                    Table(children: multipliers.keys.where((String key)=>(newMultipliers.containsKey(key) ? newMultipliers[key]! != 1.0 : multipliers[key]! != 1.0))
+                        .map((String key) => TableRow(
                               children: [
                                 Text(key + ":"),
-                                Text("x" + doubleRepresentation(multipliers[key]!)),
+                                Text("x" + doubleRepresentation(multipliers[key]!),textAlign:TextAlign.end),
                                 Text(
                                   "x" +
                                       doubleRepresentation(
@@ -135,22 +138,22 @@ mixin Functions {
                                           ? TextStyle(color: Colors.green)
                                           : TextStyle(color: Colors.red))
                                       : null,
+                                  textAlign:TextAlign.end,
                                 ),
                               ],
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             ))
-                        .toList(),
+                        .toList(),),
+                    
                     Modules.divider(),
-                    Row(
-                      children: [
+                    Table(children: [
+                      TableRow(children: [
                         Text("Total:", style: TextStyle(fontWeight: FontWeight.bold)),
                         Text("x" + doubleRepresentation(totalMultiplier),
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                            style: TextStyle(fontWeight: FontWeight.bold),textAlign:TextAlign.end,),
                         Text("x" + doubleRepresentation(newTotalMultiplier),
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    ),
+                            style: TextStyle(fontWeight: FontWeight.bold),textAlign:TextAlign.end,),
+                      ],),
+                    ],),
                   ];
                 }
 
@@ -186,8 +189,14 @@ mixin Functions {
     );
   }
 
-  static bool prestigeCriteria(double mMax, double prevMMax) {
-    // print("mMax: $mMax, prevMMax: $prevMMax");
+  //condition where players can access prestige related content, such as the prestige modal
+  static bool prestigeCriteria(double mMax) {
+    return mMax >= 10000000 ;
+    //1e7 and higher
+  }
+
+  //condition where players can actually prestige
+  static bool canPrestige(double mMax, double prevMMax) {
     return mMax >= 10000000 && mMax >= prevMMax;
     //1e7 and higher than last prestige
   }
@@ -214,7 +223,7 @@ mixin Functions {
   //TODO
   static Future<void> prestige(Player p, BuildContext context, Function(int, BuildContext) onItemTapped) async {
     //assertion on criteria before continuing
-    if (!prestigeCriteria(p.getMMax(), p.getPrevMMax())) {
+    if (!canPrestige(p.getMMax(), p.getPrevMMax())) {
       Fluttertoast.showToast(msg: "Not prestiged: Criteria not met");
       return;
     }

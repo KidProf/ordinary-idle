@@ -253,7 +253,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with WidgetsBinding
                       title: ValueHeader(
                         p,
                         _selectedIndex,
+                        _onItemTapped,
                       ),
+                      //TODO: Change colors dynamically based on theme
+                      // backgroundColor: Colors.green, 
                       toolbarHeight:
                           80, //! Please change CookieBackground to match the height of the header (specified in MyApp.dart)
                     );

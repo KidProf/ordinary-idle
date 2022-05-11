@@ -29,6 +29,7 @@ mixin Styles {
   );
 
   static const Color disabled = Colors.black54;
+  static const Color gold = Color(0xFFD4AF37);
 
   static const TextStyle titleStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const TextStyle subtitleStyle = TextStyle(fontSize: 25);

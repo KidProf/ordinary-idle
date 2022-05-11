@@ -24,7 +24,8 @@ class AchievementsPage extends StatelessWidget {
       child: ValueListenableBuilder<Box>(
           valueListenable: PlayerT3.getBox().listenable(keys: ["achievementsLevel", "achievementsParam"]),
           builder: (context, _, __) {
-            final prestigeCriteria = Functions.prestigeCriteria(p.getMMax(), p.getPrevMMax());
+            final canPrestige = Functions.canPrestige(p.getMMax(),p.getPrevMMax());
+            final prestigeCriteria = Functions.prestigeCriteria(p.getMMax());
             //1e7 and higher than last prestige
 
             return Modules.WarpBody(
@@ -45,8 +46,7 @@ class AchievementsPage extends StatelessWidget {
                             MaterialStateProperty.all<Color>(prestigeCriteria ? Color(0xFFD4AF37) : Styles.disabled),
                       ),
                       onPressed: () async {
-                        //! CRACK: do not put this to release!!!
-                        if (prestigeCriteria || p.getAchievementParam("prestige") >= 1) {
+                        if (prestigeCriteria) {
                           Functions.showMultiplierDialog(
                               p: p,
                               newPrestigeMultiplier: true,
@@ -57,13 +57,13 @@ class AchievementsPage extends StatelessWidget {
                                 },
                                 {
                                   "text": "Confirm",
-                                  "color": prestigeCriteria ? Color(0xFFD4AF37) : Styles.disabled,
+                                  "color": canPrestige ? Styles.gold : Styles.disabled,
                                   "action": () async {
-                                    if (prestigeCriteria) {
+                                    if (canPrestige) {
                                       await Functions.prestige(p, context, onItemTapped);
                                     } else {
                                       MyToast.showBottomToast(p.fToast,
-                                          "The maximum coins you have must be larger than your previous runs for prestige.");
+                                          "The maximum coins you have must be larger than your previous runs.");
                                     }
                                   }
                                 }
