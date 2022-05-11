@@ -80,6 +80,11 @@ mixin Achievements {
       "threshold": 2,
       "reward": 1,
     },
+    {
+      "title": "Enjoyment of resetting",
+      "threshold": 5,
+      "reward": 1,
+    },
   ];
 
   static final _buyChildren = [
@@ -185,7 +190,7 @@ mixin Achievements {
 
     if (achievementsParamMax[id] == null || achievementsParam[id] > achievementsParamMax[id]) {
       achievementsParamMax[id] = achievementsParam[id];
-      PlayerT3.updateAchievementsParam(achievementsParamMax);
+      PlayerT3.updateAchievementsParamMax(achievementsParamMax);
     }
 
     int currentLevel = getAchievementLevel(exid);
@@ -218,6 +223,7 @@ mixin Achievements {
   }
 
   num getAchievementParamMax(String exid) {
+    // print("local: $achievementsParamMax\n hive:${PlayerT3.achievementsParamMax()}");
     return achievementsParamMax[getIdByExid(exid)] ?? 0;
   }
 
