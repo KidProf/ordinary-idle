@@ -24,8 +24,8 @@ class AchievementsPage extends StatelessWidget {
       child: ValueListenableBuilder<Box>(
           valueListenable: PlayerT3.getBox().listenable(keys: ["achievementsLevel", "achievementsParam"]),
           builder: (context, _, __) {
-            final canPrestige = Functions.canPrestige(p.getMMax(),p.getPrevMMax());
-            final prestigeCriteria = Functions.prestigeCriteria(p.getMMax());
+            final canPrestige = Functions.canPrestigeByP(p);
+            final prestigeCriteria = Functions.prestigeCriteriaByP(p);
             //1e7 and higher than last prestige
 
             return Modules.WarpBody(

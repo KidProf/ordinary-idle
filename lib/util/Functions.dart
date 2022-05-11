@@ -190,15 +190,23 @@ mixin Functions {
   }
 
   //condition where players can access prestige related content, such as the prestige modal
-  static bool prestigeCriteria(double mMax) {
-    return mMax >= 10000000 ;
+  static bool prestigeCriteria(double mMax, num prestigeParam) {
+    return mMax >= 10000000 || prestigeParam >= 1;
     //1e7 and higher
+  }
+
+  static bool prestigeCriteriaByP(Player p){
+    return prestigeCriteria(p.getMMax(), p.getAchievementParam("prestige"));
   }
 
   //condition where players can actually prestige
   static bool canPrestige(double mMax, double prevMMax) {
     return mMax >= 10000000 && mMax >= prevMMax;
     //1e7 and higher than last prestige
+  }
+
+  static bool canPrestigeByP(Player p){
+    return canPrestige(p.getMMax(), p.getPrevMMax());
   }
 
   //TODO

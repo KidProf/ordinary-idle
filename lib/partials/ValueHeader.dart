@@ -17,8 +17,8 @@ class ValueHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final prestigeCriteria = Functions.prestigeCriteria(p.getMMax());
-    final canPrestige = Functions.canPrestige(p.getMMax(), p.getPrevMMax());
+    final prestigeCriteria = Functions.prestigeCriteriaByP(p);
+    final canPrestige = Functions.canPrestigeByP(p);
 
     return Column(
       children: [
