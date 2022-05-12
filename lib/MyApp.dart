@@ -327,7 +327,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with WidgetsBinding
         "timeSinceLastLogon: $logonTimeDiff, timeSinceLastIncome: $incomeTimeDiff, lastOpenedVersion: $lastOpenedVersion");
 
     //lastOpenedVersion == "" ==> first logon / from versions <=20
-    if (lastOpenedVersion != buildNumber && buildNumber == "23") {
+    //exactly equal to 23: lastOpenedVersion != buildNumber && buildNumber == "23"
+    if (Functions.compareBuildNumbers(lastOpenedVersion,"22")<=0) { //less than or equal to 22
       //for internal testers, with prestige functionality
       Functions.showMyDialog(
         context: context,

@@ -266,4 +266,14 @@ mixin Functions {
       Vibration.vibrate();
     }
   }
+
+  static compareBuildNumbers(String a, String b) {
+    if(a=="") return -1; //version <=20
+    if(b=="") return 1; //error
+
+    final intA = int.parse(a);
+    final intB = int.parse(b);
+
+    return intA.compareTo(intB);
+  }
 }
