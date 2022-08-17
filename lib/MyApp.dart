@@ -328,37 +328,37 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with WidgetsBinding
 
     //lastOpenedVersion == "" ==> first logon / from versions <=20
     //exactly equal to 23: lastOpenedVersion != buildNumber && buildNumber == "23"
-    if (Functions.compareBuildNumbers(lastOpenedVersion,"22")<=0) { //less than or equal to 22
-      //for internal testers, with prestige functionality
-      Functions.showMyDialog(
-        context: context,
-        barrierDismissible: false, // user must tap button!
-        child: AlertDialog(
-          title: const Text('Progress Reset'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text(
-                    'Thank you for trying the game! Unfortunately the progress for all players are reset in this version, as the data structure has changed a lot during the implementation of prestige and offline income. To compensate for this, there is a temporary button that adds 1e7 coins to your progress (in Settings page) so that you could try out the new prestige function (in Achievements page) immediately.'),
-              ],
-            ),
-          ),
-          actions: [
-            Row(
-              children: [
-                ElevatedButton(
-                  child: const Text('OK'),
-                  onPressed: () async {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
-            )
-          ],
-        ),
-      );
-    }
+    // if (Functions.compareBuildNumbers(lastOpenedVersion,"22")<=0) { //less than or equal to 22
+    //   //for internal testers, with prestige functionality
+    //   Functions.showMyDialog(
+    //     context: context,
+    //     barrierDismissible: false, // user must tap button!
+    //     child: AlertDialog(
+    //       title: const Text('Progress Reset'),
+    //       content: SingleChildScrollView(
+    //         child: ListBody(
+    //           children: const <Widget>[
+    //             Text(
+    //                 'Thank you for trying the game! Unfortunately the progress for all players are reset in this version, as the data structure has changed a lot during the implementation of prestige and offline income. To compensate for this, there is a temporary button that adds 1e7 coins to your progress (in Settings page) so that you could try out the new prestige function (in Achievements page) immediately.'),
+    //           ],
+    //         ),
+    //       ),
+    //       actions: [
+    //         Row(
+    //           children: [
+    //             ElevatedButton(
+    //               child: const Text('OK'),
+    //               onPressed: () async {
+    //                 Navigator.of(context).pop();
+    //               },
+    //             ),
+    //           ],
+    //           mainAxisAlignment: MainAxisAlignment.center,
+    //         )
+    //       ],
+    //     ),
+    //   );
+    // }
 
     Config.updateLastOpenedVersion(buildNumber);
     Config.updateLastLogonTime(DateTime.now());
