@@ -50,8 +50,13 @@ mixin Achievements {
       "reward": 1,
     },
     {
-      "title": "Endgame",
+      "title": "Eonomic Boom",
       "threshold": 1000000000000.0, //1e12
+      "reward": 1,
+    },
+    {
+      "title": "Endgame",
+      "threshold": 1000000000000000000.0, //1e18
       "reward": 1,
     },
   ];
